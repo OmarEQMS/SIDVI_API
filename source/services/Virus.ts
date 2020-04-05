@@ -4,79 +4,65 @@ import nodemailer from 'nodemailer';
 
 import { ServerRequest } from '../types';
 import { OrderModeEnum, Defaults, ContentTypeEnum } from '../api';
-import { Usuario, DBModels, _Usuario, Coleccion, } from '../models';
+import { Virus, DBModels, _Virus, Coleccion, } from '../models';
 import { APIResponse, _APIResponse, Response } from '../responses';
 import { Token } from '../models/Token';
 import { generateCode, deleteProperty } from '../tools/Utils';
 import { Log } from '../tools';
 
-export class UsuarioServicio {
+export class VirusServicio {
 
-    static async listarUsuarios(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<Coleccion<Usuario>> {
+    static async listarVirus(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try{
-            let query = req.query<Usuario>('Usuario').modify('defaultSelect');        
-            let usuarios = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let usuariosFormat = usuarios.results.map((item:any) => new Usuario(item).toJSON());
-            return new Coleccion<Usuario>(usuariosFormat, usuarios.total);
+            let query = await req.query<Virus>('Virus');   
         }catch(error){
             throw error;
         }
     }
 
-    static async crearUsuario(req: ServerRequest, usuario: Usuario): Promise<APIResponse> {
+    static async crearVirus(req: ServerRequest, virus: Virus): Promise<any> {
         try{
-            deleteProperty(usuario, ['idUsuario']);         
-            let newUsuario = await req.query<Usuario>('Usuario').insert(usuario);
-            return new APIResponse(_APIResponse.CREATED, 'El usuario fue creado satisfactoriamente', {insertedId: newUsuario.idUsuario});
+            let query = await req.query<Virus>('Virus');   
         }catch(error){
             throw error;
         }
     }
 
-    static async obtenerUsuario(req: ServerRequest, idUsuario: number): Promise<Usuario>{
+    static async obtenerVirus(req: ServerRequest, idVirus: number): Promise<any>{
         try{            
-            let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);            
-            return usuario.toJSON();
+            let query = await req.query<Virus>('Virus');   
         }catch(error){
             throw error;
         }
     }
 
-    static async actualizarUsuario(req: ServerRequest, idUsuario: number, usuario: Usuario): Promise<APIResponse> {
+    static async actualizarVirus(req: ServerRequest, idVirus: number, virus: Virus): Promise<any> {
         try{
-            deleteProperty(usuario, ['idUsuario', 'contrasena', 'token']);
-            await req.query<Usuario>('Usuario').patchAndFetchById(idUsuario, usuario);
-            return new APIResponse(_APIResponse.UPDATED, "El Usuario fue actualizado");
+            let query = await req.query<Virus>('Virus');   
         }catch(error){
             throw error;
         }
     }
     
-    static async eliminarUsuario(req: ServerRequest, idUsuario: number): Promise<APIResponse> {
+    static async eliminarVirus(req: ServerRequest, idVirus: number): Promise<any> {
         try{
-            await req.query<Usuario>('Usuario').deleteById(idUsuario);
-            return new APIResponse(_APIResponse.DELETED, "El Usuario fue eliminado correctamente");
+            let query = await req.query<Virus>('Virus');   
         }catch(error){
             throw error;
         }
     }
 
-    static async descargarUsuarioFoto(req: ServerRequest, idUsuario: number): Promise<Response<ArrayBuffer>> {
+    static async descargarVirusIcono(req: ServerRequest, idUsuario: number): Promise<any> {
         try{           
-            let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            if(usuario.archivoFoto==null) throw new APIResponse(_APIResponse.NO_CONTENT, "No hay contenido para mostrar"); 
-            return new Response<ArrayBuffer>(usuario.archivoFoto as ArrayBuffer, _APIResponse.OK.statusCode, usuario.mimetypeFoto as ContentTypeEnum);
+            let query = await req.query<Virus>('Virus'); 
         }catch(error){
             throw error;
         }
     }
 
-    static async cargarUsuarioFoto(req: ServerRequest, idUsuario: number, foto: any): Promise<APIResponse> {
+    static async cargarVirusIcono(req: ServerRequest, idUsuario: number, icono: any): Promise<any> {
         try {
-            await req.query<Usuario>('Usuario').patchAndFetchById(idUsuario, { mimetypeFoto: foto.mimetype, archivoFoto: foto.buffer });
-			return new APIResponse(_APIResponse.OK, 'Se ha subido el archivo');
+            let query = await req.query<Virus>('Virus'); 
 		} catch (error) {
 			throw error;
         }

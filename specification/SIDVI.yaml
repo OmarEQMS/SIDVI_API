@@ -114,11 +114,11 @@ paths:
             x-security:
                 - ANY
             parameters: 
-                - name: matricula
+                - name: usuario
                   in: query
                   type: string
                   required: true
-                  description: matricula, nomina o correo
+                  description: nombre de usuario
                 - name: contrasena
                   in: query
                   type: string
@@ -140,8 +140,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             responses:
                 200:
@@ -159,10 +158,10 @@ paths:
             x-security:
                 - ANY
             parameters: 
-                - name: matricula
+                - name: usuario
                   in: query
                   type: string
-                  description: matricula, nomina o correo
+                  description: nombre de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -183,10 +182,10 @@ paths:
                   in: query
                   type: string
                   description: token del usuario
-                - name: matricula
+                - name: usuario
                   in: query
                   type: string
-                  description: matricula, nomina o correo
+                  description: nombre de usuario
                 - name: nuevaContrasena
                   in: query
                   type: string
@@ -204,15 +203,16 @@ paths:
             description: Los usuarios cambian su contraseña 
             x-swagger-router-controller: Usuario
             operationId: cambiarContrasena
+            security:
+                - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters: 
-                - name: matricula
+                - name: usuario
                   in: query
                   type: string
-                  description: matricula, nomina o correo
+                  description: nombre de usuario
                 - name: contrasena
                   in: query
                   type: string
@@ -237,7 +237,6 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -260,7 +259,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: usuario
@@ -285,8 +284,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: idUsuario
@@ -309,8 +307,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: idUsuario
@@ -339,6 +336,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: idUsuario
@@ -362,8 +360,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
@@ -388,8 +385,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
@@ -421,7 +417,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -430,7 +427,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/VirusColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -443,22 +440,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: virus
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Virus'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de Virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /virus/{idUsuario}:
+    /virus/{idVirus}:
         get:
             tags: 
                 - Virus
@@ -469,18 +464,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador virus
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Virus'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -493,21 +488,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador virus
                 - name: virus
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Virus'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de Virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -525,17 +518,17 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /virus/{idUsuario}/foto:
+    /virus/{idVirus}/icono:
         get:
             tags: 
                 - Virus
@@ -546,17 +539,17 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
             parameters:
-                - name: idUsuario
+                - name: idVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -572,22 +565,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
             parameters:
-                - name: idUsuario
+                - name: idVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
-                - name: foto
+                  description: identificador virus
+                - name: icono
                   in: formData
                   type: file
                   required: true
-                  description: La foto de perfil del usuario
+                  description: el icono del virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -605,7 +596,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -614,7 +606,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/TestNodoColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -627,22 +619,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: testNodo
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/TestNodo'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de test nodo
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /testNodo/{idUsuario}:
+    /testNodo/{idTestNodo}:
         get:
             tags: 
                 - TestNodo
@@ -653,18 +643,16 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestNodo
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test nodo
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/TestNodo'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -677,21 +665,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestNodo
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test nodo
                 - name: testNodo
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/TestNodo'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de test nodo
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -709,17 +695,17 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestNodo
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test nodo
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /testNodo/{idUsuario}/foto:
+    /testNodo/{idTestNodo}/archivo:
         get:
             tags: 
                 - TestNodo
@@ -730,17 +716,17 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
             parameters:
-                - name: idUsuario
+                - name: idTestNodo
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test nodo
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -756,22 +742,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
             parameters:
-                - name: idUsuario
+                - name: idTestNodo
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
-                - name: foto
+                  description: identificador test nodo
+                - name: archivo
                   in: formData
                   type: file
                   required: true
-                  description: La foto de perfil del usuario
+                  description: La foto de perfil del test nodo
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -789,7 +773,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -798,7 +783,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/TestOpcionColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -811,22 +796,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: testOpcion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/TestOpcion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de test opcion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /testOpcion/{idUsuario}:
+    /testOpcion/{idTestOpcion}:
         get:
             tags: 
                 - TestOpcion
@@ -837,18 +820,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestOpcion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test opcion
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/TestOpcion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -861,21 +844,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestOpcion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test opcion
                 - name: testOpcion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/TestOpcion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de test opcion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -893,17 +874,17 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idTestOpcion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test opcion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /testOpcion/{idUsuario}/foto:
+    /testOpcion/{idTestOpcion}/archivo:
         get:
             tags: 
                 - TestOpcion
@@ -914,17 +895,17 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
             parameters:
-                - name: idUsuario
+                - name: idTestOpcion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador test opcion
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -940,22 +921,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
             parameters:
-                - name: idUsuario
+                - name: idTestOpcion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
-                - name: foto
+                  description: identificador test opcion
+                - name: archivo
                   in: formData
                   type: file
                   required: true
-                  description: La foto de perfil del usuario
+                  description: La foto de perfil del test opcion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -973,7 +952,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -982,7 +962,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/CategoriaInformacionColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -995,22 +975,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: categoriaInformacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CategoriaInformacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /categoriaInformacion/{idUsuario}:
+    /categoriaInformacion/{idCategoriaInformacion}:
         get:
             tags: 
                 - CategoriaInformacion
@@ -1021,18 +999,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria informacion
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/CategoriaInformacion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1045,21 +1023,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria informacion
                 - name: categoriaInformacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CategoriaInformacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1077,11 +1053,11 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1099,7 +1075,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1108,7 +1085,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/InformacionColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1121,22 +1098,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: informacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Informacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /informacion/{idUsuario}:
+    /informacion/{idInformacion}:
         get:
             tags: 
                 - Informacion
@@ -1147,18 +1122,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador informacion
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Informacion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1171,21 +1146,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador informacion
                 - name: informacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Informacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1203,17 +1176,17 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /informacion/{idUsuario}/archivo:
+    /informacion/{idInformacion}/archivo:
         get:
             tags: 
                 - Informacion
@@ -1224,17 +1197,17 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
             parameters:
-                - name: idUsuario
+                - name: idInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -1250,22 +1223,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
             parameters:
-                - name: idUsuario
+                - name: idInformacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
-                - name: foto
+                  description: identificador informacion
+                - name: archivo
                   in: formData
                   type: file
                   required: true
-                  description: La foto de perfil del usuario
+                  description: La foto de perfil del informacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1283,7 +1254,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1292,7 +1264,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/UbicacionColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1305,22 +1277,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: ubicacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Ubicacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de ubicacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /ubicacion/{idUsuario}:
+    /ubicacion/{idUbicacion}:
         get:
             tags: 
                 - Ubicacion
@@ -1331,18 +1301,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idUbicacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador ubicacion
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Ubicacion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1355,21 +1325,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idUbicacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador ubicacion
                 - name: ubicacion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Ubicacion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de ubicacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1387,11 +1355,11 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idUbicacion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador ubicacion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1409,7 +1377,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1418,7 +1387,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/CategoriaEstadisticaColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1431,22 +1400,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: categoriaEstadistica
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CategoriaEstadistica'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /categoriaEstadistica/{idUsuario}:
+    /categoriaEstadistica/{idCategoriaEstadistica}:
         get:
             tags: 
                 - CategoriaEstadistica
@@ -1457,18 +1424,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/CategoriaEstadistica'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1481,21 +1448,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
                 - name: categoriaEstadistica
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CategoriaEstadistica'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1513,11 +1478,11 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCategoriaEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1535,7 +1500,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1544,7 +1510,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/EstadisticaColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1557,22 +1523,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: estadistica
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Estadistica'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /estadistica/{idUsuario}:
+    /estadistica/{idEstadistica}:
         get:
             tags: 
                 - Estadistica
@@ -1583,18 +1547,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Estadistica'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1607,21 +1571,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
                 - name: estadistica
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Estadistica'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1639,11 +1601,11 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idEstadistica
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador categoria estadistica
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1661,7 +1623,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1670,7 +1633,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/MedicoColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1683,22 +1646,21 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: medico
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Medico'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de medico
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /medico/{idUsuario}:
+    /medico/{idMedico}:
         get:
             tags: 
                 - Medico
@@ -1709,18 +1671,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedico
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Medico'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1733,21 +1695,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedico
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico
                 - name: medico
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Medico'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de Medico
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1763,19 +1724,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedico
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /medico/{idUsuario}/foto:
+    /medico/{idMedico}/foto:
         get:
             tags: 
                 - Medico
@@ -1786,17 +1748,17 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             produces:
                 - application/octet-stream
             parameters:
-                - name: idUsuario
+                - name: idMedico
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -1812,22 +1774,21 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             consumes:
                 - multipart/form-data
             parameters:
-                - name: idUsuario
+                - name: idMedico
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico
                 - name: foto
                   in: formData
                   type: file
                   required: true
-                  description: La foto de perfil del usuario
+                  description: La foto de perfil del medico
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1845,7 +1806,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1854,7 +1816,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/MedicoVirusColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1867,22 +1829,21 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: medicoVirus
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/MedicoVirus'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de medico virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /medicoVirus/{idUsuario}:
+    /medicoVirus/{idMedicoVirus}:
         get:
             tags: 
                 - MedicoVirus
@@ -1893,18 +1854,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedicoVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico virus
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/MedicoVirus'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -1917,21 +1878,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedicoVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico virus
                 - name: medicoVirus
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/MedicoVirus'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de medico virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1947,13 +1907,14 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idMedicoVirus
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador medico virus
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -1971,7 +1932,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -1980,7 +1942,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/ValoracionColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -1993,22 +1955,21 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: valoracion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Valoracion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de valoracion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-    /valoracion/{idUsuario}:
+    /valoracion/{idValoracion}:
         get:
             tags: 
                 - Valoracion
@@ -2019,18 +1980,18 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idValoracion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador valoracion
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/Valoracion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -2043,21 +2004,20 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idValoracion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador valoracion
                 - name: valoracion
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/Valoracion'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de valoracion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -2073,13 +2033,14 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idValoracion
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador valoracion
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -2097,7 +2058,6 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - $ref: '#/parameters/ordenarPor'
@@ -2106,7 +2066,7 @@ paths:
                 - $ref: '#/parameters/indicePagina'
             responses:
                 200:
-                    $ref: '#/definitions/UsuarioColeccion'
+                    $ref: '#/definitions/CelularEstadoColeccion'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         post:
@@ -2115,20 +2075,18 @@ paths:
             summary: Crear CelularEstado
             description: Se crea un CelularEstado con el objeto enviado
             x-swagger-router-controller: CelularEstado
-            operationId: crearUsuario
+            operationId: crearCelularEstado
             security:
                 - TokenUsuario: []
             x-security:
-                - ANY
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: celularEstado
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CelularEstado'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de celular estado
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -2145,18 +2103,16 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: idCelularEstado
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador celular estado
             responses:
                 200:
-                    $ref: '#/definitions/Usuario'
+                    $ref: '#/definitions/CelularEstado'
                 default:
                     $ref: '#/responses/RespuestaFallida'
         put:
@@ -2169,21 +2125,19 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
-                - ALUMNO
-                - PROFESOR
                 - ADMINISTRADOR
             parameters:
                 - name: idCelularEstado
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador celular estado
                 - name: celularEstado
                   in: body    
                   schema:
-                    $ref: '#/definitions/Usuario'  
+                    $ref: '#/definitions/CelularEstado'  
                   required: true
-                  description: objeto de usuario
+                  description: objeto de celular estado
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'
@@ -2205,7 +2159,7 @@ paths:
                   in: path
                   type: integer
                   required: true
-                  description: identificador usuario
+                  description: identificador celular estado
             responses:
                 200:
                     $ref: '#/responses/RespuestaExitosa'

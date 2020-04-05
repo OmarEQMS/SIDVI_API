@@ -6,12 +6,10 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarUsuarios: Handler = async (req, res, next) => {
-    const nombre: string = req.swagger.params['nombre'].value;
     const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
     const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
-    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Usuario.idColumn;
-    
+    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Usuario.idColumn;    
     try{
         let response = await UsuarioServicio.listarUsuarios(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
         res.respond(response);
