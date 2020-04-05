@@ -74,7 +74,30 @@ responses:
 tags:
     - name: Usuario
       description: Informacion de Usuarios
-
+    - name: Virus
+      description: Informacion de Viruses
+    - name: TestNodo
+      description: Informacion de TestNodos
+    - name: TestOpcion
+      description: Informacion de TestOpciones
+    - name: CategoriaInformacion
+      description: Informacion de Categorias de la Informacion
+    - name: Informacion
+      description: Informacion de Informaciones
+    - name: Ubicacion
+      description: Informacion de Ubicaciones
+    - name: CategoriaEstadistica
+      description: Informacion de Categorias de Estadistica
+    - name: Estadistica
+      description: Informacion de Estadisticas
+    - name: Medico
+      description: Informacion de Medicos
+    - name: MedicoVirus
+      description: Informacion de Medicos de un Virus
+    - name: Valoracion
+      description: Informacion de Valoraciones
+    - name: CelularEstado
+      description: Informacion de Estados del Celular
 
 # ------------------------------------------------------------ PATHS
 paths:
@@ -230,31 +253,2562 @@ paths:
                   type: string
                   enum:
                     - CUERNAVACA
-                    - AGUASCALIENTES
-                    - CIUDAD JUAREZ
-                    - HIDALGO
-                    - LEON
-                    - PUEBLA
-                    - SAN LUIS POTOSI
-                    - SONORA NORTE
-                    - VERACRUZ
-                    - CHIAPAS
-                    - CIUDAD DE MEXICO
-                    - ESTADO DE MEXICO
-                    - IRAPUATO
-                    - MONTERREY
-                    - QUERETARO
-                    - SANTA FE
-                    - TAMPICO
-                    - ZACATECAS
-                    - CHIHUAHUA
-                    - CIUDAD OBREGON
-                    - GUADALAJARA
-                    - LAGUNA
-                    - MORELIA
-                    - SALTILLO
-                    - SINALOA
-                    - TOLUCA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Virus
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- TestNodo
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- TestOpcion
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- CategoriaInformacion
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Informacion
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Ubicacion
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- CategoriaEstadistica
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Estadistica
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Medico
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- MedicoVirus
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- Valoracion
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- CelularEstado
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
                   description: Filtrar por campus
                 - name: matricula
                   in: query
@@ -446,7 +3000,7 @@ definitions:
 # ------------------------------------------- DataBase
     Usuario:
         type: object
-        description: Informacion de Usuarios, ya sea profesor, alumno, administrador
+        description: Informacion de Usuarios
         required:
             - nombreCompleto
         properties:
@@ -455,16 +3009,16 @@ definitions:
                 type: integer
                 description: identificador unico del usuario
                 example: 1
-            matricula:
-                x-name: matricula o nomina
-                type: string
-                description: matricula o nomina del usuario
-                example: A01421754
             nombreCompleto:
                 x-name: nombre completo
                 type: string
                 description: nombre completo del usuario
                 example: Omar Quintero
+            usuario:
+                x-name: usuario
+                type: string
+                description: nombre de usuario, con el que iniciara sesion
+                example: OmarEQMS
             contrasena:
                 x-name: contraseña
                 type: string
@@ -475,7 +3029,18 @@ definitions:
                 type: string
                 description: token del usuario, para cambiar contrasena y para firmar JWT
                 example: 
-            mimetypeFoto: 
+            correo: 
+                x-name: correo electronico
+                type: string
+                format: email
+                description: correo electronico del usuario
+                example: omar.quintero.ms@gmail.com                
+            celular:
+                x-name: celular
+                type: string
+                description: celular del usuario
+                example: omar.quintero.ms@gmail.com    
+            mimetypeFoto:
                 x-name: formato
                 type: string
                 description: extension de la foto de perfil
@@ -485,61 +3050,420 @@ definitions:
                 type: string
                 format: binary
                 description: foto de perfil del usuario
-            campus:
-                x-name: campus
-                type: string
-                enum:
-                    - CUERNAVACA
-                    - AGUASCALIENTES
-                    - CIUDAD JUAREZ
-                    - HIDALGO
-                    - LEON
-                    - PUEBLA
-                    - SAN LUIS POTOSI
-                    - SONORA NORTE
-                    - VERACRUZ
-                    - CHIAPAS
-                    - CIUDAD DE MEXICO
-                    - ESTADO DE MEXICO
-                    - IRAPUATO
-                    - MONTERREY
-                    - QUERETARO
-                    - SANTA FE
-                    - TAMPICO
-                    - ZACATECAS
-                    - CHIHUAHUA
-                    - CIUDAD OBREGON
-                    - GUADALAJARA
-                    - LAGUNA
-                    - MORELIA
-                    - SALTILLO
-                    - SINALOA
-                    - TOLUCA
-                description: campus al que pertenece el usuario
-                example: CUERNAVACA
             rol:
                 x-name: rol
                 type: string
                 enum:
-                    - ALUMNO
-                    - PROFESOR
+                    - USUARIO
                     - ADMINISTRADOR
                 description: rol del usuario en el sistema
-                example: PROFESOR
-            correo:
-                x-name: correo electronico
+                example: USUARIO                
+    Virus:
+        type: object
+        description: Informacion de 
+        required:
+            - clave
+        properties:
+            idVirus:
+                x-name: id virus 
+                type: integer
+                description: identificador unico del virus
+                example: 1
+            clave:
+                x-name: clave
                 type: string
-                format: email
-                description: correo electronico del usuario
-                example: omar.quintero.ms@gmail.com
+                description: clave del virus
+                example: covid19
+            nombre:
+                x-name: nombre
+                type: string
+                description: nombre del virus
+                example: Coronavirus
+            mimetypeIcono:
+                x-name: formato
+                type: string
+                description: extension del icono
+                example: image/png
+            archivoIcono:
+                x-name: archivo icono
+                type: string
+                format: binary
+                description: archivo del icono del virus
+            fkTestNodo:
+                x-name: id test nodo 
+                type: integer
+                description: Identificador del Test Nodo donde inicia el diagnostico
+                example: 1
             estatus:
                 x-name: estatus
                 type: string
                 enum:
+                    - INHABILITADO
                     - HABILITADO
-                    - DESHABILITADO
-                description: estatus del usuario
-                example: DESHABILITADO
+                description: estatus del virus
+                example: HABILITADO  
+    TestNodo:
+        type: object
+        description: Informacion de 
+        required:
+            - texto
+        properties:
+            idTestNodo:
+                x-name: id usuario 
+                type: integer
+                description: identificador unico del usuario
+                example: 1
+            fkVirus:
+                x-name: id virus 
+                type: integer
+                description: Identificador del Virus al que pertenece el Nodo
+                example: 1
+            texto:
+                x-name: texto
+                type: string
+                description: texto del nodo
+                example: Ha sentido malestar?     
+            descripcion:
+                x-name: descripcion
+                type: string
+                description: descripcion del nodo
+                example: El malestar se presenta en articulaciones, ...         
+            mimetype:
+                x-name: formato
+                type: string
+                description: extension del archivo del nodo
+                example: image/png
+            archivo:
+                x-name: archivo
+                type: string
+                format: binary
+                description: archivo para mostrar en el nodo
+    TestOpcion:
+        type: object
+        description: Informacion de 
+        required:
+            - clave
+        properties:
+            idTestOpcion:
+                x-name: id testo opcion 
+                type: integer
+                description: identificador unico de la opcion de un nodo
+                example: 1
+            fkTestNodo:
+                x-name: id test nodo 
+                type: integer
+                description: Identificador del Nodo Padre al que pertenecen
+                example: 1
+            fkTestNodoSig:
+                x-name: id test nodo 
+                type: integer
+                description: Identificador del nodo al que se van a dirigir si seleccionan esta opcion
+                example: 1
+            clave:
+                x-name: clave
+                type: string
+                description: clave de la opcion
+                example: a
+            texto:
+                x-name: texto
+                type: string
+                description: texto de la opcion
+                example: Si, presento malestar    
+            descripcion:
+                x-name: descripcion
+                type: string
+                description: descripcion de la opcion
+                example: Normalmente en articulaciones       
+            mimetype:
+                x-name: formato
+                type: string
+                description: extension del archivo de la opcion
+                example: image/png
+            archivo:
+                x-name: archivo
+                type: string
+                format: binary
+                description: archivo para mostrar en la opcion
+    CategoriaInformacion:
+        type: object
+        description: Informacion de las categorias de informacion de un virus
+        required:
+            - clave
+        properties:
+            idCategoriaInformacion:
+                x-name: id categoria informacion 
+                type: integer
+                description: identificador unico de la categoria de la informacion
+                example: 1
+            clave:
+                x-name: clave
+                type: string
+                description: clave de la categoria
+                example: sintomas
+            nombre:
+                x-name: nombre
+                type: string
+                description: nombre que se le da a la categoria
+                example: Sintomas del Virus
+    Informacion:
+        type: object
+        description: Informacion de las informaciones del virus
+        required:
+            - texto
+        properties:
+            idInformacion:
+                x-name: id informacion 
+                type: integer
+                description: identificador unico de las informaciones
+                example: 1
+            fkVirus:
+                x-name: id virus
+                type: integer
+                description: Identificador del virus al que pertenece la informacion
+                example: 1
+            fkCategoriaInformacion:
+                x-name: id categoria informacion
+                type: integer
+                description: Identificador de la categoria de informacion a la que pertenece
+                example: 1
+            texto:
+                x-name: texto
+                type: string
+                description: texto de la informacion
+                example: Sintomas del Coronavirus  
+            descripcion:
+                x-name: descripcion
+                type: string
+                description: descripcion de la informacion
+                example: Los sintomas del coronavirus son los siguientes ...   
+            mimetype:
+                x-name: formato
+                type: string
+                description: extension del archivo de la informacion
+                example: image/png
+            archivo:
+                x-name: archivo
+                type: string
+                format: binary
+                description: archivo para mostrar en la informacion
+    Ubicacion:
+        type: object
+        description: Informacion de las ubicaciones, ciudades y estados
+        required:
+            - clave
+        properties:
+            idUbicacion:
+                x-name: id ubicacion 
+                type: integer
+                description: identificador unico de la ubicacion
+                example: 1
+            fkUbicacion:
+                x-name: id ubicacion
+                type: integer
+                description: Identificador de la ubicacion padre a la que pertenece
+                example: 1
+            clave:
+                x-name: clave
+                type: string
+                description: clave de la ubicacion
+                example: mx
+            nombre:
+                x-name: nombre
+                type: string
+                description: nombre de la ubicacion
+                example: Mexico
+    CategoriaEstadistica:
+        type: object
+        description: Informacion de las categorias de las estadisticas
+        required:
+            - nombre
+        properties:
+            idCategoriaEstadistica:
+                x-name: id categoria estadistica 
+                type: integer
+                description: identificador unico de la categoria estadistica
+                example: 1
+            nombre:
+                x-name: nombre
+                type: string
+                description: nombre de la categoria
+                example: Casos Confirmados 
+    Estadistica:
+        type: object
+        description: Informacion de las estadisticas
+        required:
+            - valor
+        properties:
+            idEstadistica:
+                x-name: id estadistica 
+                type: integer
+                description: identificador unico de la estadistica
+                example: 1
+            fkVirus:
+                x-name: id virus
+                type: integer
+                description: Identificador del virus de la estadistica 
+                example: 1
+            fkUbicacion:
+                x-name: id ubicacion
+                type: integer
+                description: Identificador de la ubicacion
+                example: 1
+            fkCategoriaEstadistica:
+                x-name: id categoria estadistica
+                type: integer
+                description: Identificador de la categoria estadistica
+                example: 1
+            valor:
+                x-name: valor
+                type: number
+                format: double
+                description: medicion de la estadistica
+                example: 1.0
+            fecha:
+                x-name: fecha 
+                type: date
+                description: fecha de la medicion de la estadistica
+                example: 1
+    Medico:
+        type: object
+        description: Informacion de los medicos / consultorios disponibles
+        required:
+            - nombreDoctor
+        properties:
+            idMedico:
+                x-name: id medico 
+                type: integer
+                description: identificador unico del medico
+                example: 1
+            fkUsuario:
+                x-name: id usuario
+                type: integer
+                description: Identificador del usuario asociado a este medico
+                example: 1
+            fkUbicacion:
+                x-name: id ubicacion
+                type: integer
+                description: Identificador de la ubicacion donde se encuentra el consultorio
+                example: 1
+            nombreConsultorio:
+                x-name: nombre consultorio
+                type: string
+                description: nombre del consultorio
+                example: Consultorio Dr. Quintero 
+            nombreDoctor:
+                x-name: nombre doctor
+                type: string
+                description: nombre del doctor
+                example: Dr. Quintero
+            direccionConsultorio:
+                x-name: direccion consultorio
+                type: string
+                description: direccion de la ubicacion del consultorio
+                example: Col. Fantasia, Cuernavaca, Morelos
+            telefonoConsultorio:
+                x-name: telefono consultorio
+                type: string
+                description: telefono donde podra consultar al consultorio
+                example: 7771326125
+            descripcion:
+                x-name: descripcion
+                type: string
+                description: descripcion del medico / consultorio
+                example: El consultorio ofrece los mejores servicios ...
+            mimetypeFoto:
+                x-name: formato
+                type: string
+                description: extension de la foto del medico
+                example: image/png
+            archivoFoto:
+                x-name: archivo
+                type: string
+                format: binary
+                description: foto para mostrar del medico / consultorio
+    MedicoVirus:
+        type: object
+        description: Informacion de las especialidades de los medicos o consultorios
+        required:
+            - fkMedico
+        properties:
+            idMedicoVirus:
+                x-name: id medico virus 
+                type: integer
+                description: identificador del medico-virus
+                example: 1
+            fkMedico:
+                x-name: id medico
+                type: integer
+                description: Identificador del medico
+                example: 1
+            fkVirus:
+                x-name: id virus
+                type: integer
+                description: Identificador del virus
+                example: 1
+    Valoracion:
+        type: object
+        description: Informacion de las valoraciones de usuarios a medicos
+        required:
+            - valoracion
+        properties:
+            idValoracion:
+                x-name: id valoracion 
+                type: integer
+                description: identificador unico de la valoracion del usuario
+                example: 1
+            fkMedico:
+                x-name: id medico 
+                type: integer
+                description: Identificador del medico al que se evalua
+                example: 1
+            fkUsuario:
+                x-name: id usuario
+                type: integer
+                description: Identificador del usuario que evalua
+                example: 1
+            valoracion:
+                x-name: valoracion
+                type: integer
+                description: valoracion asignada por el usuario, escala de 5
+                example: 5
+    CelularEstado:
+        type: object
+        description: Informacion del Estado del Celular
+        required:
+            - celular
+        properties:
+            idCelularEstado:
+                x-name: id celular estado 
+                type: integer
+                description: identificador unico del estado del celular
+                example: 1
+            celular:
+                x-name: celular
+                type: string
+                description: numero de celular
+                example: 7771326125   
+            fkVirus:
+                x-name: id virus
+                type: integer
+                description: Identificador del Virus seleccionado
+                example: 1
+            seccion:
+                x-name: seccion
+                type: string
+                enum:
+                    - MEDICO
+                    - INFORMACION
+                    - TEST
+                    - ESTADISTICA
+                description: seccion en la que se encuentra el usuario telefonico
+                example: HABILITADO   
+            fk:
+                x-name: foreign key
+                type: integer
+                description: foreign key del nodo, de la informacion o de la ubicacion
+                example: 1
 # ------------------------------------------- Coleccion
     UsuarioColeccion:
         type: object
@@ -553,6 +3477,186 @@ definitions:
                 items: 
                     $ref: '#/definitions/Usuario'
                 description: Arreglo de Usuarios
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    VirusColeccion:
+        type: object
+        description: Coleccion de Virus
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Virus'
+                description: Arreglo de Virus
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    TestNodoColeccion:
+        type: object
+        description: Coleccion de TestNodos
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/TestNodo'
+                description: Arreglo de TestNodos
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    TestOpcionColeccion:
+        type: object
+        description: Coleccion de TestOpciones
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/TestOpcion'
+                description: Arreglo de TestOpciones
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    CategoriaInformacionColeccion:
+        type: object
+        description: Coleccion de Categorias de Informacion
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/CategoriaInformacion'
+                description: Arreglo de Categorias de Informacion
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    InformacionColeccion:
+        type: object
+        description: Coleccion de Informaciones
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Informacion'
+                description: Arreglo de Informaciones
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    UbicacionColeccion:
+        type: object
+        description: Coleccion de Ubicaciones
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Ubicacion'
+                description: Arreglo de Ubicaciones
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    CategoriaEstadisticaColeccion:
+        type: object
+        description: Coleccion de Categorias de Estadistica
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/CategoriaEstadistica'
+                description: Arreglo de Categorias de Estadistica
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    EstadisticaColeccion:
+        type: object
+        description: Coleccion de Estadisticas
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Estadistica'
+                description: Arreglo de Estadisticas
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    MedicoColeccion:
+        type: object
+        description: Coleccion de Medicos
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Medico'
+                description: Arreglo de Medicos
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    MedicoVirusColeccion:
+        type: object
+        description: Coleccion de Medicos y Virus
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/MedicoVirus'
+                description: Arreglo de Medicos t Virus
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    ValoracionColeccion:
+        type: object
+        description: Coleccion de Valoraciones
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Valoracion'
+                description: Arreglo de Valoraciones
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    CelularEstadoColeccion:
+        type: object
+        description: Coleccion de Estados de Celular
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/CelularEstado'
+                description: Arreglo de Estados de Celular
             total: 
                 type: integer
                 description: Total delementos devueltos en el arreglo

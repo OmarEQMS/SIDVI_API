@@ -79,6 +79,7 @@ export const up = (knex: any) => {
             table.string('nombreDoctor', 300); 
             table.string('direccionConsultorio', 300); 
             table.string('telefonoConsultorio', 300); 
+            table.string('descripcion', 1000);
             table.string('mimetypeFoto', 30);
             table.specificType('archivoFoto', 'mediumblob');
         })
@@ -88,7 +89,7 @@ export const up = (knex: any) => {
             table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');            
         })
         .createTable('Valoracion', (table: any) => {
-            table.increments('idGrupo').primary();
+            table.increments('idValoracion').primary();
             table.integer('fkMedico').unsigned().references('Medico.idMedico').onDelete('CASCADE');
             table.integer('fkUsuario').unsigned().references('Usuario.idUsuario').onDelete('CASCADE');
             table.integer('valoracion');
@@ -96,7 +97,7 @@ export const up = (knex: any) => {
 
         .createTable('CelularEstado', (table: any) => {
             table.increments('idCelularEstado').primary();
-            table.string('celular', 300);
+            table.string('celular', 50);
             table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');    
             table.enum('seccion', ['MEDICO', 'INFORMACION','TEST','ESTADISTICA']);
             table.integer('fk');
