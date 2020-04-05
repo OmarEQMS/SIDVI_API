@@ -2149,7 +2149,7 @@ paths:
                 - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCelularEstado
                   in: path
                   type: integer
                   required: true
@@ -2173,7 +2173,7 @@ paths:
                 - PROFESOR
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCelularEstado
                   in: path
                   type: integer
                   required: true
@@ -2201,7 +2201,7 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
-                - name: idUsuario
+                - name: idCelularEstado
                   in: path
                   type: integer
                   required: true
@@ -2539,9 +2539,10 @@ definitions:
                 example: 1.0
             fecha:
                 x-name: fecha 
-                type: date
+                type: string
+                format: date
                 description: fecha de la medicion de la estadistica
-                example: 1
+                example: 2020-01-01
     Medico:
         type: object
         description: Informacion de los medicos / consultorios disponibles
