@@ -6,10 +6,10 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const autenticacion: Handler = async (req, res, next) => {
-    const matricula: string = req.swagger.params['matricula'].value;
+    const usuario: string = req.swagger.params['usuario'].value;
     const contrasena: string = req.swagger.params['contrasena'].value;
     try{ 
-        let response = await UsuarioServicio.autenticacion(req, matricula, contrasena);
+        let response = await UsuarioServicio.autenticacion(req, usuario, contrasena);
         res.respond(response);
     }catch(error){
         next(error);
@@ -26,9 +26,9 @@ export const cerrarSesion: Handler = async (req, res, next) => {
 }
 
 export const recuperacion: Handler = async (req, res, next) => {
-    const matricula: string = req.swagger.params['matricula'].value;
+    const usuario: string = req.swagger.params['usuario'].value;
     try{
-        let response = await UsuarioServicio.recuperacion(req, matricula);
+        let response = await UsuarioServicio.recuperacion(req, usuario);
         res.respond(response);
     }catch(error){
         next(error);
@@ -37,10 +37,10 @@ export const recuperacion: Handler = async (req, res, next) => {
 
 export const restablecer: Handler = async (req, res, next) => {
     const token: string = req.swagger.params['token'].value;
-    const matricula: string = req.swagger.params['matricula'].value;
+    const usuario: string = req.swagger.params['usuario'].value;
     const nuevaContrasena: string = req.swagger.params['nuevaContrasena'].value;
     try{
-        let response = await UsuarioServicio.restablecer(req, token, matricula, nuevaContrasena);
+        let response = await UsuarioServicio.restablecer(req, token, usuario, nuevaContrasena);
         res.respond(response);
     }catch(error){
         next(error);

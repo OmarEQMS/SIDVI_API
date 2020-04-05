@@ -12,14 +12,14 @@ import { Log } from '../tools';
 
 export class UsuarioServicio {
 
-    static async autenticacion(req: ServerRequest, matricula: string, contrasena: string): Promise<APIResponse> {
+    static async autenticacion(req: ServerRequest, usuario: string, contrasena: string): Promise<APIResponse> {
         try{
-            let usuario =  await req.query<Usuario>('Usuario').findOne({matricula});
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
+            let _usuario =  await req.query<Usuario>('Usuario').findOne({usuario}).modify('authorizationSelect');
+            if(_usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
 
-            if(await bcrypt.compare(contrasena, usuario.contrasena)){
-                let token = jwt.sign(JSON.stringify(new Token(usuario)), usuario.token);
-                return new APIResponse(_APIResponse.OK, "Autenticado Exitosamente", {usuario: usuario.toJSON(), token} )
+            if(await bcrypt.compare(contrasena, _usuario.contrasena)){
+                let token = jwt.sign(JSON.stringify(new Token(_usuario)), _usuario.token);
+                return new APIResponse(_APIResponse.OK, "Autenticado Exitosamente", {usuario: _usuario.toJSON(), token} )
             }else{
                 throw new APIResponse(_APIResponse.FORBIDDEN);
             }
@@ -40,7 +40,7 @@ export class UsuarioServicio {
         }
     }
 
-    static async recuperacion(req: ServerRequest, matricula: string): Promise<APIResponse> {
+    static async recuperacion(req: ServerRequest, usuario: string): Promise<APIResponse> {
         try{      
             // Diasble Anti-Virus and Enable https://myaccount.google.com/lesssecureapps  
             let usuarioCorreo = nodemailer.createTransport({
@@ -64,15 +64,15 @@ export class UsuarioServicio {
         }
     }
 
-    static async restablecer(req: ServerRequest, token: string, matricula: string, nuevaContrasena: string): Promise<APIResponse> {
+    static async restablecer(req: ServerRequest, token: string, usuario: string, nuevaContrasena: string): Promise<APIResponse> {
         try{
-            let usuario =  await req.query<Usuario>('Usuario').findOne({matricula});
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
+            let _usuario =  await req.query<Usuario>('Usuario').findOne({usuario});
+            if(_usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
             //Seguridad - Solo un usuario autorizado puede cambiar la contraseña
-            if(token==usuario.token){
-                usuario.token = generateCode(Defaults.codeAlphabet, Defaults.codeLength);
-                usuario.contrasena = await bcrypt.hash(nuevaContrasena, Defaults.saltRounds);   
-                await req.query<Usuario>('Usuario').patchAndFetchById(usuario.idUsuario, usuario);
+            if(token==_usuario.token){
+                _usuario.token = generateCode(Defaults.codeAlphabet, Defaults.codeLength);
+                _usuario.contrasena = await bcrypt.hash(nuevaContrasena, Defaults.saltRounds);   
+                await req.query<Usuario>('Usuario').patchAndFetchById(_usuario.idUsuario, _usuario);
                 return new APIResponse(_APIResponse.OK, "Recuperacion Exitosamente");
             }else{
                 throw new APIResponse(_APIResponse.FORBIDDEN);
@@ -82,14 +82,14 @@ export class UsuarioServicio {
         }
     }
 
-    static async cambiarContrasena(req: ServerRequest, matricula: string, contrasena: string, nuevaContrasena: string): Promise<APIResponse> {
+    static async cambiarContrasena(req: ServerRequest, usuario: string, contrasena: string, nuevaContrasena: string): Promise<APIResponse> {
         try{
-            let usuario =  await req.query<Usuario>('Usuario').findOne({matricula});
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
+            let _usuario =  await req.query<Usuario>('Usuario').findOne({usuario});
+            if(_usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
             //Seguridad - Solo un usuario autorizado puede cambiar la contraseña            
-            if(await bcrypt.compare(contrasena, usuario.contrasena)){
-                usuario.contrasena = await bcrypt.hash(nuevaContrasena, Defaults.saltRounds);   
-                await req.query<Usuario>('Usuario').patchAndFetchById(usuario.idUsuario, usuario);
+            if(await bcrypt.compare(contrasena, _usuario.contrasena)){
+                _usuario.contrasena = await bcrypt.hash(nuevaContrasena, Defaults.saltRounds);   
+                await req.query<Usuario>('Usuario').patchAndFetchById(_usuario.idUsuario, _usuario);
                 return new APIResponse(_APIResponse.OK, "Cambio su Contrasena Exitosamente");
             }else{
                 throw new APIResponse(_APIResponse.FORBIDDEN);
