@@ -1,0 +1,597 @@
+swagger: '2.0'
+# ------------------------------------------------------------ INFO
+info:
+    version: 1.0.0
+    title: SIDVI
+    description: Sistema de Informacion y Diagnostivo de Virus
+    contact:
+        name: Fernanda Orduña, Diego Montoya, Omar Quintero
+        email: omar.quintero.msq@gmail.com 
+    license:
+        name: MIT
+        url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# ------------------------------------------------------------ CONFIGURATION
+host: localhost:8000
+basePath: /
+schemes:
+    - http
+    - https
+consumes:
+    - application/json
+produces:
+    - application/json
+
+# ------------------------------------------------------------ SECURITY
+securityDefinitions:
+    TokenUsuario:
+        name: TokenUsuario
+        in: header
+        type: apiKey
+
+# ------------------------------------------------------------ GENERAL PARAMS
+parameters:
+    tamanoPagina:
+        name: tamanoPagina
+        in: query
+        type: integer
+        description: La API dividira la informacion en bultos de tamaño [tamanoPagina] por default = 100
+    indicePagina:
+        name: indicePagina
+        in: query
+        type: integer
+        description: La API devolvera el bulto [indicePagina] despues de dividir la informacion en [tamanoPagina] por default = 0
+    ordenarPor:
+        name: ordenarPor
+        in: query
+        type: string
+        description: Campo para ordenar los datos por un campo
+    ordenarModo:
+        name: ordenarModo
+        in: query
+        type: string
+        enum:
+            - ASC
+            - DESC
+        description: Como ordenar los elementos, por default es Ascendente
+
+# ------------------------------------------------------------ GENERAL RESPONSES
+responses:
+    RespuestaArchivo:
+        description: Archivo Respondido
+        schema:
+            type: file
+    RespuestaExitosa:
+        description: Operacion Exitosa
+        schema:
+            $ref: '#/definitions/APIResponse'
+    RespuestaFallida:
+        description: Operacion Fallida
+        schema:
+            $ref: '#/definitions/APIResponse'
+
+# ------------------------------------------------------------ TAGS
+tags:
+    - name: Usuario
+      description: Informacion de Usuarios
+
+
+# ------------------------------------------------------------ PATHS
+paths:
+                    
+# ------------------------------------------- Usuario
+    /autenticacion:
+        get:
+            tags: 
+                - Usuario
+            summary: Autenticacion de Usuarios
+            description: Los usuarios se autentican y se les proporciona un UserToken 
+            x-swagger-router-controller: Usuario
+            operationId: autenticacion
+            x-security:
+                - ANY
+            parameters: 
+                - name: matricula
+                  in: query
+                  type: string
+                  required: true
+                  description: matricula, nomina o correo
+                - name: contrasena
+                  in: query
+                  type: string
+                  required: true
+                  description: contrasena del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /cerrarsesion:
+        get:
+            tags: 
+                - Usuario
+            summary: Cerrar Sesion de Usuarios
+            description: Los usuarios se desautentican
+            x-swagger-router-controller: Usuario
+            operationId: cerrarSesion
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /recuperacion:
+        get:
+            tags: 
+                - Usuario
+            summary: Recuperacion de Cuenta
+            description: Los usuarios recuperan su contraseña 
+            x-swagger-router-controller: Usuario
+            operationId: recuperacion
+            x-security:
+                - ANY
+            parameters: 
+                - name: matricula
+                  in: query
+                  type: string
+                  description: matricula, nomina o correo
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /restablecer:
+        get:
+            tags: 
+                - Usuario
+            summary: Restablecer la Cuenta
+            description: Los usuarios restablecen su contraseña 
+            x-swagger-router-controller: Usuario
+            operationId: restablecer
+            x-security:
+                - ANY
+            parameters: 
+                - name: token
+                  in: query
+                  type: string
+                  description: token del usuario
+                - name: matricula
+                  in: query
+                  type: string
+                  description: matricula, nomina o correo
+                - name: nuevaContrasena
+                  in: query
+                  type: string
+                  description: contrasena del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /cambiarContrasena:
+        get:
+            tags: 
+                - Usuario
+            summary: Cambiar la contraseña de la Cuenta
+            description: Los usuarios cambian su contraseña 
+            x-swagger-router-controller: Usuario
+            operationId: cambiarContrasena
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters: 
+                - name: matricula
+                  in: query
+                  type: string
+                  description: matricula, nomina o correo
+                - name: contrasena
+                  in: query
+                  type: string
+                  description: contrasena del usuario
+                - name: nuevaContrasena
+                  in: query
+                  type: string
+                  description: contrasena del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario:
+        get:
+            tags: 
+                - Usuario
+            summary: Listar Usuarios
+            description: Se listan todos los usuarios dependiendo de los filtros
+            x-swagger-router-controller: Usuario
+            operationId: listarUsuarios
+            security:
+                - TokenUsuario: []
+            x-security:
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                  description: Filtrar por el rol del usuario
+                - name: campus
+                  in: query
+                  type: string
+                  enum:
+                    - CUERNAVACA
+                    - AGUASCALIENTES
+                    - CIUDAD JUAREZ
+                    - HIDALGO
+                    - LEON
+                    - PUEBLA
+                    - SAN LUIS POTOSI
+                    - SONORA NORTE
+                    - VERACRUZ
+                    - CHIAPAS
+                    - CIUDAD DE MEXICO
+                    - ESTADO DE MEXICO
+                    - IRAPUATO
+                    - MONTERREY
+                    - QUERETARO
+                    - SANTA FE
+                    - TAMPICO
+                    - ZACATECAS
+                    - CHIHUAHUA
+                    - CIUDAD OBREGON
+                    - GUADALAJARA
+                    - LAGUNA
+                    - MORELIA
+                    - SALTILLO
+                    - SINALOA
+                    - TOLUCA
+                  description: Filtrar por campus
+                - name: matricula
+                  in: query
+                  type: string
+                  description: Filtrar por matricula o nomina
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: Filtrar por nombre
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                      - HABILITADO
+                      - DESHABILITADO
+                  description: estatus del usuario
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+                - $ref: '#/parameters/tamanoPagina'
+                - $ref: '#/parameters/indicePagina'
+            responses:
+                200:
+                    $ref: '#/definitions/UsuarioColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - Usuario
+            summary: Crear Usuario
+            description: Se crea un usuario con el objeto enviado
+            x-swagger-router-controller: Usuario
+            operationId: crearUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener un Usuario
+            description: Se obtiene un Usuario con el idUsuario correspondiente
+            x-swagger-router-controller: Usuario
+            operationId: obtenerUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/definitions/Usuario'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Actualizar Usuario
+            description: Se actualiza el usuario con el id usuario y el objeto proporcionado 
+            x-swagger-router-controller: Usuario
+            operationId: actualizarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: usuario
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/Usuario'  
+                  required: true
+                  description: objeto de usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - Usuario
+            summary: Eliminar Usuario
+            description: Se elimina el usuario con el id usuario proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: eliminarUsuario
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /usuario/{idUsuario}/foto:
+        get:
+            tags: 
+                - Usuario
+            summary: Obtener Foto Usuario
+            description: Se obtiene la foto del usuario con el id proporcionado
+            x-swagger-router-controller: Usuario
+            operationId: descargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            produces:
+                - application/octet-stream
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaArchivo'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - Usuario
+            summary: Subir Foto de Usuario
+            description: Se sube la foto de perfil del usuario
+            x-swagger-router-controller: Usuario
+            operationId: cargarUsuarioFoto
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ALUMNO
+                - PROFESOR
+                - ADMINISTRADOR
+            consumes:
+                - multipart/form-data
+            parameters:
+                - name: idUsuario
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador usuario
+                - name: foto
+                  in: formData
+                  type: file
+                  required: true
+                  description: La foto de perfil del usuario
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+
+# ------------------------------------------------------------ DEFINITIONS
+definitions:
+# ------------------------------------------- DataBase
+    Usuario:
+        type: object
+        description: Informacion de Usuarios, ya sea profesor, alumno, administrador
+        required:
+            - nombreCompleto
+        properties:
+            idUsuario:
+                x-name: id usuario 
+                type: integer
+                description: identificador unico del usuario
+                example: 1
+            matricula:
+                x-name: matricula o nomina
+                type: string
+                description: matricula o nomina del usuario
+                example: A01421754
+            nombreCompleto:
+                x-name: nombre completo
+                type: string
+                description: nombre completo del usuario
+                example: Omar Quintero
+            contrasena:
+                x-name: contraseña
+                type: string
+                description: contraseña del usuario encripted
+                example: secret
+            token:
+                x-name: token
+                type: string
+                description: token del usuario, para cambiar contrasena y para firmar JWT
+                example: 
+            mimetypeFoto: 
+                x-name: formato
+                type: string
+                description: extension de la foto de perfil
+                example: image/png
+            archivoFoto:
+                x-name: archivo
+                type: string
+                format: binary
+                description: foto de perfil del usuario
+            campus:
+                x-name: campus
+                type: string
+                enum:
+                    - CUERNAVACA
+                    - AGUASCALIENTES
+                    - CIUDAD JUAREZ
+                    - HIDALGO
+                    - LEON
+                    - PUEBLA
+                    - SAN LUIS POTOSI
+                    - SONORA NORTE
+                    - VERACRUZ
+                    - CHIAPAS
+                    - CIUDAD DE MEXICO
+                    - ESTADO DE MEXICO
+                    - IRAPUATO
+                    - MONTERREY
+                    - QUERETARO
+                    - SANTA FE
+                    - TAMPICO
+                    - ZACATECAS
+                    - CHIHUAHUA
+                    - CIUDAD OBREGON
+                    - GUADALAJARA
+                    - LAGUNA
+                    - MORELIA
+                    - SALTILLO
+                    - SINALOA
+                    - TOLUCA
+                description: campus al que pertenece el usuario
+                example: CUERNAVACA
+            rol:
+                x-name: rol
+                type: string
+                enum:
+                    - ALUMNO
+                    - PROFESOR
+                    - ADMINISTRADOR
+                description: rol del usuario en el sistema
+                example: PROFESOR
+            correo:
+                x-name: correo electronico
+                type: string
+                format: email
+                description: correo electronico del usuario
+                example: omar.quintero.ms@gmail.com
+            estatus:
+                x-name: estatus
+                type: string
+                enum:
+                    - HABILITADO
+                    - DESHABILITADO
+                description: estatus del usuario
+                example: DESHABILITADO
+# ------------------------------------------- Coleccion
+    UsuarioColeccion:
+        type: object
+        description: Coleccion de usuarios
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/Usuario'
+                description: Arreglo de Usuarios
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+# ------------------------------------------- Response
+    APIResponse:
+        type: object
+        description: Mensaje de respuesta al usuario
+        required:
+            - statusCode
+            - type
+            - message
+        properties:
+            type:
+                x-name: tipo
+                type: string
+                enum:
+                    - ERROR
+                    - SUCCESS
+                description: tipo de respuesta
+                example: SUCCESS
+            statusCode:
+                x-name: codigo de respuesta
+                type: integer
+                description: codigo de respuesta al usuario
+                example: 200
+            message:
+                x-name: mensaje
+                type: string
+                description: mensaje para el usuario
+                example: Se creo el recurso satisfacotiramente
+            extra:
+                x-name: extra
+                type: object
+                description: campos extra para regresar en la respuesta
+                example:
+                    insertedId: 1
+            debugMessage:
+                x-name: mensaje para debugeo
+                type: object
+                description: campos para debugear el servicio
+                example:
+                    stack: STACK

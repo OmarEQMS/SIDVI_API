@@ -20,6 +20,9 @@ async function InitializeServer() {
     swaggerTools.initializeMiddleware(apiSpec, function (middleware) {
         app.use(cors());
 
+        // Static Files
+        app.use('/public', express.static(path.resolve(__dirname, 'public')))
+
         // Interpret Swagger resources and attach metadata (jsonParser) to request - must be first in swagger-tools middleware chain
         app.use(middleware.swaggerMetadata());
 
@@ -66,4 +69,4 @@ async function InitializeServer() {
 
 }
 
-InitializeServer()
+InitializeServer();

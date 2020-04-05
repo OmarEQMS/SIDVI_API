@@ -41,12 +41,13 @@ module.exports = function(grunt) {
             
             releaseSetup: "node release/setup.js",
             mkdir:{ command: (dir) => `mkdir ${dir}` },
-            deleteDir: { command: (dir) => `rm -rf ${dir}` },
-
+            
+            deleteDir: { command: (dir) => `rd /s /q ${dir}` },
             copy: { command: (file) => `copy ${file} build\\${file}` },
             copyRelease: { command: (file) => `copy release\\${file} build\\${file}` },
             copyAll: { command: (file) => `copy ${file}\\* build\\${file}` },
 
+            unixDeleteDir: { command: (dir) => `rm -rf ${dir}` },
             unixCopy: { command: (file) => `cp ${file} build/${file}` },
             unixCopyRelease: { command: (file) => `cp release/${file} build/${file}` },
             unixCopyAll: { command: (file) => `cp ${file}/* build/${file}` },
@@ -63,24 +64,26 @@ module.exports = function(grunt) {
     grunt.registerTask('refresh_token', ['shell:refreshToken']);
 
     grunt.registerTask('init', ['shell:mkdir:build']);
-    grunt.registerTask('build', ['shell:deleteDir:coverage',
-                                 'shell:deleteDir:build',
+    grunt.registerTask('build', ['shell:deleteDir:build',
                                  'shell:mkdir:build',
                                  'shell:mkdir:build\\specification',
                                  'shell:mkdir:build\\test\\files',
+                                 'shell:mkdir:build\\public',
                                  'shell:copy:.env',
-                                 'shell:copy:specification\\PreparaTec.yaml',
+                                 'shell:copy:specification\\SIDVI.yaml',
                                  'shell:copyAll:test\\files',
+                                 'shell:copyAll:public',
                                  'ts:build']);
-    grunt.registerTask('unixBuild', ['shell:deleteDir:coverage',
-                                     'shell:deleteDir:build',
+    grunt.registerTask('unixBuild', ['shell:unixDeleteDir:build',
                                      'shell:mkdir:build',
                                      'shell:mkdir:build/specification',
                                      'shell:mkdir:build/test',
                                      'shell:mkdir:build/test/files',
+                                     'shell:mkdir:build/public',
                                      'shell:unixCopy:.env',
-                                     'shell:unixCopy:specification/PreparaTec.yaml',
+                                     'shell:unixCopy:specification/SIDVI.yaml',
                                      'shell:unixCopyAll:test/files',
+                                     'shell:unixCopyAll:public',
                                      'ts:build']);
     grunt.registerTask('release', ['shell:deleteDir:build',
                                    'shell:mkdir:build',
@@ -89,17 +92,19 @@ module.exports = function(grunt) {
                                    'shell:copyRelease:package.json',
                                    'shell:copyRelease:.env',
                                    'shell:releaseSetup',
+                                   'shell:copyAll:public',
                                    'ts:build',
                                    'shell:deleteDir:build\\test']);
-    grunt.registerTask('unixRelease', ['shell:deleteDir:build',
+    grunt.registerTask('unixRelease', ['shell:unixDeleteDir:build',
                                        'shell:mkdir:build',
                                        'shell:mkdir:build/specification',
                                        'shell:unixCopy:.npmrc',
                                        'shell:unixCopyRelease:package.json',
                                        'shell:unixCopyRelease:.env',
                                        'shell:releaseSetup',
+                                       'shell:unixCopyAll:public',
                                        'ts:build',
-                                       'shell:deleteDir:build/test']);
+                                       'shell:unixDeleteDir:build/test']);
     grunt.registerTask('migrate', ['shell:cleardb',
                                    'shell:migrate']);
     grunt.registerTask('cleardb', ['shell:cleardb']);
