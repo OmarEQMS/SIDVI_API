@@ -12,15 +12,11 @@ import { Log } from '../tools';
 
 export class UsuarioServicio {
 
-    static async listarUsuarios(req: ServerRequest, rol: _Usuario.RolEnum, matricula: string, nombreCompleto: string, estatus: _Usuario.EstatusEnum, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<Coleccion<Usuario>> {
+    static async listarUsuarios(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<Coleccion<Usuario>> {
         try{
-            let query = req.query<Usuario>('Usuario').modify('defaultSelect'); 
-            query = rol ? query.where({rol}) : query;
-            query = matricula ? query.where('matricula', 'like', `%${matricula}%`) : query;
-            query = nombreCompleto ? query.where('nombreCompleto', 'like', `%${nombreCompleto}%`) : query;
-            query = estatus ? query.where({estatus}) : query;            
+            let query = req.query<Usuario>('Usuario').modify('defaultSelect');        
             let usuarios = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let usuariosFormat = usuarios.results.map((item:any) => new Usuario(item).forJSON());
+            let usuariosFormat = usuarios.results.map((item:any) => new Usuario(item).toJSON());
             return new Coleccion<Usuario>(usuariosFormat, usuarios.total);
         }catch(error){
             throw error;
@@ -29,18 +25,7 @@ export class UsuarioServicio {
 
     static async crearUsuario(req: ServerRequest, usuario: Usuario): Promise<APIResponse> {
         try{
-            //Verificar que no exista
-            if(await req.query<Usuario>('Usuario').findOne({matricula: usuario.matricula})!=null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La matricula ya existe");
-            //Seguridad - Solo un usuario autorizado puede crear usuarios habilitados y profesores o administradores
-            if(!UsuarioServicio.authorize(usuario.rol, req.usuarioToken.rol)){
-                usuario.estatus = _Usuario.EstatusEnum.DESHABILITADO;
-                usuario.rol = _Usuario.RolEnum.ALUMNO;                
-            }
-            
-            deleteProperty(usuario, ['idUsuario']); 
-            usuario.token = generateCode(Defaults.codeAlphabet, Defaults.codeLength);
-            usuario.contrasena = await bcrypt.hash(usuario.contrasena, Defaults.saltRounds);            
+            deleteProperty(usuario, ['idUsuario']);         
             let newUsuario = await req.query<Usuario>('Usuario').insert(usuario);
             return new APIResponse(_APIResponse.CREATED, 'El usuario fue creado satisfactoriamente', {insertedId: newUsuario.idUsuario});
         }catch(error){
@@ -50,13 +35,9 @@ export class UsuarioServicio {
 
     static async obtenerUsuario(req: ServerRequest, idUsuario: number): Promise<Usuario>{
         try{            
-            //Seguridad - Un alumno solo puede obtener datos de el mismo
-            if(req.usuarioToken.rol==_Usuario.RolEnum.ALUMNO && req.usuarioToken.idUsuario!=idUsuario) 
-                throw new APIResponse(_APIResponse.FORBIDDEN);
-
             let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
             if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);            
-            return usuario.forBase64();
+            return usuario.toJSON();
         }catch(error){
             throw error;
         }
@@ -64,19 +45,6 @@ export class UsuarioServicio {
 
     static async actualizarUsuario(req: ServerRequest, idUsuario: number, usuario: Usuario): Promise<APIResponse> {
         try{
-            let oldUsuario = await req.query<Usuario>('Usuario').findById(idUsuario);
-            //Verificar que Exista
-            if(oldUsuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            //Seguridad - Solo un usuario autorizado puede cambiarlos datos de alguien
-            if(!(req.usuarioToken.idUsuario==idUsuario || UsuarioServicio.authorize(oldUsuario.rol, req.usuarioToken.rol))) 
-                throw new APIResponse(_APIResponse.FORBIDDEN);
-            //Seguridad - Solo un usuario autorizado puede crear usuarios habilitados y profesores o administradores
-            if(!UsuarioServicio.authorize(usuario.rol, req.usuarioToken.rol))
-                deleteProperty(usuario, ['estatus', 'rol', 'matricula']);
-            //Verificar que no exista
-            if(usuario.matricula!=null && await req.query<Usuario>('Usuario').findOne({matricula: usuario.matricula})!=null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La matricula ya existe");            
-
             deleteProperty(usuario, ['idUsuario', 'contrasena', 'token']);
             await req.query<Usuario>('Usuario').patchAndFetchById(idUsuario, usuario);
             return new APIResponse(_APIResponse.UPDATED, "El Usuario fue actualizado");
@@ -87,10 +55,6 @@ export class UsuarioServicio {
     
     static async eliminarUsuario(req: ServerRequest, idUsuario: number): Promise<APIResponse> {
         try{
-            //Verificar que Exista
-            if(await req.query<Usuario>('Usuario').findById(idUsuario)==null) 
-                throw new APIResponse(_APIResponse.NOT_FOUND);
-
             await req.query<Usuario>('Usuario').deleteById(idUsuario);
             return new APIResponse(_APIResponse.DELETED, "El Usuario fue eliminado correctamente");
         }catch(error){
@@ -100,14 +64,10 @@ export class UsuarioServicio {
 
     static async descargarUsuarioFoto(req: ServerRequest, idUsuario: number): Promise<Response<ArrayBuffer>> {
         try{           
-            //Seguridad - Un alumno solo pueden ver datos de el mismo
-            if(req.usuarioToken.rol==_Usuario.RolEnum.ALUMNO && req.usuarioToken.idUsuario!=idUsuario)
-                throw new APIResponse(_APIResponse.FORBIDDEN);
-
             let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
             if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
             if(usuario.archivoFoto==null) throw new APIResponse(_APIResponse.NO_CONTENT, "No hay contenido para mostrar"); 
-            return new Response(usuario.archivoFoto, _APIResponse.OK.statusCode, usuario.mimetypeFoto as ContentTypeEnum);
+            return new Response<ArrayBuffer>(usuario.archivoFoto as ArrayBuffer, _APIResponse.OK.statusCode, usuario.mimetypeFoto as ContentTypeEnum);
         }catch(error){
             throw error;
         }
@@ -115,16 +75,6 @@ export class UsuarioServicio {
 
     static async cargarUsuarioFoto(req: ServerRequest, idUsuario: number, foto: any): Promise<APIResponse> {
         try {
-            let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
-            //Verificar que Exista
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            //Seguridad - Solo un usuario aturoizado puede cambiar la informacion
-            if(!(req.usuarioToken.idUsuario==idUsuario || UsuarioServicio.authorize(usuario.rol, req.usuarioToken.rol))) 
-                throw new APIResponse(_APIResponse.FORBIDDEN);
-            //Restriction - FileSize - ContentType
-            if(foto.buffer.length>_Usuario.archivoFileSize) throw new APIResponse(_APIResponse.UNAVAILABLE, "No se permite un documento tan grande");
-            if(!_Usuario.archivoContentType.includes(foto.mimetype)) throw new APIResponse(_APIResponse.UNAVAILABLE, "No se permite este formato");
-
             await req.query<Usuario>('Usuario').patchAndFetchById(idUsuario, { mimetypeFoto: foto.mimetype, archivoFoto: foto.buffer });
 			return new APIResponse(_APIResponse.OK, 'Se ha subido el archivo');
 		} catch (error) {

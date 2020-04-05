@@ -21,7 +21,6 @@ export var Authorization = {
             if(!req.swagger.operation['x-security'].some(scope => scope==tokenDecoded.rol)) throw -1;
             req.usuarioToken = tokenDecoded;
             let usuario = await req.query<Usuario>('Usuario').modify('authorizationSelect').findById(tokenDecoded.idUsuario); 
-            if(usuario.estatus!=_Usuario.EstatusEnum.HABILITADO) throw -1;   
             await jwt.verify(token, usuario.token);
             next();
         }catch (err){
