@@ -14,7 +14,7 @@ export class CategoriaEstadisticaServicio {
 
     static async listarCategoriaEstadisticas(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try{
-            let query = await req.query<CategoriaEstadistica>('CategoriaEstadistica');   
+            let query = await req.query<CategoriaEstadistica>('CategoriaEstadistica');
         }catch(error){
             throw error;
         }

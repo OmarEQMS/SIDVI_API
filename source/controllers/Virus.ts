@@ -1,37 +1,37 @@
 import { Handler } from '../types';
 import { Response } from '../responses';
-import { UsuarioServicio } from '../services';
-import { Usuario, _Usuario } from '../models';
+import { VirusServicio } from '../services';
+import { Virus, _Virus } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarUsuarios: Handler = async (req, res, next) => {
+export const listarViruss: Handler = async (req, res, next) => {
     const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
     const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
-    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Usuario.idColumn;    
+    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Virus.idColumn;    
     try{
-        let response = await UsuarioServicio.listarUsuarios(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await VirusServicio.listarVirus(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
         res.respond(response);
     }catch(error){
         next(error);
     }
 }
 
-export const crearUsuario: Handler = async (req, res, next) => {
-    const usuario: Usuario = req.swagger.params['usuario'].value;
+export const crearVirus: Handler = async (req, res, next) => {
+    const virus: Virus = req.swagger.params['virus'].value;
     try{
-        let response = await UsuarioServicio.crearUsuario(req, usuario);
+        let response = await VirusServicio.crearVirus(req, virus);
         res.respond(response);
     }catch(error){
         next(error);
     }
 }
 
-export const obtenerUsuario: Handler = async (req, res, next) => {
-    const idUsuario: number = req.swagger.params['idUsuario'].value;
+export const obtenerVirus: Handler = async (req, res, next) => {
+    const idVirus: number = req.swagger.params['idVirus'].value;
     try{
-        let response = await UsuarioServicio.obtenerUsuario(req, idUsuario);
+        let response = await VirusServicio.obtenerVirus(req, idVirus);
         res.respond(response);
         }catch(error){
         next(error);
@@ -39,42 +39,42 @@ export const obtenerUsuario: Handler = async (req, res, next) => {
 }
 
 
-export const actualizarUsuario: Handler = async (req, res, next) => {
-    const idUsuario: number = req.swagger.params['idUsuario'].value;
-    const usuario: Usuario = req.swagger.params['usuario'].value;
+export const actualizarVirus: Handler = async (req, res, next) => {
+    const idVirus: number = req.swagger.params['idVirus'].value;
+    const virus: Virus = req.swagger.params['virus'].value;
     try{
-        let response = await UsuarioServicio.actualizarUsuario(req, idUsuario, usuario);
+        let response = await VirusServicio.actualizarVirus(req, idVirus, virus);
         res.respond(response);
     }catch(error){
         next(error);
     }
 }
 
-export const eliminarUsuario: Handler = async (req, res, next) => {
-    const idUsuario: number = req.swagger.params['idUsuario'].value;
+export const eliminarVirus: Handler = async (req, res, next) => {
+    const idVirus: number = req.swagger.params['idVirus'].value;
     try{
-        let response = await UsuarioServicio.eliminarUsuario(req, idUsuario);
+        let response = await VirusServicio.eliminarVirus(req, idVirus);
         res.respond(response);
     }catch(error){
         next(error);
     }
 }
 
-export const descargarUsuarioFoto: Handler = async (req, res, next) => {
-    const idUsuario: number = req.swagger.params['idUsuario'].value;
+export const descargarVirusIcono: Handler = async (req, res, next) => {
+    const idVirus: number = req.swagger.params['idVirus'].value;
     try{
-        let response = await UsuarioServicio.descargarUsuarioFoto(req, idUsuario);
+        let response = await VirusServicio.descargarVirusIcono(req, idVirus);
         res.respond(response);
     }catch(error){
         next(error);
     }
 }
 
-export const cargarUsuarioFoto: Handler = async (req, res, next) => {
-    const idUsuario: number = req.swagger.params['idUsuario'].value;
-    const foto: any = req.swagger.params['foto'].value;
+export const cargarVirusIcono: Handler = async (req, res, next) => {
+    const idVirus: number = req.swagger.params['idVirus'].value;
+    const icono: any = req.swagger.params['icono'].value;
     try{
-        let response = await UsuarioServicio.cargarUsuarioFoto(req, idUsuario, foto);
+        let response = await VirusServicio.cargarVirusIcono(req, idVirus, icono);
         res.respond(response);
     }catch(error){
         next(error);
