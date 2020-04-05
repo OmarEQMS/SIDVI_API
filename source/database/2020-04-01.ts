@@ -45,7 +45,7 @@ export const up = (knex: any) => {
             table.string('nombre', 300);
         })
         .createTable('Informacion', (table: any) => {
-            table.increments('idGrupo').primary();
+            table.increments('idInformacion').primary();
             table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');            
             table.integer('fkCategoriaInformacion').unsigned().references('CategoriaInformacion.idCategoriaInformacion').onDelete('CASCADE');
             table.string('texto', 300);

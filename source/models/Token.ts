@@ -3,22 +3,22 @@ import { getDate } from "../tools/Utils";
 
 export interface IToken {
     idUsuario?: number;
-    matricula: string;
     nombreCompleto: string;
-    rol?: _Usuario.RolEnum;
+    usuario: string;
+    rol?: _Usuario.Rol;
     expire: Date;
 }
 export class Token implements IToken {
     idUsuario?: number;
-    matricula: string;
     nombreCompleto: string;
-    rol?: _Usuario.RolEnum;
+    usuario: string;
+    rol?: _Usuario.Rol;
     expire: Date;
 
     constructor(usuario: Usuario){
         this.idUsuario = usuario.idUsuario;
-        this.matricula = usuario.matricula;
         this.nombreCompleto = usuario.nombreCompleto;
+        this.usuario = usuario.usuario;
         this.rol = usuario.rol;
         this.expire = getDate();
     }

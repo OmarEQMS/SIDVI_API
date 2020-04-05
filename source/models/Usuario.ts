@@ -1,91 +1,89 @@
 import { RelationMappings, Model } from 'objection';
 
 import { BaseModel } from '../models';
-import { Log } from '../tools';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
+import { Log } from '../tools';
 
 export namespace _Usuario {
     export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
     export let archivoFileSize: number = 8 * 1024 * 1024;
 
-    export type RolEnum = 'ALUMNO' | 'PROFESOR' | 'ADMINISTRADOR';
-    export const RolEnum = {
-        ALUMNO: 'ALUMNO' as RolEnum,
-        PROFESOR: 'PROFESOR' as RolEnum,
-        ADMINISTRADOR: 'ADMINISTRADOR' as RolEnum
-    };
-    export type EstatusEnum = 'HABILITADO' | 'DESHABILITADO';
-    export const EstatusEnum = {
-        HABILITADO: 'HABILITADO' as EstatusEnum,
-        DESHABILITADO: 'DESHABILITADO' as EstatusEnum,
+    export type Rol = 'USUARIO' | 'ADMINISTRADOR';
+    export const Rol = {
+        USUARIO: 'USUARIO' as Rol,
+        ADMINISTRADOR: 'ADMINISTRADOR' as Rol
     };
 }
 
 export interface IUsuario {
     idUsuario?: number;
-    matricula: string;
     nombreCompleto: string;
-    contrasena: string;
-    token: string;
+    usuario?: string;
+    contrasena?: string;
+    token?: string;
+    correo?: string;
+    celular?: string;
     mimetypeFoto?: string;
     archivoFoto?: ArrayBuffer | string;
-    rol?: _Usuario.RolEnum;
-    correo?: any;
-    estatus?: _Usuario.EstatusEnum;
+    rol?: _Usuario.Rol;
 }
 
 export class Usuario extends BaseModel implements IUsuario {
+    // Objection
     static tableName = 'Usuario';
     static idColumn = 'idUsuario';
-    static columnList = ['idUsuario', 'matricula', 'nombreCompleto', 'mimetypeFoto', 'campus', 'rol', 'correo', 'estatus'];
-    static columnListAuthorization = ['idUsuario', 'matricula', 'nombreCompleto', 'contrasena', 'token', 'campus', 'rol', 'estatus'];
+    // Objection Modifiers
+    static columnList = ['idUsuario', 'nombreCompleto', 'usuario', 'correo', 'celular', 'mimetypeFoto', 'rol'];
+    static columnListAuthorization = ['idUsuario', 'nombreCompleto', 'usuario', 'contrasena', 'token', 'rol'];
 
+    // Columns
     idUsuario?: number;
-    matricula: string;
     nombreCompleto: string;
-    contrasena: string;
-    token: string;
+    usuario?: string;
+    contrasena?: string;
+    token?: string;
+    correo?: string;
+    celular?: string;
     mimetypeFoto?: ContentTypeEnum;
-    archivoFoto?: ArrayBuffer;
-    rol?: _Usuario.RolEnum;
-    correo?: any;
-    estatus?: _Usuario.EstatusEnum;
-    // HasMany
+    archivoFoto?: ArrayBuffer | string;
+    rol?: _Usuario.Rol;
 
+    //Relations: BelongsToOne
+    
+    // Relations: HasMany
+        // medicos: Medico;
+
+    // Constructor
     constructor(usuario?: any){
         super();
         if(usuario!==undefined){
             this.idUsuario = usuario.idUsuario;
-            this.matricula = usuario.matricula;
             this.nombreCompleto = usuario.nombreCompleto;
+            this.usuario = usuario.usuario;
             this.contrasena = usuario.contrasena;
-            this.mimetypeFoto = usuario.mimetypeFoto
+            this.token = usuario.token
+            this.correo = usuario.correo;
+            this.celular = usuario.celular;
+            this.mimetypeFoto = usuario.mimetypeFoto;
             this.archivoFoto = usuario.archivoFoto;
             this.rol = usuario.rol;
-            this.correo = usuario.correo;
-            this.estatus = usuario.estatus;
         }
     }
     
-    forJSON() {
-        delete this.token; //Seguridad - Nunca se envia el parametro contraseña, ni token
+    // Respond Object
+    toJSON() {
         delete this.contrasena;
-        delete this.archivoFoto;
-        return this;
-    }
-    
-    forBase64() {
         delete this.token;
-        delete this.contrasena;
         if (Defaults.allowBase64Types.includes(this.mimetypeFoto)) {
             this.archivoFoto = fileToBase64(this.mimetypeFoto, this.archivoFoto);
         }else{
             delete this.archivoFoto;
         }
         return this;
-	}
+    }
 
+    // Objection: Modifiers
     static get modifiers() {
         return {   
             defaultSelect(builder) {
@@ -97,26 +95,18 @@ export class Usuario extends BaseModel implements IUsuario {
         };
     }
 
+    // Objection: Relations
     static relationMappings: RelationMappings = {
-    //------------------------------------- HasManyRelation
-        Inscripcion: {
+        //------------------------------------- HasManyRelation
+        Medico: {
             relation: Model.HasManyRelation,
-            modelClass: 'Inscripcion',
-            join: { from: 'Usuario.idUsuario', to: 'Inscripcion.fkUsuario' }
-        },
-        Mensaje: {
-            relation: Model.HasManyRelation,
-            modelClass: 'Mensaje',
-            join: { from: 'Usuario.idUsuario', to: 'Mensaje.fkUsuario' }
-        },
-        Evento: {
-            relation: Model.HasManyRelation,
-            modelClass: 'Evento',
-            join: { from: 'Usuario.idUsuario', to: 'Evento.fkUsuario' }
+            modelClass: 'Medico',
+            join: { from: 'Usuario.idUsuario', to: 'Medico.fkUsuario' }
         }
-    //------------------------------------- HasOneRelation
-    //------------------------------------- BelongsToOneRelation  
-    //------------------------------------- HasOneThroughRelation
+        //------------------------------------- HasOneRelation
+        //------------------------------------- BelongsToOneRelation  
+
+        //------------------------------------- HasOneThroughRelation
     };
 
 }

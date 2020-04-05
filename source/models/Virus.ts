@@ -1,122 +1,62 @@
 import { RelationMappings, Model } from 'objection';
 
 import { BaseModel } from '../models';
-import { Log } from '../tools';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
+import { Log } from '../tools';
 
-export namespace _Usuario {
-    export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
-    export let archivoFileSize: number = 8 * 1024 * 1024;
-
-    export type RolEnum = 'ALUMNO' | 'PROFESOR' | 'ADMINISTRADOR';
-    export const RolEnum = {
-        ALUMNO: 'ALUMNO' as RolEnum,
-        PROFESOR: 'PROFESOR' as RolEnum,
-        ADMINISTRADOR: 'ADMINISTRADOR' as RolEnum
-    };
-    export type EstatusEnum = 'HABILITADO' | 'DESHABILITADO';
-    export const EstatusEnum = {
-        HABILITADO: 'HABILITADO' as EstatusEnum,
-        DESHABILITADO: 'DESHABILITADO' as EstatusEnum,
-    };
+export namespace _Virus {
+    
 }
 
-export interface IUsuario {
-    idUsuario?: number;
-    matricula: string;
-    nombreCompleto: string;
-    contrasena: string;
-    token: string;
-    mimetypeFoto?: string;
-    archivoFoto?: ArrayBuffer | string;
-    rol?: _Usuario.RolEnum;
-    correo?: any;
-    estatus?: _Usuario.EstatusEnum;
+export interface IVirus {
+    idVirus?: number;
 }
 
-export class Usuario extends BaseModel implements IUsuario {
-    static tableName = 'Usuario';
-    static idColumn = 'idUsuario';
-    static columnList = ['idUsuario', 'matricula', 'nombreCompleto', 'mimetypeFoto', 'campus', 'rol', 'correo', 'estatus'];
-    static columnListAuthorization = ['idUsuario', 'matricula', 'nombreCompleto', 'contrasena', 'token', 'campus', 'rol', 'estatus'];
+export class Virus extends BaseModel implements IVirus {
+    // Objection
+    static tableName = 'Virus';
+    static idColumn = 'idVirus';
+    // Objection Modifiers
+    static columnList = ['idVirus'];
 
-    idUsuario?: number;
-    matricula: string;
-    nombreCompleto: string;
-    contrasena: string;
-    token: string;
-    mimetypeFoto?: ContentTypeEnum;
-    archivoFoto?: ArrayBuffer;
-    rol?: _Usuario.RolEnum;
-    correo?: any;
-    estatus?: _Usuario.EstatusEnum;
-    // HasMany
+    // Columns
+    idVirus?: number;
 
-    constructor(usuario?: any){
+    //Relations: BelongsToOne
+    
+    // Relations: HasMany
+
+    // Constructor
+    constructor(virus?: any){
         super();
-        if(usuario!==undefined){
-            this.idUsuario = usuario.idUsuario;
-            this.matricula = usuario.matricula;
-            this.nombreCompleto = usuario.nombreCompleto;
-            this.contrasena = usuario.contrasena;
-            this.mimetypeFoto = usuario.mimetypeFoto
-            this.archivoFoto = usuario.archivoFoto;
-            this.rol = usuario.rol;
-            this.correo = usuario.correo;
-            this.estatus = usuario.estatus;
+        if(virus!==undefined){
+            this.idVirus = virus.idVirus;
         }
     }
     
-    forJSON() {
-        delete this.token; //Seguridad - Nunca se envia el parametro contraseña, ni token
-        delete this.contrasena;
-        delete this.archivoFoto;
+    // Respond Object
+    toJSON() {
         return this;
     }
-    
-    forBase64() {
-        delete this.token;
-        delete this.contrasena;
-        if (Defaults.allowBase64Types.includes(this.mimetypeFoto)) {
-            this.archivoFoto = fileToBase64(this.mimetypeFoto, this.archivoFoto);
-        }else{
-            delete this.archivoFoto;
-        }
-        return this;
-	}
 
+    // Objection: Modifiers
     static get modifiers() {
         return {   
             defaultSelect(builder) {
-                builder.select(...Usuario.columnList);
-            },
-            authorizationSelect(builder) {
-                builder.select(...Usuario.columnListAuthorization);
+                builder.select(...Virus.columnList);
             }
         };
     }
 
+    // Objection: Relations
     static relationMappings: RelationMappings = {
-    //------------------------------------- HasManyRelation
-        Inscripcion: {
-            relation: Model.HasManyRelation,
-            modelClass: 'Inscripcion',
-            join: { from: 'Usuario.idUsuario', to: 'Inscripcion.fkUsuario' }
-        },
-        Mensaje: {
-            relation: Model.HasManyRelation,
-            modelClass: 'Mensaje',
-            join: { from: 'Usuario.idUsuario', to: 'Mensaje.fkUsuario' }
-        },
-        Evento: {
-            relation: Model.HasManyRelation,
-            modelClass: 'Evento',
-            join: { from: 'Usuario.idUsuario', to: 'Evento.fkUsuario' }
-        }
-    //------------------------------------- HasOneRelation
-    //------------------------------------- BelongsToOneRelation  
-    //------------------------------------- HasOneThroughRelation
+        //------------------------------------- HasManyRelation
+
+        //------------------------------------- HasOneRelation
+        //------------------------------------- BelongsToOneRelation  
+
+        //------------------------------------- HasOneThroughRelation
     };
 
 }
