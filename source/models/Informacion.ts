@@ -6,11 +6,18 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 
 export namespace _Informacion {
-    
+    export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
+    export let archivoFileSize: number = 8 * 1024 * 1024;
 }
 
 export interface IInformacion {
     idInformacion?: number;
+    fkVirus?: number;
+    fkCategoriaInformacion?: number;
+    texto?: string;
+    descripcion?: string;
+    mimetype?: string;
+    archivo?: ArrayBuffer | string;
 }
 
 export class Informacion extends BaseModel implements IInformacion {
@@ -18,31 +25,48 @@ export class Informacion extends BaseModel implements IInformacion {
     static tableName = 'Informacion';
     static idColumn = 'idInformacion';
     // Objection Modifiers
-    static columnList = ['idInformacion'];
+    static columnList = ['idInformacion', 'fkVirus', 'fkCategoriaInformacion', 'texto', 'descripcion', 'mimetype'];
 
     // Columns
     idInformacion?: number;
+    fkVirus?: number;
+    fkCategoriaInformacion?: number;
+    texto?: string;
+    descripcion?: string;
+    mimetype?: ContentTypeEnum;
+    archivo?: ArrayBuffer | string;
 
     //Relations: BelongsToOne
-    
+
     // Relations: HasMany
 
     // Constructor
-    constructor(informacion?: any){
+    constructor(informacion?: any) {
         super();
-        if(informacion!==undefined){
+        if (informacion !== undefined) {
             this.idInformacion = informacion.idInformacion;
+            this.fkVirus =  informacion.fkVirus;
+            this.fkCategoriaInformacion =  informacion.fkCategoriaInformacion;
+            this.texto =  informacion.texto;
+            this.descripcion =  informacion.descripcion;
+            this.mimetype =  informacion.mimetype;
+            this.archivo = informacion.archivo;
         }
     }
-    
+
     // Respond Object
     toJSON() {
+        if(Defaults.allowBase64Types.includes(this.mimetype)) {
+            this.archivo = fileToBase64(this.mimetype, this.archivo);
+        } else {
+            delete this.archivo;
+        }
         return this;
     }
 
     // Objection: Modifiers
     static get modifiers() {
-        return {   
+        return {
             defaultSelect(builder) {
                 builder.select(...Informacion.columnList);
             }
@@ -54,7 +78,18 @@ export class Informacion extends BaseModel implements IInformacion {
         //------------------------------------- HasManyRelation
 
         //------------------------------------- HasOneRelation
+
         //------------------------------------- BelongsToOneRelation  
+        Virus: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'Virus',
+            join: { from: 'Informacion.fkVirus', to: 'Virus.idVirus' }
+        },
+        CategoriaInformacion: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'Usuario',
+            join: { from: 'Informacion.fkCategoriaInformacion', to: 'CategoriaInformacion.idCategoriaInformacion' }
+        }
 
         //------------------------------------- HasOneThroughRelation
     };
