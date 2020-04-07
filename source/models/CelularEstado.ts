@@ -1,6 +1,6 @@
 import { RelationMappings, Model } from 'objection';
 
-import { BaseModel } from '../models';
+import { BaseModel, Virus } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
@@ -38,7 +38,8 @@ export class CelularEstado extends BaseModel implements ICelularEstado {
     fk?: number;
 
     //Relations: BelongsToOne
-    
+    virus: Virus;
+
     // Relations: HasMany
 
     // Constructor
@@ -73,12 +74,7 @@ export class CelularEstado extends BaseModel implements ICelularEstado {
 
         //------------------------------------- HasOneRelation
 
-        //------------------------------------- BelongsToOneRelation  
-        Usuario: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: 'Usuario',
-            join: { from: 'CelularEstado.fkUsuario', to: 'Usuario.idUsuario' }
-        },
+        //------------------------------------- BelongsToOneRelation          
         Virus: {
             relation: Model.BelongsToOneRelation,
             modelClass: 'Virus',

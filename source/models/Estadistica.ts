@@ -1,6 +1,6 @@
 import { RelationMappings, Model } from 'objection';
 
-import { BaseModel } from '../models';
+import { BaseModel, Virus, Ubicacion, CategoriaEstadistica } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
@@ -34,7 +34,10 @@ export class Estadistica extends BaseModel implements IEstadistica {
     fecha?: Date;
 
     //Relations: BelongsToOne
-    
+    virus: Virus;
+    ubicacion: Ubicacion;
+    categoriaEstadistica: CategoriaEstadistica;
+
     // Relations: HasMany
 
     // Constructor

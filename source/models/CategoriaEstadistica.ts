@@ -1,6 +1,6 @@
 import { RelationMappings, Model } from 'objection';
 
-import { BaseModel } from '../models';
+import { BaseModel, Estadistica } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
@@ -28,6 +28,7 @@ export class CategoriaEstadistica extends BaseModel implements ICategoriaEstadis
     //Relations: BelongsToOne
     
     // Relations: HasMany
+    estadisticas: Estadistica[];
 
     // Constructor
     constructor(categoriaEstadistica?: any){

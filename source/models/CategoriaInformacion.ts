@@ -1,6 +1,6 @@
 import { RelationMappings, Model } from 'objection';
 
-import { BaseModel } from '../models';
+import { BaseModel, Informacion } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
@@ -30,6 +30,7 @@ export class CategoriaInformacion extends BaseModel implements ICategoriaInforma
     //Relations: BelongsToOne
     
     // Relations: HasMany
+    informaciones: Informacion[];
 
     // Constructor
     constructor(categoriaInformacion?: any){

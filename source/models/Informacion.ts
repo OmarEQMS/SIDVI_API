@@ -1,6 +1,6 @@
 import { RelationMappings, Model } from 'objection';
 
-import { BaseModel } from '../models';
+import { BaseModel, Virus, CategoriaInformacion } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
@@ -37,6 +37,8 @@ export class Informacion extends BaseModel implements IInformacion {
     archivo?: ArrayBuffer | string;
 
     //Relations: BelongsToOne
+    virus: Virus;
+    categoriaInformacion: CategoriaInformacion;
 
     // Relations: HasMany
 
