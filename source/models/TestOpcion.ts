@@ -39,7 +39,7 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
     clave?: string;
     texto?: string;
     descripcion?: string;
-    mimetype?: string;
+    mimetype?: ContentTypeEnum;
     archivo?: ArrayBuffer | string;
 
     //Relations: BelongsToOne
@@ -64,6 +64,11 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
     
     // Respond Object
     toJSON() {
+        if(this.archivo != null && Defaults.allowBase64Types.includes(this.mimetype)) {
+            this.archivo = fileToBase64(this.mimetype, this.archivo);
+        } else {
+            delete this.archivo;
+        }
         return this;
     }
 

@@ -35,7 +35,7 @@ export class TestNodo extends BaseModel implements ITestNodo {
     fkVirus?: number;
     texto?: string;
     descripcion?: string;
-    mimetype?: string;
+    mimetype?: ContentTypeEnum;
     archivo?: ArrayBuffer | string;
 
     //Relations: BelongsToOne
@@ -61,6 +61,11 @@ export class TestNodo extends BaseModel implements ITestNodo {
     
     // Respond Object
     toJSON() {
+        if(this.archivo != null && Defaults.allowBase64Types.includes(this.mimetype)) {
+            this.archivo = fileToBase64(this.mimetype, this.archivo);
+        } else {
+            delete this.archivo;
+        }
         return this;
     }
 

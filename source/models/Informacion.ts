@@ -89,7 +89,7 @@ export class Informacion extends BaseModel implements IInformacion {
         },
         CategoriaInformacion: {
             relation: Model.BelongsToOneRelation,
-            modelClass: 'Usuario',
+            modelClass: 'CategoriaInformacion',
             join: { from: 'Informacion.fkCategoriaInformacion', to: 'CategoriaInformacion.idCategoriaInformacion' }
         }
 

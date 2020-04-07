@@ -45,7 +45,7 @@ export class Medico extends BaseModel implements IMedico {
     direccionConsultorio?: string;
     telefonoConsultorio?: string;
     descripcion?: string;
-    mimetypeFoto?: string;
+    mimetypeFoto?: ContentTypeEnum;
     archivoFoto ?: ArrayBuffer | string; 
 
     //Relations: BelongsToOne
@@ -75,6 +75,11 @@ export class Medico extends BaseModel implements IMedico {
     
     // Respond Object
     toJSON() {
+        if(this.archivoFoto != null && Defaults.allowBase64Types.includes(this.mimetypeFoto)) {
+            this.archivoFoto = fileToBase64(this.mimetypeFoto, this.archivoFoto);
+        } else {
+            delete this.archivoFoto;
+        }
         return this;
     }
 

@@ -27,8 +27,6 @@ export interface IVirus {
     archivoIcono?: ArrayBuffer | string;
     fkTestNodo?: number;
     estatus?: _Virus.Estatus;
-
-
 }
 
 export class Virus extends BaseModel implements IVirus {
@@ -42,15 +40,18 @@ export class Virus extends BaseModel implements IVirus {
     idVirus?: number;
     clave?: string;
     nombre?: string;
-    mimetypeIcono?: string;
+    mimetypeIcono?: ContentTypeEnum;
     archivoIcono?: ArrayBuffer | string;
     fkTestNodo?: number;
     estatus?: _Virus.Estatus;
+    
     //Relations: BelongsToOne
     testNodo?: TestNodo;
+
     // Relations: HasMany
     medicosVirus?: MedicoVirus[];
     testNodos?: TestNodo[];
+
     // Constructor
     constructor(virus?: any){
         super();
@@ -66,6 +67,11 @@ export class Virus extends BaseModel implements IVirus {
     
     // Respond Object
     toJSON() {
+        if(this.archivoIcono != null && Defaults.allowBase64Types.includes(this.mimetypeIcono)) {
+            this.archivoIcono = fileToBase64(this.mimetypeIcono, this.archivoIcono);
+        } else {
+            delete this.archivoIcono;
+        }
         return this;
     }
 
