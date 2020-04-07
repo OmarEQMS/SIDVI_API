@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class UbicacionServicio {
 
-    static async listarUbicaciones(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarUbicaciones(req: ServerRequest, fkUbicacion: number, clave: string, nombre: string, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
             let query = await req.query<Ubicacion>('Ubicacion');   
         }catch(error){

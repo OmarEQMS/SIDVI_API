@@ -6,12 +6,13 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarCelularEstados: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const celular: string = req.swagger.params['celular'].value;
+    const fkVirus: number = req.swagger.params['fkVirus'].value;
+    const seccion: _CelularEstado.Seccion = req.swagger.params['seccion'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || CelularEstado.idColumn;    
     try{
-        let response = await CelularEstadoServicio.listarCelularEstados(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await CelularEstadoServicio.listarCelularEstados(req, celular, fkVirus, seccion, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

@@ -60,13 +60,17 @@ export const cambiarContrasena: Handler = async (req, res, next) => {
 }
 
 export const listarUsuarios: Handler = async (req, res, next) => {
-    const nombre: string = req.swagger.params['nombre'].value;
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const nombreCompleto: string = req.swagger.params['nombreCompleto'].value;
+    const usuario: string = req.swagger.params['usuario'].value;
+    const correo: string = req.swagger.params['correo'].value;
+    const celular: string = req.swagger.params['celular'].value;
+    const rol: _Usuario.Rol = req.swagger.params['rol'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Usuario.idColumn;    
+    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
+    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
     try{
-        let response = await UsuarioServicio.listarUsuarios(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await UsuarioServicio.listarUsuarios(req, nombreCompleto, usuario, correo, celular, rol, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
         res.respond(response);
     }catch(error){
         next(error);

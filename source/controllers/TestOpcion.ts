@@ -6,12 +6,14 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarTestOpcions: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkTestNodo: number = req.swagger.params['fkTestNodo'].value || Defaults.ordenarModo;
+    const fkTestNodoSig: number = req.swagger.params['fkTestNodoSig'].value || Defaults.ordenarModo;
+    const clave: string = req.swagger.params['clave'].value || Defaults.ordenarModo;
+    const texto: string = req.swagger.params['texto'].value || Defaults.ordenarModo;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || TestOpcion.idColumn;    
     try{
-        let response = await TestOpcionServicio.listarTestOpciones(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await TestOpcionServicio.listarTestOpciones(req, fkTestNodo, fkTestNodoSig, clave, texto, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

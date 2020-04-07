@@ -239,6 +239,30 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
+                - name: nombreCompleto
+                  in: query
+                  type: string
+                  description: nombre completo del usuario
+                - name: usuario
+                  in: query
+                  type: string
+                  description: nombre de usuario
+                - name: correo
+                  in: query
+                  type: string
+                  format: email
+                  description: correo del usuario
+                - name: celular
+                  in: query
+                  type: string
+                  description: celular del usuario
+                - name: rol
+                  in: query
+                  type: string
+                  enum:
+                    - USUARIO
+                    - ADMINISTRADOR
+                  description: rol del usuario
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
                 - $ref: '#/parameters/tamanoPagina'
@@ -360,6 +384,7 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -421,10 +446,27 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: clave
+                  in: query
+                  type: string
+                  description: clave del virus
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre del virus
+                - name: fkTestNodo
+                  in: query
+                  type: integer
+                  description: nodo padre del test
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                    - INHABILITADO
+                    - HABILITADO
+                  description: estatus del virus
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/VirusColeccion'
@@ -540,6 +582,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -600,10 +643,16 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkVirus
+                  in: query
+                  type: integer
+                  description: identificador del virus
+                - name: texto
+                  in: query
+                  type: string
+                  description: texto del nodo
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/TestNodoColeccion'
@@ -717,6 +766,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -777,10 +827,24 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkTestNodo
+                  in: query
+                  type: integer
+                  description: identificador del nodo padre
+                - name: fkTestNodoSig
+                  in: query
+                  type: integer
+                  description: identificador del nodo siguiente
+                - name: clave
+                  in: query
+                  type: string
+                  description: clave de la opcion
+                - name: texto
+                  in: query
+                  type: string
+                  description: texto de la opcion
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/TestOpcionColeccion'
@@ -896,6 +960,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -956,10 +1021,16 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: clave
+                  in: query
+                  type: string
+                  description: clave de la categoria
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre de la categoria
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/CategoriaInformacionColeccion'
@@ -1079,10 +1150,20 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkVirus
+                  in: query
+                  type: integer
+                  description: identificador del virus
+                - name: fkCategoriaInformacion
+                  in: query
+                  type: integer
+                  description: identificador de la categoria
+                - name: texto
+                  in: query
+                  type: string
+                  description: texto de la informacion
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/InformacionColeccion'
@@ -1198,6 +1279,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -1258,10 +1340,20 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkUbicacion
+                  in: query
+                  type: integer
+                  description: identificador de la ubicacion
+                - name: clave
+                  in: query
+                  type: string
+                  description: clave de la ubicacion
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre de la ubicacion
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/UbicacionColeccion'
@@ -1381,10 +1473,12 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre de la categoria
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/CategoriaEstadisticaColeccion'
@@ -1504,10 +1598,20 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkVirus
+                  in: query
+                  type: integer
+                  description: identificador del virus
+                - name: fkUbicacion
+                  in: query
+                  type: integer
+                  description: identificador de la ubicacion
+                - name: fkCategoriaEstadistica
+                  in: query
+                  type: integer
+                  description: identificador de la categoria estadistica
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/EstadisticaColeccion'
@@ -1627,6 +1731,22 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkUsuario
+                  in: query
+                  type: integer
+                  description: identificador del usuario
+                - name: fkUbicacion
+                  in: query
+                  type: integer
+                  description: identificador de la ubicacion
+                - name: nombreConsultorio
+                  in: query
+                  type: string
+                  description: nombre del consultorio
+                - name: nombreDoctor
+                  in: query
+                  type: string
+                  description: nombre del doctor
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
                 - $ref: '#/parameters/tamanoPagina'
@@ -1749,6 +1869,7 @@ paths:
                 - TokenUsuario: []
             x-security:
                 - ANY
+                - PATH
                 - USUARIO
                 - ADMINISTRADOR
             produces:
@@ -1810,10 +1931,16 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkMedico
+                  in: query
+                  type: integer
+                  description: identificador del medico
+                - name: fkVirus
+                  in: query
+                  type: integer
+                  description: identificador del virus
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/MedicoVirusColeccion'
@@ -1936,10 +2063,16 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
+                - name: fkMedico
+                  in: query
+                  type: integer
+                  description: identificador del medico
+                - name: fkUsuario
+                  in: query
+                  type: integer
+                  description: identificador del usuario
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/ValoracionColeccion'
@@ -2060,10 +2193,25 @@ paths:
             x-security:
                 - ADMINISTRADOR
             parameters:
+                - name: celular
+                  in: query
+                  type: string
+                  description: numero celular del usuario
+                - name: fkVirus
+                  in: query
+                  type: integer
+                  description: identificador del virus
+                - name: seccion
+                  in: query
+                  type: string
+                  enum:
+                    - MEDICO
+                    - INFORMACION
+                    - TEST
+                    - ESTADISTICA
+                  description: seccion en donde se encuentra
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
-                - $ref: '#/parameters/tamanoPagina'
-                - $ref: '#/parameters/indicePagina'
             responses:
                 200:
                     $ref: '#/definitions/CelularEstadoColeccion'
@@ -2210,7 +2358,7 @@ definitions:
                 x-name: celular
                 type: string
                 description: celular del usuario
-                example: omar.quintero.ms@gmail.com    
+                example: 7771326125   
             mimetypeFoto:
                 x-name: formato
                 type: string

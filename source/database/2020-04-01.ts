@@ -100,7 +100,7 @@ export const up = (knex: any) => {
             table.string('celular', 50);
             table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');    
             table.enum('seccion', ['MEDICO', 'INFORMACION','TEST','ESTADISTICA']);
-            table.integer('fk');
+            table.integer('fk').unsigned();
         })
     ;
 }

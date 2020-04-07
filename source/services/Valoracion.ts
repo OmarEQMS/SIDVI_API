@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class ValoracionServicio {
 
-    static async listarValoraciones(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarValoraciones(req: ServerRequest, fkMedico: number, fkUsuario: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
             let query = await req.query<Valoracion>('Valoracion');   
         }catch(error){

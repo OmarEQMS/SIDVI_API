@@ -6,12 +6,12 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarValoracions: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkMedico: number = req.swagger.params['fkMedico'].value;
+    const fkUsuario: number = req.swagger.params['fkUsuario'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Valoracion.idColumn;    
     try{
-        let response = await ValoracionServicio.listarValoraciones(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await ValoracionServicio.listarValoraciones(req, fkMedico, fkUsuario, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

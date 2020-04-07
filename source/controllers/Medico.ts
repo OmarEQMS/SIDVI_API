@@ -6,12 +6,16 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarMedicos: Handler = async (req, res, next) => {
+    const fkUsuario: number = req.swagger.params['fkUsuario'].value;
+    const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
+    const nombreConsultorio: string = req.swagger.params['nombreConsultorio'].value;
+    const nombreDoctor: string = req.swagger.params['nombreDoctor'].value;
+    const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
+    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Medico.idColumn; 
     const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
     const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
-    const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
-    const ordenarPor: string = req.swagger.params['ordenarPor'].value || Medico.idColumn;    
     try{
-        let response = await MedicoServicio.listarMedicos(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await MedicoServicio.listarMedicos(req, fkUsuario, fkUbicacion, nombreConsultorio, nombreDoctor, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
         res.respond(response);
     }catch(error){
         next(error);

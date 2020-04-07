@@ -6,12 +6,12 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarTestNodos: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkVirus: number = req.swagger.params['fkVirus'].value || Defaults.ordenarModo;
+    const texto: string = req.swagger.params['texto'].value || Defaults.ordenarModo;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || TestNodo.idColumn;    
     try{
-        let response = await TestNodoServicio.listarTestNodos(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await TestNodoServicio.listarTestNodos(req, fkVirus, texto, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

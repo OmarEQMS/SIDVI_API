@@ -14,6 +14,7 @@ export namespace _Virus {
         INHABILITADO: 'INHABILITADO' as Estatus,
         HABILITADO: 'HABILITADO' as Estatus
     };
+
 }
 
 export interface IVirus {

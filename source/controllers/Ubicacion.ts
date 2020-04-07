@@ -6,12 +6,13 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarUbicacions: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
+    const clave: string = req.swagger.params['clave'].value;
+    const nombre: string = req.swagger.params['nombre'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Ubicacion.idColumn;    
     try{
-        let response = await UbicacionServicio.listarUbicaciones(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await UbicacionServicio.listarUbicaciones(req, fkUbicacion, clave, nombre, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

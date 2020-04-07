@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class EstadisticaServicio {
 
-    static async listarEstadisticas(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkCategoriaEstadistica: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
             let query = await req.query<Estadistica>('Estadistica');   
         }catch(error){

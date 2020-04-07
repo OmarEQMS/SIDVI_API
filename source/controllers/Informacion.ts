@@ -6,12 +6,13 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarInformacions: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkVirus: number = req.swagger.params['fkVirus'].value;
+    const fkCategoriaInformacion: number = req.swagger.params['fkCategoriaInformacion'].value;
+    const texto: string = req.swagger.params['texto'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Informacion.idColumn;    
     try{
-        let response = await InformacionServicio.listarInformaciones(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await InformacionServicio.listarInformaciones(req, fkVirus, fkCategoriaInformacion, texto, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);
