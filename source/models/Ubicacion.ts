@@ -4,6 +4,7 @@ import { BaseModel } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
+import { Medico } from './Medico';
 
 export namespace _Ubicacion {
     
@@ -11,6 +12,9 @@ export namespace _Ubicacion {
 
 export interface IUbicacion {
     idUbicacion?: number;
+    fkUbicacion?: number;
+    dave?: string;
+    nombre?: string;
 }
 
 export class Ubicacion extends BaseModel implements IUbicacion {
@@ -22,16 +26,24 @@ export class Ubicacion extends BaseModel implements IUbicacion {
 
     // Columns
     idUbicacion?: number;
+    fkUbicacion?: number;
+    dave?: string;
+    nombre?: string;
 
     //Relations: BelongsToOne
-    
+    ubicacion?: Ubicacion;
     // Relations: HasMany
+    ubicaciones?: Ubicacion[];
+    medicos?: Medico[];
 
     // Constructor
     constructor(ubicacion?: any){
         super();
         if(ubicacion!==undefined){
             this.idUbicacion = ubicacion.idUbicacion;
+            this.fkUbicacion = ubicacion.fkUbicacion;
+            this.dave = ubicacion.dave;
+            this.nombre = ubicacion.nombre;
         }
     }
     
@@ -48,14 +60,27 @@ export class Ubicacion extends BaseModel implements IUbicacion {
             }
         };
     }
-
     // Objection: Relations
     static relationMappings: RelationMappings = {
         //------------------------------------- HasManyRelation
+        Ubicaciones: {
+            relation: Model.HasManyRelation,
+            modelClass: 'Ubicacion',
+            join: { from: 'Ubicacion.idUbicacion', to: 'Ubicacion.fkUbicacion' }
+        },
+        Medico: {
+            relation: Model.HasManyRelation,
+            modelClass: 'Medico',
+            join: { from: 'Ubicacion.idUbicacion', to: 'Medico.fkUbicacion' }
+        },
 
         //------------------------------------- HasOneRelation
         //------------------------------------- BelongsToOneRelation  
-
+        Ubicacion: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'Ubicacion',
+            join: { from: 'Ubicacion.fkUbicacion', to: 'Ubicacion.idUbicacion' }
+        }
         //------------------------------------- HasOneThroughRelation
     };
 

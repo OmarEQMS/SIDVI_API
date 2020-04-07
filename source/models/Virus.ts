@@ -4,13 +4,28 @@ import { BaseModel } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
+import { TestNodo} from './TestNodo';
+import { MedicoVirus} from './MedicoVirus';
 
 export namespace _Virus {
-    
+   
+    export type Estatus = 'INHABILITADO' | 'HABILITADO';
+    export const Estatus = {
+        INHABILITADO: 'INHABILITADO' as Estatus,
+        HABILITADO: 'HABILITADO' as Estatus
+    };
 }
 
 export interface IVirus {
     idVirus?: number;
+    dave?: string;
+    nombre?: string;
+    mimetypeIcono?: string;
+    archivoIcono?: ArrayBuffer | string;
+    fkTestNodo?: number;
+    estatus?: _Virus.Estatus;
+
+
 }
 
 export class Virus extends BaseModel implements IVirus {
@@ -22,16 +37,27 @@ export class Virus extends BaseModel implements IVirus {
 
     // Columns
     idVirus?: number;
-
+    dave?: string;
+    nombre?: string;
+    mimetypeIcono?: string;
+    archivoIcono?: ArrayBuffer | string;
+    fkTestNodo?: number;
+    estatus?: _Virus.Estatus;
     //Relations: BelongsToOne
-    
+    testNodo?: TestNodo;
     // Relations: HasMany
-
+    medicosVirus?: MedicoVirus[];
+    testNodos?: TestNodo[];
     // Constructor
     constructor(virus?: any){
         super();
         if(virus!==undefined){
             this.idVirus = virus.idVirus;
+            this.dave = virus.dave;
+            this.nombre = virus.nombre;
+            this.mimetypeIcono = virus.mimetypeIcono;
+            this.archivoIcono = virus.archivoIcono;
+            this.fkTestNodo = virus.fkTestNodo;
         }
     }
     
@@ -52,10 +78,24 @@ export class Virus extends BaseModel implements IVirus {
     // Objection: Relations
     static relationMappings: RelationMappings = {
         //------------------------------------- HasManyRelation
-
+        MedicoVirus: {
+            relation: Model.HasManyRelation,
+            modelClass: 'MedicoVirus',
+            join: { from: 'Virus.idVirus', to: 'MedicoVirus.fkVirus' }
+        },
+        TestNodos: {
+            relation: Model.HasManyRelation,
+            modelClass: 'TestNodo',
+            join: { from: 'Virus.idVirus', to: 'TestNodo.fkVirus' }
+        },
         //------------------------------------- HasOneRelation
         //------------------------------------- BelongsToOneRelation  
 
+        TestNodo: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'TestNodo',
+            join: { from: 'Virus.fkTestNodo', to: 'TestNodo.idTestNodo' }
+        }
         //------------------------------------- HasOneThroughRelation
     };
 

@@ -4,6 +4,8 @@ import { BaseModel } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
+import { Medico } from './Medico';
+import { Valoracion} from './Valoracion';
 
 export namespace _Usuario {
     export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
@@ -52,7 +54,8 @@ export class Usuario extends BaseModel implements IUsuario {
     //Relations: BelongsToOne
     
     // Relations: HasMany
-        // medicos: Medico;
+    medicos: Medico[];
+    valoraciones?: Valoracion[];
 
     // Constructor
     constructor(usuario?: any){
@@ -104,7 +107,8 @@ export class Usuario extends BaseModel implements IUsuario {
             join: { from: 'Usuario.idUsuario', to: 'Medico.fkUsuario' }
         }
         //------------------------------------- HasOneRelation
-        //------------------------------------- BelongsToOneRelation  
+        //------------------------------------- BelongsToOneRelation 
+         
 
         //------------------------------------- HasOneThroughRelation
     };

@@ -27,7 +27,7 @@ export const up = (knex: any) => {
             table.string('texto', 300);
             table.string('descripcion', 1000);
             table.string('mimetype', 20);
-            table.specificType('archivo', 'mediumblob');
+            table.specificType('archivo', 'mediumblob'); 
         })
         .createTable('TestOpcion', (table: any) => {
             table.increments('idTestOpcion').primary();

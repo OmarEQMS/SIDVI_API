@@ -4,6 +4,10 @@ import { BaseModel } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
+import { Medico} from './Medico';
+import { Virus} from './Virus';
+
+
 
 export namespace _MedicoVirus {
     
@@ -11,6 +15,8 @@ export namespace _MedicoVirus {
 
 export interface IMedicoVirus {
     idMedicoVirus?: number;
+    fkMedico?: number;
+    fkVirus?: number;
 }
 
 export class MedicoVirus extends BaseModel implements IMedicoVirus {
@@ -22,9 +28,12 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
 
     // Columns
     idMedicoVirus?: number;
+    fkMedico?: number;
+    fkVirus?: number;
 
     //Relations: BelongsToOne
-    
+    medico?: Medico;
+    virus?: Virus;
     // Relations: HasMany
 
     // Constructor
@@ -32,6 +41,8 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
         super();
         if(medicoVirus!==undefined){
             this.idMedicoVirus = medicoVirus.idMedicoVirus;
+            this.fkMedico = medicoVirus.fkMedico;
+            this.fkVirus = medicoVirus.fkVirus;
         }
     }
     
@@ -55,7 +66,16 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
 
         //------------------------------------- HasOneRelation
         //------------------------------------- BelongsToOneRelation  
-
+        Medico: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'Medico',
+            join: { from: 'MedicoVirus.fkMedico', to: 'Medico.idMedico' }
+        },
+        Virus: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'Virus',
+            join: { from: 'MedicoVirus.fkVirus', to: 'Virus.idVirus' }
+        }
         //------------------------------------- HasOneThroughRelation
     };
 
