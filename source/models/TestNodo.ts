@@ -28,7 +28,7 @@ export class TestNodo extends BaseModel implements ITestNodo {
     static tableName = 'TestNodo';
     static idColumn = 'idTestNodo';
     // Objection Modifiers
-    static columnList = ['idTestNodo'];
+    static columnList = ['idTestNodo', 'fkVirus', 'texto', 'descripcion', 'mimetype'];
 
     // Columns
     idTestNodo?: number;
@@ -45,6 +45,7 @@ export class TestNodo extends BaseModel implements ITestNodo {
     testOpciones?: TestOpcion[];
     testOpcionesSig?: TestOpcion[];
     viruss?: Virus[];
+    
     // Constructor
     constructor(testNodo?: any){
         super();

@@ -58,7 +58,7 @@ export class Informacion extends BaseModel implements IInformacion {
 
     // Respond Object
     toJSON() {
-        if(Defaults.allowBase64Types.includes(this.mimetype)) {
+        if(this.archivo != null && Defaults.allowBase64Types.includes(this.mimetype)) {
             this.archivo = fileToBase64(this.mimetype, this.archivo);
         } else {
             delete this.archivo;

@@ -24,7 +24,7 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
     static tableName = 'MedicoVirus';
     static idColumn = 'idMedicoVirus';
     // Objection Modifiers
-    static columnList = ['idMedicoVirus'];
+    static columnList = ['idMedicoVirus', 'fkMedico', 'fkVirus'];
 
     // Columns
     idMedicoVirus?: number;

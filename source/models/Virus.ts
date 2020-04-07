@@ -21,7 +21,7 @@ export namespace _Virus {
 
 export interface IVirus {
     idVirus?: number;
-    dave?: string;
+    clave?: string;
     nombre?: string;
     mimetypeIcono?: string;
     archivoIcono?: ArrayBuffer | string;
@@ -36,11 +36,11 @@ export class Virus extends BaseModel implements IVirus {
     static tableName = 'Virus';
     static idColumn = 'idVirus';
     // Objection Modifiers
-    static columnList = ['idVirus'];
+    static columnList = ['idVirus', 'clave', 'nombre', 'mimetypeIcono', 'fkTestNodo', 'estatus'];
 
     // Columns
     idVirus?: number;
-    dave?: string;
+    clave?: string;
     nombre?: string;
     mimetypeIcono?: string;
     archivoIcono?: ArrayBuffer | string;
@@ -56,7 +56,7 @@ export class Virus extends BaseModel implements IVirus {
         super();
         if(virus!==undefined){
             this.idVirus = virus.idVirus;
-            this.dave = virus.dave;
+            this.clave = virus.dave;
             this.nombre = virus.nombre;
             this.mimetypeIcono = virus.mimetypeIcono;
             this.archivoIcono = virus.archivoIcono;

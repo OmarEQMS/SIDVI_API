@@ -23,7 +23,7 @@ export class Valoracion extends BaseModel implements IValoracion {
     static tableName = 'Valoracion';
     static idColumn = 'idValoracion';
     // Objection Modifiers
-    static columnList = ['idValoracion'];
+    static columnList = ['idValoracion', 'fkMedico', 'fkUsuario', 'valoracion'];
 
     // Columns
     idValoracion?: number;

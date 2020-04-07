@@ -18,7 +18,7 @@ export interface ITestOpcion {
     idTestOpcion?: number;
     fkTestNodo?: number;
     fkTestNodoSig?: number;
-    dave?: string;
+    clave?: string;
     texto?: string;
     descripcion?: string;
     mimetype?: string;
@@ -30,13 +30,13 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
     static tableName = 'TestOpcion';
     static idColumn = 'idTestOpcion';
     // Objection Modifiers
-    static columnList = ['idTestOpcion'];
+    static columnList = ['idTestOpcion', 'fkTestNodo', 'fkTestNodoSig', 'clave', 'texto', 'descripcion', 'mimetype'];
 
     // Columns
     idTestOpcion?: number;
     fkTestNodo?: number;
     fkTestNodoSig?: number;
-    dave?: string;
+    clave?: string;
     texto?: string;
     descripcion?: string;
     mimetype?: string;
@@ -54,7 +54,7 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
             this.idTestOpcion = testOpcion.idTestOpcion;
             this.fkTestNodo = testOpcion.fkTestNodo;
             this.fkTestNodoSig = testOpcion.fkTestNodoSig;
-            this.dave = testOpcion.dave;
+            this.clave = testOpcion.dave;
             this.texto = testOpcion.texto;
             this.descripcion = testOpcion.descripcion;
             this.mimetype = testOpcion.mimetype;
@@ -81,11 +81,17 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
         //------------------------------------- HasManyRelation
 
         //------------------------------------- HasOneRelation
+
         //------------------------------------- BelongsToOneRelation  
         TestNodo: {
             relation: Model.BelongsToOneRelation,
             modelClass: 'TestNodo',
             join: { from: 'TestOpcion.fkTestNodo', to: 'TestNodo.idTestNodo' }
+        },
+        TestNodoSiguiente: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: 'TestNodo',
+            join: { from: 'TestOpcion.fkTestNodoSig', to: 'TestNodo.idTestNodo' }
         }
 
         //------------------------------------- HasOneThroughRelation

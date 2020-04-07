@@ -13,7 +13,7 @@ export namespace _Ubicacion {
 export interface IUbicacion {
     idUbicacion?: number;
     fkUbicacion?: number;
-    dave?: string;
+    clave?: string;
     nombre?: string;
 }
 
@@ -22,12 +22,12 @@ export class Ubicacion extends BaseModel implements IUbicacion {
     static tableName = 'Ubicacion';
     static idColumn = 'idUbicacion';
     // Objection Modifiers
-    static columnList = ['idUbicacion'];
+    static columnList = ['idUbicacion', 'fkUbicacion', 'clave', 'nombre'];
 
     // Columns
     idUbicacion?: number;
     fkUbicacion?: number;
-    dave?: string;
+    clave?: string;
     nombre?: string;
 
     //Relations: BelongsToOne
@@ -42,7 +42,7 @@ export class Ubicacion extends BaseModel implements IUbicacion {
         if(ubicacion!==undefined){
             this.idUbicacion = ubicacion.idUbicacion;
             this.fkUbicacion = ubicacion.fkUbicacion;
-            this.dave = ubicacion.dave;
+            this.clave = ubicacion.dave;
             this.nombre = ubicacion.nombre;
         }
     }
