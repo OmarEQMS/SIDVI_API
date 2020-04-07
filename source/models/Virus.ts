@@ -8,7 +8,9 @@ import { TestNodo} from './TestNodo';
 import { MedicoVirus} from './MedicoVirus';
 
 export namespace _Virus {
-   
+    export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
+    export let archivoFileSize: number = 8 * 1024 * 1024;  
+    
     export type Estatus = 'INHABILITADO' | 'HABILITADO';
     export const Estatus = {
         INHABILITADO: 'INHABILITADO' as Estatus,
