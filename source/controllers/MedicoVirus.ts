@@ -6,12 +6,12 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarMedicoViruss: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkMedico: number = req.swagger.params['fkMedico'].value;
+    const fkVirus: number = req.swagger.params['fkVirus'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || MedicoVirus.idColumn;    
     try{
-        let response = await MedicoVirusServicio.listarMedicosVirus(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await MedicoVirusServicio.listarMedicosVirus(req, fkMedico, fkVirus, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

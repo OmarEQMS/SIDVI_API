@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class TestNodoServicio {
 
-    static async listarTestNodos(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarTestNodos(req: ServerRequest, fkVirus: number, texto: string, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
             let query = await req.query<TestNodo>('TestNodo');   
         }catch(error){

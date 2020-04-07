@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class MedicoServicio {
 
-    static async listarMedicos(req: ServerRequest, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarMedicos(req: ServerRequest, fkUsuario: number, fkUbicacion: number, nombreConsultorio: string, nombreDoctor: string, ordenarPor: string, ordenarModo:OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try{
             let query = await req.query<Medico>('Medico');   
         }catch(error){

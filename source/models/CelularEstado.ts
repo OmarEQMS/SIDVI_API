@@ -6,7 +6,7 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 
 export namespace _CelularEstado {
-    
+    export type Seccion = 'x';
 }
 
 export interface ICelularEstado {

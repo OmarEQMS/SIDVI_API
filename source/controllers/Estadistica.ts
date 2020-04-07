@@ -6,12 +6,13 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarEstadisticas: Handler = async (req, res, next) => {
-    const tamanoPagina: number = req.swagger.params['tamanoPagina'].value || Defaults.tamanoPagina;
-    const indicePagina: number = req.swagger.params['indicePagina'].value || Defaults.indicePagina;
+    const fkVirus: number = req.swagger.params['fkVirus'].value;
+    const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
+    const fkCategoriaEstadistica: number = req.swagger.params['fkCategoriaEstadistica'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Estadistica.idColumn;    
     try{
-        let response = await EstadisticaServicio.listarEstadisticas(req, ordenarPor, ordenarModo, tamanoPagina, indicePagina);
+        let response = await EstadisticaServicio.listarEstadisticas(req, fkVirus, fkUbicacion, fkCategoriaEstadistica, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

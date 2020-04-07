@@ -6,7 +6,7 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 
 export namespace _Virus {
-    
+    export type Estatus = 'x';
 }
 
 export interface IVirus {
