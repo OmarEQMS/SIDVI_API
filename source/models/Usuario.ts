@@ -106,10 +106,10 @@ export class Usuario extends BaseModel implements IUsuario {
             modelClass: 'Medico',
             join: { from: 'Usuario.idUsuario', to: 'Medico.fkUsuario' }
         },
-        Valoraciones: {
+        Valoracion: {
             relation: Model.HasManyRelation,
-            modelClass: 'Valoraciones',
-            join: { from: 'Usuario.idUsuario', to: 'Valoraciones.fkUsuario' }
+            modelClass: 'Valoracion',
+            join: { from: 'Usuario.idUsuario', to: 'Valoracion.fkUsuario' }
         }
         
         //------------------------------------- HasOneRelation

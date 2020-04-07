@@ -132,9 +132,9 @@ export class UsuarioServicio {
     }
 
     static async obtenerUsuario(req: ServerRequest, idUsuario: number): Promise<Usuario>{
-        try{            
+        try{
             let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
-            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);            
+            if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
             return usuario.toJSON();
         }catch(error){
             throw error;
@@ -143,6 +143,9 @@ export class UsuarioServicio {
 
     static async actualizarUsuario(req: ServerRequest, idUsuario: number, usuario: Usuario): Promise<APIResponse> {
         try{
+            //Verificar que Exista
+            if(await req.query<Usuario>('Usuario').findById(idUsuario)==null) 
+                throw new APIResponse(_APIResponse.NOT_FOUND);                
             //Verificar que no exista
             if(usuario.usuario!=null && await req.query<Usuario>('Usuario').findOne({usuario: usuario.usuario})!=null)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "El usuario ya existe");
