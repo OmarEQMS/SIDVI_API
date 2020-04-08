@@ -16,11 +16,12 @@ export class CelularEstadoServicio {
         try {
             let query = req.query<CelularEstado>('CelularEstado').modify('defaultSelect');
             query = celular ? query.where('celular', 'like', `%${celular}%`) : query;
-            query = fkVirus ? query.where('fkVirus', 'like', `%${fkVirus}%`) : query;
+            query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
             query = seccion ? query.where('seccion', 'like', `%${seccion}%`) : query;
 
             let celularesEstado = await query.orderBy(ordenarPor, ordenarModo);
-            return new Coleccion<CelularEstado>(celularesEstado, celularesEstado.length);
+            let celularesEstadoFormat = celularesEstado.map((item: any) => new CelularEstado(item).toJSON());
+            return new Coleccion<CelularEstado>(celularesEstadoFormat, celularesEstado.length);
 
         } catch (error) {
             throw error;

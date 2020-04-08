@@ -15,8 +15,8 @@ export class MedicoServicio {
     static async listarMedicos(req: ServerRequest, fkUsuario: number, fkUbicacion: number, nombreConsultorio: string, nombreDoctor: string, ordenarPor: string, ordenarModo: OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try {
             let query = req.query<Medico>('Medico').modify('defaultSelect');
-            query = fkUsuario ? query.where('fkUsuario', 'like', `%${fkUsuario}%`) : query;
-            query = fkUbicacion ? query.where('fkUbicacion', 'like', `%${fkUbicacion}%`) : query;
+            query = fkUsuario ? query.where('fkUsuario', '=', `%${fkUsuario}%`) : query;
+            query = fkUbicacion ? query.where('fkUbicacion', '=', `%${fkUbicacion}%`) : query;
             query = nombreConsultorio ? query.where('nombreConsultorio', 'like', `%${nombreConsultorio}%`) : query;
             query = nombreDoctor ? query.where('nombreDoctor', 'like', `%${nombreDoctor}%`) : query;
 
