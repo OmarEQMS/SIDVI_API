@@ -14,7 +14,12 @@ export class ValoracionServicio {
 
     static async listarValoraciones(req: ServerRequest, fkMedico: number, fkUsuario: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
-            let query = await req.query<Valoracion>('Valoracion');   
+            let query = req.query<Valoracion>('Valoracion').modify('defaultSelect');
+            query = fkMedico ? query.where({fkMedico}) : query;
+            query = fkUsuario ? query.where({fkUsuario}) : query;
+            let valoraciones = await query.orderBy(ordenarPor, ordenarModo);
+            let valoracionesFormat = valoraciones.map((item:any) => new Valoracion(item).toJSON());
+            return new Coleccion<Valoracion>(valoracionesFormat, valoracionesFormat.length); 
         }catch(error){
             throw error;
         }
@@ -22,7 +27,11 @@ export class ValoracionServicio {
 
     static async crearValoracion(req: ServerRequest, valoracion: Valoracion): Promise<any> {
         try{
-            let query = await req.query<Valoracion>('Valoracion');   
+            deleteProperty(valoracion, ['idValoracion']);
+
+            let newValoracion = await req.query<Valoracion>('Valoracion').insert(valoracion);
+            return new APIResponse(_APIResponse.CREATED, 'La Valoracion fue creada satisfactoriamente', {insertedId: newValoracion.idValoracion});
+
         }catch(error){
             throw error;
         }
@@ -30,7 +39,9 @@ export class ValoracionServicio {
 
     static async obtenerValoracion(req: ServerRequest, idValoracion: number): Promise<any>{
         try{            
-            let query = await req.query<Valoracion>('Valoracion');   
+            let valoracion =  await req.query<Valoracion>('Valoracion').findById(idValoracion);
+            if(valoracion==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
+            return valoracion.toJSON();   
         }catch(error){
             throw error;
         }
@@ -38,7 +49,14 @@ export class ValoracionServicio {
 
     static async actualizarValoracion(req: ServerRequest, idValoracion: number, valoracion: Valoracion): Promise<any> {
         try{
-            let query = await req.query<Valoracion>('Valoracion');   
+            //Verificar que Exista
+            if(await req.query<Valoracion>('Valoracion').findById(idValoracion)==null) 
+                throw new APIResponse(_APIResponse.NOT_FOUND);   
+
+            deleteProperty(valoracion, ['idValoracion']);
+            await req.query<Valoracion>('Valoracion').patchAndFetchById(idValoracion, valoracion);
+            return new APIResponse(_APIResponse.UPDATED, "La valoracion fue actualizada");
+
         }catch(error){
             throw error;
         }
@@ -46,7 +64,13 @@ export class ValoracionServicio {
     
     static async eliminarValoracion(req: ServerRequest, idValoracion: number): Promise<any> {
         try{
-            let query = await req.query<Valoracion>('Valoracion');   
+            //Verificar que Exista
+            if(await req.query<Valoracion>('Valoracion').findById(idValoracion)==null) 
+                throw new APIResponse(_APIResponse.NOT_FOUND);   
+            
+            await req.query<Valoracion>('Valoracion').deleteById(idValoracion);
+            return new APIResponse(_APIResponse.DELETED, "La Valoracion fue eliminada correctamente");
+   
         }catch(error){
             throw error;
         }

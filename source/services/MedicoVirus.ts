@@ -27,7 +27,17 @@ export class MedicoVirusServicio {
 
     static async crearMedicoVirus(req: ServerRequest, medicoVirus: MedicoVirus): Promise<any> {
         try{
-            let query = await req.query<MedicoVirus>('MedicoVirus');   
+            //Verificar que no exista
+            if(await req.query<MedicoVirus>('MedicoVirus').findOne({
+                fkMedico: medicoVirus.fkMedico,
+                fkVirus: medicoVirus.fkVirus
+            })!=null)
+                throw new APIResponse(_APIResponse.UNAVAILABLE, "El MedicoVirus ya existe");
+
+            deleteProperty(medicoVirus, ['IdMedicoVirus']);
+
+            let newMedicoVirus = await req.query<MedicoVirus>('MedicoVirus').insert(medicoVirus);
+            return new APIResponse(_APIResponse.CREATED, 'El medicoVirus fue creado satisfactoriamente', {insertedId: newMedicoVirus.idMedicoVirus});
         }catch(error){
             throw error;
         }
@@ -35,7 +45,9 @@ export class MedicoVirusServicio {
 
     static async obtenerMedicoVirus(req: ServerRequest, idMedicoVirus: number): Promise<any>{
         try{            
-            let query = await req.query<MedicoVirus>('MedicoVirus');   
+            let medicoVirus =  await req.query<MedicoVirus>('MedicoVirus').findById(idMedicoVirus);
+            if(medicoVirus==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
+            return medicoVirus.toJSON();  
         }catch(error){
             throw error;
         }
@@ -43,7 +55,13 @@ export class MedicoVirusServicio {
 
     static async actualizarMedicoVirus(req: ServerRequest, idMedicoVirus: number, medicoVirus: MedicoVirus): Promise<any> {
         try{
-            let query = await req.query<MedicoVirus>('MedicoVirus');   
+            //Verificar que Exista
+            if(await req.query<MedicoVirus>('MedicoVirus').findById(idMedicoVirus)==null) 
+                throw new APIResponse(_APIResponse.NOT_FOUND);   
+
+            deleteProperty(medicoVirus, ['IdMedicoVirus']);
+            await req.query<MedicoVirus>('MedicoVirus').patchAndFetchById(idMedicoVirus, medicoVirus);
+            return new APIResponse(_APIResponse.UPDATED, "El medicoVirus fue actualizado");        
         }catch(error){
             throw error;
         }
@@ -51,7 +69,12 @@ export class MedicoVirusServicio {
     
     static async eliminarMedicoVirus(req: ServerRequest, idMedicoVirus: number): Promise<any> {
         try{
-            let query = await req.query<MedicoVirus>('MedicoVirus');   
+            //Verificar que Exista
+            if(await req.query<MedicoVirus>('MedicoVirus').findById(idMedicoVirus)==null) 
+                throw new APIResponse(_APIResponse.NOT_FOUND);   
+            
+            await req.query<MedicoVirus>('MedicoVirus').deleteById(idMedicoVirus);
+            return new APIResponse(_APIResponse.DELETED, "El MedicoVirus fue eliminado correctamente");
         }catch(error){
             throw error;
         }
