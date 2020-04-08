@@ -18,7 +18,8 @@ export class CategoriaEstadisticaServicio {
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
 
             let categoriasEstadistica = await query.orderBy(ordenarPor, ordenarModo);
-            return new Coleccion<CategoriaEstadistica>(categoriasEstadistica, categoriasEstadistica.length);
+            let categoriasEstadisticaFormat = categoriasEstadistica.map((item: any) => new CategoriaEstadistica(item).toJSON());
+            return new Coleccion<CategoriaEstadistica>(categoriasEstadisticaFormat, categoriasEstadistica.length);
         } catch (error) {
             throw error;
         }

@@ -15,12 +15,13 @@ export class InformacionServicio {
     static async listarInformaciones(req: ServerRequest, fkVirus: number, fkCategoriaInformacion: number, texto: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Informacion>('Informacion').modify('defaultSelect');
-            query = fkVirus ? query.where('fkVirus', 'like', `%${fkVirus}%`) : query;
-            query = fkCategoriaInformacion ? query.where('fkCategoriaInformacion', 'like', `%${fkCategoriaInformacion}%`) : query;
+            query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
+            query = fkCategoriaInformacion ? query.where('fkCategoriaInformacion', '=', `%${fkCategoriaInformacion}%`) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
 
-            let Informaciones = await query.orderBy(ordenarPor, ordenarModo);
-            return new Coleccion<Informacion>(Informaciones, Informaciones.length);
+            let informaciones = await query.orderBy(ordenarPor, ordenarModo);
+            let informacionesFormat = informaciones.map((item: any) => new Informacion(item).toJSON());
+            return new Coleccion<Informacion>(informacionesFormat, informaciones.length);
 
         } catch (error) {
             throw error;

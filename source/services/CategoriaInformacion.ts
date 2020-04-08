@@ -19,7 +19,8 @@ export class CategoriaInformacionServicio {
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
 
             let categoriasInformacion = await query.orderBy(ordenarPor, ordenarModo);
-            return new Coleccion<CategoriaInformacion>(categoriasInformacion, categoriasInformacion.length);
+            let categoriasInformacionFormat = categoriasInformacion.map((item: any) => new CategoriaInformacion(item).toJSON());
+            return new Coleccion<CategoriaInformacion>(categoriasInformacionFormat, categoriasInformacion.length);
         } catch (error) {
             throw error;
         }
