@@ -18,10 +18,8 @@ export class CategoriaInformacionServicio {
             query = clave ? query.where('clave', 'like', `%${clave}%`) : query;
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
 
-            let categoriasInformacion = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let categoriasInformacionFormat = categoriasInformacion.results.map((item: any) => new CategoriaInformacion(item).toJSON());
-            return new Coleccion<CategoriaInformacion>(categoriasInformacionFormat, categoriasInformacion.total);
-
+            let categoriasInformacion = await query.orderBy(ordenarPor, ordenarModo);
+            return new Coleccion<CategoriaInformacion>(categoriasInformacion, categoriasInformacion.length);
         } catch (error) {
             throw error;
         }

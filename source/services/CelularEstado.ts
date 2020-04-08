@@ -19,9 +19,8 @@ export class CelularEstadoServicio {
             query = fkVirus ? query.where('fkVirus', 'like', `%${fkVirus}%`) : query;
             query = seccion ? query.where('seccion', 'like', `%${seccion}%`) : query;
 
-            let celularesEstado = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let celularesEstadoFormat = celularesEstado.results.map((item: any) => new CelularEstado(item).toJSON());
-            return new Coleccion<CelularEstado>(celularesEstadoFormat, celularesEstado.total);
+            let celularesEstado = await query.orderBy(ordenarPor, ordenarModo);
+            return new Coleccion<CelularEstado>(celularesEstado, celularesEstado.length);
 
         } catch (error) {
             throw error;

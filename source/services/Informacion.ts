@@ -19,9 +19,8 @@ export class InformacionServicio {
             query = fkCategoriaInformacion ? query.where('fkCategoriaInformacion', 'like', `%${fkCategoriaInformacion}%`) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
 
-            let Informaciones = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let InformacionesFormat = Informaciones.results.map((item: any) => new Informacion(item).toJSON());
-            return new Coleccion<Informacion>(InformacionesFormat, Informaciones.total);
+            let Informaciones = await query.orderBy(ordenarPor, ordenarModo);
+            return new Coleccion<Informacion>(Informaciones, Informaciones.length);
 
         } catch (error) {
             throw error;

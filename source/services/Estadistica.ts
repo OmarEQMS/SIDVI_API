@@ -19,9 +19,8 @@ export class EstadisticaServicio {
             query = fkUbicacion ? query.where('fkUbicacion', 'like', `%${fkUbicacion}%`) : query;
             query = fkCategoriaEstadistica ? query.where('fkCategoriaEstadistica', 'like', `%${fkCategoriaEstadistica}%`) : query;
 
-            let estadisticas = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let estadisticasFormat = estadisticas.results.map((item: any) => new Estadistica(item).toJSON());
-            return new Coleccion<Estadistica>(estadisticasFormat, estadisticas.total);
+            let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
+            return new Coleccion<Estadistica>(estadisticas, estadisticas.length);
 
         } catch (error) {
             throw error;
