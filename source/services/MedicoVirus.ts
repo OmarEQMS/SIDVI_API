@@ -12,9 +12,14 @@ import { Log } from '../tools';
 
 export class MedicoVirusServicio {
 
-    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
+    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
         try{
-            let query = await req.query<MedicoVirus>('MedicoVirus');   
+            let query = req.query<MedicoVirus>('MedicoVirus').modify('defaultSelect');
+            query = fkMedico ? query.where({fkMedico}) : query;
+            query = fkVirus ? query.where({fkVirus}) : query;
+            let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);
+            let medicosVirusFormat = medicosVirus.map((item:any) => new MedicoVirus(item).toJSON());
+            return new Coleccion<MedicoVirus>(medicosVirusFormat, medicosVirusFormat.length);
         }catch(error){
             throw error;
         }
