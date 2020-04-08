@@ -6,6 +6,7 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 import { Medico } from './Medico';
 import { Usuario } from './Usuario';
+import { MedicoVirus } from './MedicoVirus';
 
 export namespace _Valoracion {
     
@@ -23,16 +24,16 @@ export class Valoracion extends BaseModel implements IValoracion {
     static tableName = 'Valoracion';
     static idColumn = 'idValoracion';
     // Objection Modifiers
-    static columnList = ['idValoracion', 'fkMedico', 'fkUsuario', 'valoracion'];
+    static columnList = ['idValoracion', 'fkMedicoVirus', 'fkUsuario', 'valoracion'];
 
     // Columns
     idValoracion?: number;
-    fkMedico?: number;
+    fkMedicoVirus?: number;
     fkUsuario?: number;
     valoracion?: number;
 
     //Relations: BelongsToOne
-    medico?: Medico;
+    medicoVirus?: MedicoVirus;
     usuario?: Usuario;
 
     // Relations: HasMany
@@ -42,7 +43,7 @@ export class Valoracion extends BaseModel implements IValoracion {
         super();
         if(valoracion!==undefined){
             this.idValoracion = valoracion.idValoracion;
-            this.fkMedico = valoracion.fkMedico;
+            this.fkMedicoVirus = valoracion.fkMedicoVirus;
             this.fkUsuario = valoracion.fkUsuario;
             this.valoracion = valoracion.valoracion;
         }
@@ -69,10 +70,10 @@ export class Valoracion extends BaseModel implements IValoracion {
 
         //------------------------------------- HasOneRelation
         //------------------------------------- BelongsToOneRelation  
-        Medico: {
+        MedicoVirus: {
             relation: Model.BelongsToOneRelation,
-            modelClass: 'Medico',
-            join: { from: 'Valoracion.fkMedico', to: 'Medico.idMedico' }
+            modelClass: 'MedicoVirus',
+            join: { from: 'Valoracion.fkMedicoVirus', to: 'MedicoVirus.idMedicoVirus' }
         },
         Usuario: {
             relation: Model.BelongsToOneRelation,

@@ -90,7 +90,7 @@ export const up = (knex: any) => {
         })
         .createTable('Valoracion', (table: any) => {
             table.increments('idValoracion').primary();
-            table.integer('fkMedico').unsigned().references('Medico.idMedico').onDelete('CASCADE');
+            table.integer('fkMedicoVirus').unsigned().references('MedicoVirus.idMedicoVirus').onDelete('CASCADE');
             table.integer('fkUsuario').unsigned().references('Usuario.idUsuario').onDelete('CASCADE');
             table.integer('valoracion');
         })

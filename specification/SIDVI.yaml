@@ -2063,7 +2063,7 @@ paths:
                 - USUARIO
                 - ADMINISTRADOR
             parameters:
-                - name: fkMedico
+                - name: fkMedicoVirus
                   in: query
                   type: integer
                   description: identificador del medico

@@ -18,6 +18,7 @@ export class InformacionServicio {
             query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
             query = fkCategoriaInformacion ? query.where('fkCategoriaInformacion', '=', `%${fkCategoriaInformacion}%`) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
+            query = query.withGraphFetched('CategoriaInformacion(defaultSelect)');
 
             let informaciones = await query.orderBy(ordenarPor, ordenarModo);
             let informacionesFormat = informaciones.map((item: any) => new Informacion(item).toJSON());
@@ -45,9 +46,9 @@ export class InformacionServicio {
 
     static async obtenerInformacion(req: ServerRequest, idInformacion: number): Promise<any> {
         try {
-            let informacion = await req.query<Informacion>('Informacion').findById(idInformacion);
+            let informacion = await req.query<Informacion>('Informacion').findById(idInformacion).withGraphFetched('CategoriaInformacion(defaultSelect)');
             if (informacion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return informacion.toJSON();
+            return new Informacion(informacion).toJSON();
         } catch (error) {
             throw error;
         }

@@ -12,10 +12,10 @@ import { Log } from '../tools';
 
 export class ValoracionServicio {
 
-    static async listarValoraciones(req: ServerRequest, fkMedico: number, fkUsuario: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
+    static async listarValoraciones(req: ServerRequest, fkMedicoVirus: number, fkUsuario: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
         try{
             let query = req.query<Valoracion>('Valoracion').modify('defaultSelect');
-            query = fkMedico ? query.where({fkMedico}) : query;
+            query = fkMedicoVirus ? query.where({fkMedicoVirus}) : query;
             query = fkUsuario ? query.where({fkUsuario}) : query;
             let valoraciones = await query.orderBy(ordenarPor, ordenarModo);
             let valoracionesFormat = valoraciones.map((item:any) => new Valoracion(item).toJSON());

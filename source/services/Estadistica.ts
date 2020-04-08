@@ -18,6 +18,7 @@ export class EstadisticaServicio {
             query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
             query = fkUbicacion ? query.where('fkUbicacion', '=', `%${fkUbicacion}%`) : query;
             query = fkCategoriaEstadistica ? query.where('fkCategoriaEstadistica', '=', `%${fkCategoriaEstadistica}%`) : query;
+            query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
             let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).toJSON());
@@ -45,9 +46,9 @@ export class EstadisticaServicio {
 
     static async obtenerEstadistica(req: ServerRequest, idEstadistica: number): Promise<any> {
         try {
-            let estadistica = await req.query<Estadistica>('Estadistica').findById(idEstadistica);
+            let estadistica = await req.query<Estadistica>('Estadistica').findById(idEstadistica).withGraphFetched('CategoriaEstadistica(defaultSelect)');
             if (estadistica == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return estadistica.toJSON();
+            return new Estadistica(estadistica).toJSON();
         } catch (error) {
             throw error;
         }

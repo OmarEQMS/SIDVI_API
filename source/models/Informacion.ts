@@ -53,6 +53,8 @@ export class Informacion extends BaseModel implements IInformacion {
             this.descripcion =  informacion.descripcion;
             this.mimetype =  informacion.mimetype;
             this.archivo = informacion.archivo;
+            // Relations
+            this.categoriaInformacion = new CategoriaInformacion(informacion.CategoriaInformacion);
         }
     }
 

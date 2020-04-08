@@ -50,6 +50,8 @@ export class Estadistica extends BaseModel implements IEstadistica {
             this.fkCategoriaEstadistica = estadistica.fkCategoriaEstadistica;
             this.valor = estadistica.valor;
             this.fecha = estadistica.fecha;
+            // Relations
+            this.categoriaEstadistica = new CategoriaEstadistica(estadistica.CategoriaEstadistica);
         }
     }
     
