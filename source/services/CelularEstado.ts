@@ -16,7 +16,7 @@ export class CelularEstadoServicio {
         try {
             let query = req.query<CelularEstado>('CelularEstado').modify('defaultSelect');
             query = celular ? query.where('celular', 'like', `%${celular}%`) : query;
-            query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
+            query = fkVirus ? query.where({fkVirus}) : query;
             query = seccion ? query.where('seccion', 'like', `%${seccion}%`) : query;
 
             let celularesEstado = await query.orderBy(ordenarPor, ordenarModo);

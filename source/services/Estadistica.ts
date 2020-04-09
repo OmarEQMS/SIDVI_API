@@ -15,9 +15,9 @@ export class EstadisticaServicio {
     static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkCategoriaEstadistica: number, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
-            query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
-            query = fkUbicacion ? query.where('fkUbicacion', '=', `%${fkUbicacion}%`) : query;
-            query = fkCategoriaEstadistica ? query.where('fkCategoriaEstadistica', '=', `%${fkCategoriaEstadistica}%`) : query;
+            query = fkVirus ? query.where({fkVirus}) : query;
+            query = fkUbicacion ? query.where({fkUbicacion}) : query;
+            query = fkCategoriaEstadistica ? query.where({fkCategoriaEstadistica}) : query;
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);

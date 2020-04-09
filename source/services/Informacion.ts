@@ -15,8 +15,8 @@ export class InformacionServicio {
     static async listarInformaciones(req: ServerRequest, fkVirus: number, fkCategoriaInformacion: number, texto: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Informacion>('Informacion').modify('defaultSelect');
-            query = fkVirus ? query.where('fkVirus', '=', `%${fkVirus}%`) : query;
-            query = fkCategoriaInformacion ? query.where('fkCategoriaInformacion', '=', `%${fkCategoriaInformacion}%`) : query;
+            query = fkVirus ? query.where({fkVirus}) : query;
+            query = fkCategoriaInformacion ? query.where({fkCategoriaInformacion}) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
             query = query.withGraphFetched('CategoriaInformacion(defaultSelect)');
 
