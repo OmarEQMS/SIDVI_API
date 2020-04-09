@@ -42,7 +42,7 @@ export class Ubicacion extends BaseModel implements IUbicacion {
         if(ubicacion!==undefined){
             this.idUbicacion = ubicacion.idUbicacion;
             this.fkUbicacion = ubicacion.fkUbicacion;
-            this.clave = ubicacion.dave;
+            this.clave = ubicacion. clave;
             this.nombre = ubicacion.nombre;
         }
     }

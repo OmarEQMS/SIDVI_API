@@ -54,7 +54,7 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
             this.idTestOpcion = testOpcion.idTestOpcion;
             this.fkTestNodo = testOpcion.fkTestNodo;
             this.fkTestNodoSig = testOpcion.fkTestNodoSig;
-            this.clave = testOpcion.dave;
+            this.clave = testOpcion. clave;
             this.texto = testOpcion.texto;
             this.descripcion = testOpcion.descripcion;
             this.mimetype = testOpcion.mimetype;

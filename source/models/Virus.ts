@@ -57,7 +57,7 @@ export class Virus extends BaseModel implements IVirus {
         super();
         if(virus!==undefined){
             this.idVirus = virus.idVirus;
-            this.clave = virus.dave;
+            this.clave = virus. clave;
             this.nombre = virus.nombre;
             this.mimetypeIcono = virus.mimetypeIcono;
             this.archivoIcono = virus.archivoIcono;
