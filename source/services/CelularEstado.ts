@@ -47,7 +47,7 @@ export class CelularEstadoServicio {
         try {
             let celularEstado = await req.query<CelularEstado>('CelularEstado').findById(idCelularEstado);
             if (celularEstado == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return celularEstado.toJSON();
+            return new CelularEstado(celularEstado).toJSON();
         } catch (error) {
             throw error;
         }

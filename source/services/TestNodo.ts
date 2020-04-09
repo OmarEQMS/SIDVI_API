@@ -40,7 +40,7 @@ export class TestNodoServicio {
         try{            
             let testNodo =  await req.query<TestNodo>('TestNodo').findById(idTestNodo);
             if(testNodo==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return testNodo.toJSON();    
+            return new TestNodo(testNodo).toJSON();    
         }catch(error){
             throw error;
         }

@@ -41,7 +41,7 @@ export class TestOpcionServicio {
         try{            
             let testOpcion =  await req.query<TestOpcion>('TestOpcion').findById(idTestOpcion);
             if(testOpcion==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return testOpcion.toJSON();  
+            return new TestOpcion(testOpcion).toJSON();  
         }catch(error){
             throw error;
         }

@@ -48,7 +48,7 @@ export class MedicoServicio {
         try {
             let medico = await req.query<Medico>('Medico').findById(idMedico);
             if (medico == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return medico.toJSON();
+            return new Medico(medico).toJSON();
         } catch (error) {
             throw error;
         }

@@ -45,7 +45,7 @@ export class CategoriaInformacionServicio {
         try {
             let categoriaInformacion = await req.query<CategoriaInformacion>('CategoriaInformacion').findById(idCategoriaInformacion);
             if (categoriaInformacion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return categoriaInformacion.toJSON();
+            return new CategoriaInformacion(categoriaInformacion).toJSON();
         } catch (error) {
             throw error;
         }

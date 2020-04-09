@@ -135,7 +135,7 @@ export class UsuarioServicio {
         try{
             let usuario =  await req.query<Usuario>('Usuario').findById(idUsuario);
             if(usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return usuario.toJSON();
+            return new Usuario(usuario).toJSON();
         }catch(error){
             throw error;
         }

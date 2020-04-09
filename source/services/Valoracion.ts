@@ -41,7 +41,7 @@ export class ValoracionServicio {
         try{            
             let valoracion =  await req.query<Valoracion>('Valoracion').findById(idValoracion);
             if(valoracion==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return valoracion.toJSON();   
+            return new Valoracion(valoracion).toJSON();   
         }catch(error){
             throw error;
         }

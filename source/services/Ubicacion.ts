@@ -48,7 +48,7 @@ export class UbicacionServicio {
         try{            
             let ubicacion =  await req.query<Ubicacion>('Ubicacion').findById(idUbicacion);
             if(ubicacion==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return ubicacion.toJSON();  
+            return new Ubicacion(ubicacion).toJSON();  
         }catch(error){
             throw error;
         }

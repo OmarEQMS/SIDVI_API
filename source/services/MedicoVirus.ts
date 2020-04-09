@@ -47,7 +47,7 @@ export class MedicoVirusServicio {
         try{            
             let medicoVirus =  await req.query<MedicoVirus>('MedicoVirus').findById(idMedicoVirus);
             if(medicoVirus==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return medicoVirus.toJSON();  
+            return new MedicoVirus(medicoVirus).toJSON();  
         }catch(error){
             throw error;
         }

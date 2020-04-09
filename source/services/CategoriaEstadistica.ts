@@ -44,7 +44,7 @@ export class CategoriaEstadisticaServicio {
         try {
             let categoriaEstadistica = await req.query<CategoriaEstadistica>('CategoriaEstadistica').findById(idCategoriaEstadistica);
             if (categoriaEstadistica == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return categoriaEstadistica.toJSON();
+            return new CategoriaEstadistica(categoriaEstadistica).toJSON();
         } catch (error) {
             throw error;
         }

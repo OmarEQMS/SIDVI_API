@@ -50,8 +50,7 @@ export class VirusServicio {
         try{            
             let virus =  await req.query<Virus>('Virus').findById(idVirus);
             if(virus==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return virus.toJSON();
-
+            return new Virus(virus).toJSON();
         }catch(error){
             throw error;
         }
