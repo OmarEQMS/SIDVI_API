@@ -16,7 +16,7 @@ export class CelularEstadoServicio {
         try {
             let query = req.query<CelularEstado>('CelularEstado').modify('defaultSelect');
             query = celular ? query.where('celular', 'like', `%${celular}%`) : query;
-            query = fkVirus ? query.where({fkVirus}) : query;
+            query = fkVirus ? query.where({ fkVirus }) : query;
             query = seccion ? query.where('seccion', 'like', `%${seccion}%`) : query;
 
             let celularesEstado = await query.orderBy(ordenarPor, ordenarModo);
@@ -55,7 +55,11 @@ export class CelularEstadoServicio {
 
     static async actualizarCelularEstado(req: ServerRequest, idCelularEstado: number, celularEstado: CelularEstado): Promise<any> {
         try {
-            //Verificar que no exista
+            //Verificar que exista el registro
+            if (await req.query<CelularEstado>('CelularEstado').findById(idCelularEstado) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
+
+            //Verificar que no exista el celular
             if (await req.query<CelularEstado>('CelularEstado').findOne({ celular: celularEstado.celular }) != null)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "El CelularEstado ya existe");
 

@@ -52,7 +52,11 @@ export class CategoriaEstadisticaServicio {
 
     static async actualizarCategoriaEstadistica(req: ServerRequest, idCategoriaEstadistica: number, categoriaEstadistica: CategoriaEstadistica): Promise<any> {
         try {
-            //Verificar que no exista
+            //Verificar que exista el registro
+            if (await req.query<CategoriaEstadistica>('CategoriaEstadistica').findById(idCategoriaEstadistica) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
+
+            //Verificar que no exista el nombre
             if (await req.query<CategoriaEstadistica>('CategoriaEstadistica').findOne({ nombre: categoriaEstadistica.nombre }) != null)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "La CategoriaEstadistica ya existe");
 

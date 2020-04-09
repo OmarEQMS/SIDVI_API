@@ -15,9 +15,9 @@ export class EstadisticaServicio {
     static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkCategoriaEstadistica: number, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
-            query = fkVirus ? query.where({fkVirus}) : query;
-            query = fkUbicacion ? query.where({fkUbicacion}) : query;
-            query = fkCategoriaEstadistica ? query.where({fkCategoriaEstadistica}) : query;
+            query = fkVirus ? query.where({ fkVirus }) : query;
+            query = fkUbicacion ? query.where({ fkUbicacion }) : query;
+            query = fkCategoriaEstadistica ? query.where({ fkCategoriaEstadistica }) : query;
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
@@ -31,10 +31,6 @@ export class EstadisticaServicio {
 
     static async crearEstadistica(req: ServerRequest, estadistica: Estadistica): Promise<any> {
         try {
-            //Verificar que no exista
-            /*if (await req.query<Estadistica>('Estadistica').findOne({ clave: estadistica.clave }) != null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La Estadistica ya existe");*/
-
             deleteProperty(estadistica, ['idEstadistica']);
 
             let newEstadistica = await req.query<Estadistica>('Estadistica').insert(estadistica);
@@ -56,9 +52,9 @@ export class EstadisticaServicio {
 
     static async actualizarEstadistica(req: ServerRequest, idEstadistica: number, estadistica: Estadistica): Promise<any> {
         try {
-            //Verificar que no exista
-            /*if(await req.query<Estadistica>('Estadistica').findOne({clave: estadistica.clave})!=null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La Estadistica ya existe");*/
+            //Verificar que exista
+            if (await req.query<Estadistica>('Estadistica').findById(idEstadistica) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
 
             await req.query<Estadistica>('Estadistica').patchAndFetchById(idEstadistica, estadistica);
             return new APIResponse(_APIResponse.UPDATED, "La Estadistica fue actualizada");

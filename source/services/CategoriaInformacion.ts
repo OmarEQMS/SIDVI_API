@@ -53,7 +53,11 @@ export class CategoriaInformacionServicio {
 
     static async actualizarCategoriaInformacion(req: ServerRequest, idCategoriaInformacion: number, categoriaInformacion: CategoriaInformacion): Promise<any> {
         try {
-            //Verificar que no exista
+            //Verificar que exista el registro
+            if (await req.query<CategoriaInformacion>('CategoriaInformacion').findById(idCategoriaInformacion) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
+
+            //Verificar que no exista la clave
             if (await req.query<CategoriaInformacion>('CategoriaInformacion').findOne({ clave: categoriaInformacion.clave }) != null)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "La CategoriaInformacion ya existe");
 

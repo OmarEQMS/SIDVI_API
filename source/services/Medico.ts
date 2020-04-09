@@ -15,8 +15,8 @@ export class MedicoServicio {
     static async listarMedicos(req: ServerRequest, fkUsuario: number, fkUbicacion: number, nombreConsultorio: string, nombreDoctor: string, ordenarPor: string, ordenarModo: OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try {
             let query = req.query<Medico>('Medico').modify('defaultSelect');
-            query = fkUsuario ? query.where({fkUsuario}) : query;
-            query = fkUbicacion ? query.where({fkUbicacion}) : query;
+            query = fkUsuario ? query.where({ fkUsuario }) : query;
+            query = fkUbicacion ? query.where({ fkUbicacion }) : query;
             query = nombreConsultorio ? query.where('nombreConsultorio', 'like', `%${nombreConsultorio}%`) : query;
             query = nombreDoctor ? query.where('nombreDoctor', 'like', `%${nombreDoctor}%`) : query;
 
@@ -31,10 +31,6 @@ export class MedicoServicio {
 
     static async crearMedico(req: ServerRequest, medico: Medico): Promise<any> {
         try {
-            //Verificar que no exista
-            if (await req.query<Medico>('Medico').findOne({ nombreDoctor: medico.nombreDoctor }) != null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "El Medico ya existe");
-
             deleteProperty(medico, ['idMedico']);
 
             let newMedico = await req.query<Medico>('Medico').insert(medico);
@@ -56,9 +52,9 @@ export class MedicoServicio {
 
     static async actualizarMedico(req: ServerRequest, idMedico: number, medico: Medico): Promise<any> {
         try {
-            //Verificar que no exista
-            if (await req.query<Medico>('Medico').findOne({ nombreDoctor: medico.nombreDoctor }) != null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "El Medico ya existe");
+            //Verificar que exista
+            if (await req.query<Medico>('Medico').findById(idMedico) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
 
             await req.query<Medico>('Medico').patchAndFetchById(idMedico, medico);
             return new APIResponse(_APIResponse.UPDATED, "El Medico fue actualizada");

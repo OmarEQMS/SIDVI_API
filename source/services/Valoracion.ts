@@ -12,66 +12,66 @@ import { Log } from '../tools';
 
 export class ValoracionServicio {
 
-    static async listarValoraciones(req: ServerRequest, fkMedicoVirus: number, fkUsuario: number, ordenarPor: string, ordenarModo:OrderModeEnum): Promise<any> {
-        try{
+    static async listarValoraciones(req: ServerRequest, fkMedicoVirus: number, fkUsuario: number, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
+        try {
             let query = req.query<Valoracion>('Valoracion').modify('defaultSelect');
-            query = fkMedicoVirus ? query.where({fkMedicoVirus}) : query;
-            query = fkUsuario ? query.where({fkUsuario}) : query;
+            query = fkMedicoVirus ? query.where({ fkMedicoVirus }) : query;
+            query = fkUsuario ? query.where({ fkUsuario }) : query;
             let valoraciones = await query.orderBy(ordenarPor, ordenarModo);
-            let valoracionesFormat = valoraciones.map((item:any) => new Valoracion(item).toJSON());
-            return new Coleccion<Valoracion>(valoracionesFormat, valoracionesFormat.length); 
-        }catch(error){
+            let valoracionesFormat = valoraciones.map((item: any) => new Valoracion(item).toJSON());
+            return new Coleccion<Valoracion>(valoracionesFormat, valoracionesFormat.length);
+        } catch (error) {
             throw error;
         }
     }
 
     static async crearValoracion(req: ServerRequest, valoracion: Valoracion): Promise<any> {
-        try{
+        try {
             deleteProperty(valoracion, ['idValoracion']);
 
             let newValoracion = await req.query<Valoracion>('Valoracion').insert(valoracion);
-            return new APIResponse(_APIResponse.CREATED, 'La Valoracion fue creada satisfactoriamente', {insertedId: newValoracion.idValoracion});
+            return new APIResponse(_APIResponse.CREATED, 'La Valoracion fue creada satisfactoriamente', { insertedId: newValoracion.idValoracion });
 
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
 
-    static async obtenerValoracion(req: ServerRequest, idValoracion: number): Promise<any>{
-        try{            
-            let valoracion =  await req.query<Valoracion>('Valoracion').findById(idValoracion);
-            if(valoracion==null) throw new APIResponse(_APIResponse.NOT_FOUND);       
-            return new Valoracion(valoracion).toJSON();   
-        }catch(error){
+    static async obtenerValoracion(req: ServerRequest, idValoracion: number): Promise<any> {
+        try {
+            let valoracion = await req.query<Valoracion>('Valoracion').findById(idValoracion);
+            if (valoracion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
+            return new Valoracion(valoracion).toJSON();
+        } catch (error) {
             throw error;
         }
     }
 
     static async actualizarValoracion(req: ServerRequest, idValoracion: number, valoracion: Valoracion): Promise<any> {
-        try{
+        try {
             //Verificar que Exista
-            if(await req.query<Valoracion>('Valoracion').findById(idValoracion)==null) 
-                throw new APIResponse(_APIResponse.NOT_FOUND);   
+            if (await req.query<Valoracion>('Valoracion').findById(idValoracion) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
 
             deleteProperty(valoracion, ['idValoracion']);
             await req.query<Valoracion>('Valoracion').patchAndFetchById(idValoracion, valoracion);
             return new APIResponse(_APIResponse.UPDATED, "La valoracion fue actualizada");
 
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
-    
+
     static async eliminarValoracion(req: ServerRequest, idValoracion: number): Promise<any> {
-        try{
+        try {
             //Verificar que Exista
-            if(await req.query<Valoracion>('Valoracion').findById(idValoracion)==null) 
-                throw new APIResponse(_APIResponse.NOT_FOUND);   
-            
+            if (await req.query<Valoracion>('Valoracion').findById(idValoracion) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
+
             await req.query<Valoracion>('Valoracion').deleteById(idValoracion);
             return new APIResponse(_APIResponse.DELETED, "La Valoracion fue eliminada correctamente");
-   
-        }catch(error){
+
+        } catch (error) {
             throw error;
         }
     }

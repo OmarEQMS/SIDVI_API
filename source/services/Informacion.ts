@@ -15,8 +15,8 @@ export class InformacionServicio {
     static async listarInformaciones(req: ServerRequest, fkVirus: number, fkCategoriaInformacion: number, texto: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Informacion>('Informacion').modify('defaultSelect');
-            query = fkVirus ? query.where({fkVirus}) : query;
-            query = fkCategoriaInformacion ? query.where({fkCategoriaInformacion}) : query;
+            query = fkVirus ? query.where({ fkVirus }) : query;
+            query = fkCategoriaInformacion ? query.where({ fkCategoriaInformacion }) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
             query = query.withGraphFetched('CategoriaInformacion(defaultSelect)');
 
@@ -31,10 +31,6 @@ export class InformacionServicio {
 
     static async crearInformacion(req: ServerRequest, informacion: Informacion): Promise<any> {
         try {
-            //Verificar que no exista
-            /*if (await req.query<Informacion>('Informacion').findOne({ clave: informacion.clave }) != null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La Informacion ya existe");*/
-
             deleteProperty(informacion, ['idInformacion']);
 
             let newInformacion = await req.query<Informacion>('Informacion').insert(informacion);
@@ -56,9 +52,9 @@ export class InformacionServicio {
 
     static async actualizarInformacion(req: ServerRequest, idInformacion: number, informacion: Informacion): Promise<any> {
         try {
-            //Verificar que no exista
-            /*if(await req.query<Informacion>('Informacion').findOne({clave: informacion.clave})!=null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "La Informacion ya existe");*/
+            //Verificar que exista
+            if (await req.query<Informacion>('Informacion').findById(idInformacion) == null)
+                throw new APIResponse(_APIResponse.NOT_FOUND);
 
             await req.query<Informacion>('Informacion').patchAndFetchById(idInformacion, informacion);
             return new APIResponse(_APIResponse.UPDATED, "La Informacion fue actualizada");
