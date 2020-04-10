@@ -6,10 +6,10 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarTestOpcions: Handler = async (req, res, next) => {
-    const fkTestNodo: number = req.swagger.params['fkTestNodo'].value || Defaults.ordenarModo;
-    const fkTestNodoSig: number = req.swagger.params['fkTestNodoSig'].value || Defaults.ordenarModo;
-    const clave: string = req.swagger.params['clave'].value || Defaults.ordenarModo;
-    const texto: string = req.swagger.params['texto'].value || Defaults.ordenarModo;
+    const fkTestNodo: number = req.swagger.params['fkTestNodo'].value;
+    const fkTestNodoSig: number = req.swagger.params['fkTestNodoSig'].value;
+    const clave: string = req.swagger.params['clave'].value;
+    const texto: string = req.swagger.params['texto'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || TestOpcion.idColumn;    
     try{

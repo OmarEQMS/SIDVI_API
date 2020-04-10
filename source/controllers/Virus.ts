@@ -5,11 +5,11 @@ import { Virus, _Virus } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarViruss: Handler = async (req, res, next) => {
-    const clave: string = req.swagger.params['clave'].value || Defaults.tamanoPagina;
-    const nombre: string = req.swagger.params['nombre'].value || Defaults.tamanoPagina;
-    const fkTestNodo: number = req.swagger.params['fkTestNodo'].value || Defaults.tamanoPagina;
-    const estatus: _Virus.Estatus = req.swagger.params['estatus'].value || Defaults.tamanoPagina;
+export const listarVirus: Handler = async (req, res, next) => {
+    const clave: string = req.swagger.params['clave'].value;
+    const nombre: string = req.swagger.params['nombre'].value;
+    const fkTestNodo: number = req.swagger.params['fkTestNodo'].value;
+    const estatus: _Virus.Estatus = req.swagger.params['estatus'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Virus.idColumn;    
     try{

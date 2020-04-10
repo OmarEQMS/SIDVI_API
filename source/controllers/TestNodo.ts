@@ -6,8 +6,8 @@ import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
 export const listarTestNodos: Handler = async (req, res, next) => {
-    const fkVirus: number = req.swagger.params['fkVirus'].value || Defaults.ordenarModo;
-    const texto: string = req.swagger.params['texto'].value || Defaults.ordenarModo;
+    const fkVirus: number = req.swagger.params['fkVirus'].value;
+    const texto: string = req.swagger.params['texto'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || TestNodo.idColumn;    
     try{
