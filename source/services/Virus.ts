@@ -11,7 +11,7 @@ import { generateCode, deleteProperty } from '../tools/Utils';
 import { Log } from '../tools';
 
 export class VirusServicio {
-
+// H
     static async listarVirus(req: ServerRequest, clave: string, nombre: string, fkTestNodo: number, estatus: _Virus.Estatus, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Virus>('Virus').modify('defaultSelect');
