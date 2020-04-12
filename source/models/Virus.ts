@@ -6,6 +6,7 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 import { TestNodo} from './TestNodo';
 import { MedicoVirus} from './MedicoVirus';
+import { Informacion } from './Informacion';
 
 export namespace _Virus {
     export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
@@ -51,6 +52,7 @@ export class Virus extends BaseModel implements IVirus {
     // Relations: HasMany
     medicosVirus?: MedicoVirus[];
     testNodos?: TestNodo[];
+    informaciones?: Informacion[];
 
     // Constructor
     constructor(virus?: any){
@@ -96,6 +98,11 @@ export class Virus extends BaseModel implements IVirus {
             relation: Model.HasManyRelation,
             modelClass: 'TestNodo',
             join: { from: 'Virus.idVirus', to: 'TestNodo.fkVirus' }
+        },
+        Informacion: {
+            relation: Model.HasManyRelation,
+            modelClass: 'Informacion',
+            join: { from: 'Virus.idVirus', to: 'Informacion.fkVirus'}
         },
         //------------------------------------- HasOneRelation
         //------------------------------------- BelongsToOneRelation  
