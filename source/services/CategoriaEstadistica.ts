@@ -18,7 +18,7 @@ export class CategoriaEstadisticaServicio {
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
 
             let categoriasEstadistica = await query.orderBy(ordenarPor, ordenarModo);
-            let categoriasEstadisticaFormat = categoriasEstadistica.map((item: any) => new CategoriaEstadistica(item).toJSON());
+            let categoriasEstadisticaFormat = categoriasEstadistica.map((item: any) => new CategoriaEstadistica(item).forJSON());
             return new Coleccion<CategoriaEstadistica>(categoriasEstadisticaFormat, categoriasEstadistica.length);
         } catch (error) {
             throw error;
@@ -44,7 +44,7 @@ export class CategoriaEstadisticaServicio {
         try {
             let categoriaEstadistica = await req.query<CategoriaEstadistica>('CategoriaEstadistica').findById(idCategoriaEstadistica);
             if (categoriaEstadistica == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new CategoriaEstadistica(categoriaEstadistica).toJSON();
+            return new CategoriaEstadistica(categoriaEstadistica).forJSON();
         } catch (error) {
             throw error;
         }

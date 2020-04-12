@@ -68,9 +68,9 @@ export class Virus extends BaseModel implements IVirus {
     }
     
     // Respond Object
-    toJSON() {
-        if(this.archivoIcono != null && Defaults.allowBase64Types.includes(this.mimetypeIcono)) {
-            this.archivoIcono = fileToBase64(this.mimetypeIcono, this.archivoIcono);
+    forJSON() {
+        if(this.archivoIcono!=null && Defaults.allowBase64Types.includes(this.mimetypeIcono)) {
+            this.archivoIcono = fileToBase64(this.mimetypeIcono, this.archivoIcono as ArrayBuffer);
         } else {
             delete this.archivoIcono;
         }

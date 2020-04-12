@@ -20,7 +20,7 @@ export class VirusServicio {
             query = fkTestNodo ? query.where({ fkTestNodo }) : query;
             query = estatus ? query.where({ estatus }) : query;
             let virus = await query.orderBy(ordenarPor, ordenarModo);
-            let virusFormat = virus.map((item: any) => new Virus(item).toJSON());
+            let virusFormat = virus.map((item: any) => new Virus(item).forJSON());
             return new Coleccion<Virus>(virusFormat, virusFormat.length);
 
         } catch (error) {
@@ -50,7 +50,7 @@ export class VirusServicio {
         try {
             let virus = await req.query<Virus>('Virus').findById(idVirus);
             if (virus == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Virus(virus).toJSON();
+            return new Virus(virus).forJSON();
         } catch (error) {
             throw error;
         }

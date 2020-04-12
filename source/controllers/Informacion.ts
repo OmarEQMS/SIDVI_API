@@ -5,7 +5,7 @@ import { Informacion, _Informacion } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarInformacions: Handler = async (req, res, next) => {
+export const listarInformaciones: Handler = async (req, res, next) => {
     const fkVirus: number = req.swagger.params['fkVirus'].value;
     const fkCategoriaInformacion: number = req.swagger.params['fkCategoriaInformacion'].value;
     const texto: string = req.swagger.params['texto'].value;

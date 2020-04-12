@@ -74,7 +74,7 @@ export class Medico extends BaseModel implements IMedico {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         if(this.archivoFoto != null && Defaults.allowBase64Types.includes(this.mimetypeFoto)) {
             this.archivoFoto = fileToBase64(this.mimetypeFoto, this.archivoFoto);
         } else {

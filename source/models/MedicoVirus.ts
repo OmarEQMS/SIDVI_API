@@ -47,7 +47,7 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

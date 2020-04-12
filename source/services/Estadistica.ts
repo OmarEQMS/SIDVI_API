@@ -21,7 +21,7 @@ export class EstadisticaServicio {
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
-            let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).toJSON());
+            let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).forJSON());
             return new Coleccion<Estadistica>(estadisticasFormat, estadisticas.length);
 
         } catch (error) {
@@ -44,7 +44,7 @@ export class EstadisticaServicio {
         try {
             let estadistica = await req.query<Estadistica>('Estadistica').findById(idEstadistica).withGraphFetched('CategoriaEstadistica(defaultSelect)');
             if (estadistica == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Estadistica(estadistica).toJSON();
+            return new Estadistica(estadistica).forJSON();
         } catch (error) {
             throw error;
         }

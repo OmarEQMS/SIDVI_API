@@ -43,7 +43,7 @@ export class CategoriaInformacion extends BaseModel implements ICategoriaInforma
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

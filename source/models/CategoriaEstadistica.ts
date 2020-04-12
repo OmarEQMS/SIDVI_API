@@ -40,7 +40,7 @@ export class CategoriaEstadistica extends BaseModel implements ICategoriaEstadis
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

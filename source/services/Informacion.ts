@@ -14,14 +14,14 @@ export class InformacionServicio {
 
     static async listarInformaciones(req: ServerRequest, fkVirus: number, fkCategoriaInformacion: number, texto: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
-            let query = req.query<Informacion>('Informacion').modify('defaultSelect');
+            let query = req.query<Informacion>('Informacion');
             query = fkVirus ? query.where({ fkVirus }) : query;
             query = fkCategoriaInformacion ? query.where({ fkCategoriaInformacion }) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
             query = query.withGraphFetched('CategoriaInformacion(defaultSelect)');
 
             let informaciones = await query.orderBy(ordenarPor, ordenarModo);
-            let informacionesFormat = informaciones.map((item: any) => new Informacion(item).toJSON());
+            let informacionesFormat = informaciones.map((item: any) => new Informacion(item).forJSON());
             return new Coleccion<Informacion>(informacionesFormat, informaciones.length);
 
         } catch (error) {
@@ -44,7 +44,7 @@ export class InformacionServicio {
         try {
             let informacion = await req.query<Informacion>('Informacion').findById(idInformacion).withGraphFetched('CategoriaInformacion(defaultSelect)');
             if (informacion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Informacion(informacion).toJSON();
+            return new Informacion(informacion).forJSON();
         } catch (error) {
             throw error;
         }

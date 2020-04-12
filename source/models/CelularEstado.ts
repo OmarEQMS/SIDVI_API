@@ -55,7 +55,7 @@ export class CelularEstado extends BaseModel implements ICelularEstado {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

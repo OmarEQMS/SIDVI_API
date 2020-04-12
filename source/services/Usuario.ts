@@ -19,7 +19,7 @@ export class UsuarioServicio {
 
             if (await bcrypt.compare(contrasena, _usuario.contrasena)) {
                 let token = jwt.sign(JSON.stringify(new Token(_usuario)), _usuario.token);
-                return new APIResponse(_APIResponse.OK, "Autenticado Exitosamente", { usuario: new Usuario(_usuario).toJSON(), token })
+                return new APIResponse(_APIResponse.OK, "Autenticado Exitosamente", { usuario: new Usuario(_usuario).forJSON(), token })
             } else {
                 throw new APIResponse(_APIResponse.FORBIDDEN);
             }
@@ -105,7 +105,7 @@ export class UsuarioServicio {
             query = celular ? query.where('celular', 'like', `%${celular}%`) : query;
             query = rol ? query.where({ rol }) : query;
             let usuarios = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let usuariosFormat = usuarios.results.map((item: any) => new Usuario(item).toJSON());
+            let usuariosFormat = usuarios.results.map((item: any) => new Usuario(item).forJSON());
             return new Coleccion<Usuario>(usuariosFormat, usuarios.total);
         } catch (error) {
             throw error;
@@ -135,7 +135,7 @@ export class UsuarioServicio {
         try {
             let usuario = await req.query<Usuario>('Usuario').findById(idUsuario);
             if (usuario == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Usuario(usuario).toJSON();
+            return new Usuario(usuario).forJSON();
         } catch (error) {
             throw error;
         }

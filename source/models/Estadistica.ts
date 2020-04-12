@@ -56,7 +56,7 @@ export class Estadistica extends BaseModel implements IEstadistica {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

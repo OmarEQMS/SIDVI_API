@@ -20,7 +20,7 @@ export class CelularEstadoServicio {
             query = seccion ? query.where('seccion', 'like', `%${seccion}%`) : query;
 
             let celularesEstado = await query.orderBy(ordenarPor, ordenarModo);
-            let celularesEstadoFormat = celularesEstado.map((item: any) => new CelularEstado(item).toJSON());
+            let celularesEstadoFormat = celularesEstado.map((item: any) => new CelularEstado(item).forJSON());
             return new Coleccion<CelularEstado>(celularesEstadoFormat, celularesEstado.length);
 
         } catch (error) {
@@ -47,7 +47,7 @@ export class CelularEstadoServicio {
         try {
             let celularEstado = await req.query<CelularEstado>('CelularEstado').findById(idCelularEstado);
             if (celularEstado == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new CelularEstado(celularEstado).toJSON();
+            return new CelularEstado(celularEstado).forJSON();
         } catch (error) {
             throw error;
         }

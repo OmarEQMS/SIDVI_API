@@ -19,7 +19,7 @@ export class CategoriaInformacionServicio {
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
 
             let categoriasInformacion = await query.orderBy(ordenarPor, ordenarModo);
-            let categoriasInformacionFormat = categoriasInformacion.map((item: any) => new CategoriaInformacion(item).toJSON());
+            let categoriasInformacionFormat = categoriasInformacion.map((item: any) => new CategoriaInformacion(item).forJSON());
             return new Coleccion<CategoriaInformacion>(categoriasInformacionFormat, categoriasInformacion.length);
         } catch (error) {
             throw error;
@@ -45,7 +45,7 @@ export class CategoriaInformacionServicio {
         try {
             let categoriaInformacion = await req.query<CategoriaInformacion>('CategoriaInformacion').findById(idCategoriaInformacion);
             if (categoriaInformacion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new CategoriaInformacion(categoriaInformacion).toJSON();
+            return new CategoriaInformacion(categoriaInformacion).forJSON();
         } catch (error) {
             throw error;
         }

@@ -21,7 +21,7 @@ export class MedicoServicio {
             query = nombreDoctor ? query.where('nombreDoctor', 'like', `%${nombreDoctor}%`) : query;
 
             let medicos = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
-            let medicosFormat = medicos.results.map((item: any) => new Medico(item).toJSON());
+            let medicosFormat = medicos.results.map((item: any) => new Medico(item).forJSON());
             return new Coleccion<Medico>(medicosFormat, medicos.total);
 
         } catch (error) {
@@ -44,7 +44,7 @@ export class MedicoServicio {
         try {
             let medico = await req.query<Medico>('Medico').findById(idMedico);
             if (medico == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Medico(medico).toJSON();
+            return new Medico(medico).forJSON();
         } catch (error) {
             throw error;
         }

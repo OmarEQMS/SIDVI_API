@@ -19,7 +19,7 @@ export class UbicacionServicio {
             query = clave ? query.where('clave', 'like', `%${clave}%`) : query;
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
             let ubicaciones = await query.orderBy(ordenarPor, ordenarModo);
-            let ubicacionesFormat = ubicaciones.map((item: any) => new Ubicacion(item).toJSON());
+            let ubicacionesFormat = ubicaciones.map((item: any) => new Ubicacion(item).forJSON());
             return new Coleccion<Ubicacion>(ubicacionesFormat, ubicacionesFormat.length);
         } catch (error) {
             throw error;
@@ -48,7 +48,7 @@ export class UbicacionServicio {
         try {
             let ubicacion = await req.query<Ubicacion>('Ubicacion').findById(idUbicacion);
             if (ubicacion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Ubicacion(ubicacion).toJSON();
+            return new Ubicacion(ubicacion).forJSON();
         } catch (error) {
             throw error;
         }

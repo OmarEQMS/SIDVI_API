@@ -63,7 +63,7 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         if(this.archivo != null && Defaults.allowBase64Types.includes(this.mimetype)) {
             this.archivo = fileToBase64(this.mimetype, this.archivo);
         } else {

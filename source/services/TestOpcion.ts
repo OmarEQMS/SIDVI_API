@@ -20,7 +20,7 @@ export class TestOpcionServicio {
             query = clave ? query.where('clave', 'like', `%${clave}%`) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
             let testsOpciones = await query.orderBy(ordenarPor, ordenarModo);
-            let testsOpcionesFormat = testsOpciones.map((item: any) => new TestOpcion(item).toJSON());
+            let testsOpcionesFormat = testsOpciones.map((item: any) => new TestOpcion(item).forJSON());
             return new Coleccion<TestOpcion>(testsOpcionesFormat, testsOpcionesFormat.length);
         } catch (error) {
             throw error;
@@ -41,7 +41,7 @@ export class TestOpcionServicio {
         try {
             let testOpcion = await req.query<TestOpcion>('TestOpcion').findById(idTestOpcion);
             if (testOpcion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new TestOpcion(testOpcion).toJSON();
+            return new TestOpcion(testOpcion).forJSON();
         } catch (error) {
             throw error;
         }

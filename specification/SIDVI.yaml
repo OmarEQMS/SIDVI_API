@@ -395,6 +395,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador usuario
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -593,6 +597,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador virus
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -777,6 +785,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador test nodo
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -971,6 +983,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador test opcion
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -1290,6 +1306,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador informacion
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'
@@ -1880,6 +1900,10 @@ paths:
                   type: integer
                   required: true
                   description: identificador medico
+                - name: TokenUsuario
+                  in: query
+                  type: string
+                  description: token de usuario
             responses:
                 200:
                     $ref: '#/responses/RespuestaArchivo'

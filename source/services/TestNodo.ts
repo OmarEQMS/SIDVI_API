@@ -18,7 +18,7 @@ export class TestNodoServicio {
             query = fkVirus ? query.where({ fkVirus }) : query;
             query = texto ? query.where('texto', 'like', `%${texto}%`) : query;
             let testsNodos = await query.orderBy(ordenarPor, ordenarModo);
-            let testsNodosFormat = testsNodos.map((item: any) => new TestNodo(item).toJSON());
+            let testsNodosFormat = testsNodos.map((item: any) => new TestNodo(item).forJSON());
             return new Coleccion<TestNodo>(testsNodosFormat, testsNodosFormat.length);
         } catch (error) {
             throw error;
@@ -40,7 +40,7 @@ export class TestNodoServicio {
         try {
             let testNodo = await req.query<TestNodo>('TestNodo').findById(idTestNodo);
             if (testNodo == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new TestNodo(testNodo).toJSON();
+            return new TestNodo(testNodo).forJSON();
         } catch (error) {
             throw error;
         }

@@ -18,7 +18,7 @@ export class ValoracionServicio {
             query = fkMedicoVirus ? query.where({ fkMedicoVirus }) : query;
             query = fkUsuario ? query.where({ fkUsuario }) : query;
             let valoraciones = await query.orderBy(ordenarPor, ordenarModo);
-            let valoracionesFormat = valoraciones.map((item: any) => new Valoracion(item).toJSON());
+            let valoracionesFormat = valoraciones.map((item: any) => new Valoracion(item).forJSON());
             return new Coleccion<Valoracion>(valoracionesFormat, valoracionesFormat.length);
         } catch (error) {
             throw error;
@@ -41,7 +41,7 @@ export class ValoracionServicio {
         try {
             let valoracion = await req.query<Valoracion>('Valoracion').findById(idValoracion);
             if (valoracion == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new Valoracion(valoracion).toJSON();
+            return new Valoracion(valoracion).forJSON();
         } catch (error) {
             throw error;
         }

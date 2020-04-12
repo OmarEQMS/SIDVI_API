@@ -35,7 +35,7 @@ export const obtenerVirus: Handler = async (req, res, next) => {
     try{
         let response = await VirusServicio.obtenerVirus(req, idVirus);
         res.respond(response);
-        }catch(error){
+    }catch(error){
         next(error);
     }
 }

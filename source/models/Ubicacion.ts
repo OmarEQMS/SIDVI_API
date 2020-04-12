@@ -48,7 +48,7 @@ export class Ubicacion extends BaseModel implements IUbicacion {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

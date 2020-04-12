@@ -50,7 +50,7 @@ export class Valoracion extends BaseModel implements IValoracion {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         return this;
     }
 

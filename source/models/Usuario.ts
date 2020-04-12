@@ -75,7 +75,7 @@ export class Usuario extends BaseModel implements IUsuario {
     }
     
     // Respond Object
-    toJSON() {
+    forJSON() {
         delete this.contrasena;
         delete this.token;
         if (this.archivoFoto!=null && Defaults.allowBase64Types.includes(this.mimetypeFoto)) {

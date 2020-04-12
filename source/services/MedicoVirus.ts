@@ -18,7 +18,7 @@ export class MedicoVirusServicio {
             query = fkMedico ? query.where({ fkMedico }) : query;
             query = fkVirus ? query.where({ fkVirus }) : query;
             let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);
-            let medicosVirusFormat = medicosVirus.map((item: any) => new MedicoVirus(item).toJSON());
+            let medicosVirusFormat = medicosVirus.map((item: any) => new MedicoVirus(item).forJSON());
             return new Coleccion<MedicoVirus>(medicosVirusFormat, medicosVirusFormat.length);
         } catch (error) {
             throw error;
@@ -47,7 +47,7 @@ export class MedicoVirusServicio {
         try {
             let medicoVirus = await req.query<MedicoVirus>('MedicoVirus').findById(idMedicoVirus);
             if (medicoVirus == null) throw new APIResponse(_APIResponse.NOT_FOUND);
-            return new MedicoVirus(medicoVirus).toJSON();
+            return new MedicoVirus(medicoVirus).forJSON();
         } catch (error) {
             throw error;
         }
