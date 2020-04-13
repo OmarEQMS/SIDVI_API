@@ -7,7 +7,7 @@ import { Log } from '../tools';
 
 export const listarEstadisticas: Handler = async (req, res, next) => {
     const fkVirus: number = req.swagger.params['fkVirus'].value;
-    const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
+    const fkUbicacion: number[] = req.swagger.params['fkUbicacion'].value;
     const fkCategoriaEstadistica: number = req.swagger.params['fkCategoriaEstadistica'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Estadistica.idColumn;    
