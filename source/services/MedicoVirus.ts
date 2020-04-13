@@ -17,6 +17,8 @@ export class MedicoVirusServicio {
             let query = req.query<MedicoVirus>('MedicoVirus').modify('defaultSelect');
             query = fkMedico ? query.where({ fkMedico }) : query;
             query = fkVirus ? query.where({ fkVirus }) : query;
+            query = query.withGraphFetched('Medico(defaultSelect)');
+
             let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);
             let medicosVirusFormat = medicosVirus.map((item: any) => new MedicoVirus(item).forJSON());
             return new Coleccion<MedicoVirus>(medicosVirusFormat, medicosVirusFormat.length);

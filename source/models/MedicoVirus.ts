@@ -43,6 +43,7 @@ export class MedicoVirus extends BaseModel implements IMedicoVirus {
             this.idMedicoVirus = medicoVirus.idMedicoVirus;
             this.fkMedico = medicoVirus.fkMedico;
             this.fkVirus = medicoVirus.fkVirus;
+            this.medico = new Medico(medicoVirus.Medico);
         }
     }
     
