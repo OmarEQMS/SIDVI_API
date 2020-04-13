@@ -15,7 +15,7 @@ export class UbicacionServicio {
     static async listarUbicaciones(req: ServerRequest, fkUbicacion: number, clave: string, nombre: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Ubicacion>('Ubicacion').modify('defaultSelect');
-            query = fkUbicacion ? query.where({ fkUbicacion }) : query;
+            query = fkUbicacion ? (fkUbicacion==-1 ? query.where({fkUbicacion: null}) : query.where({fkUbicacion}) ) : query;
             query = clave ? query.where('clave', 'like', `%${clave}%`) : query;
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
             let ubicaciones = await query.orderBy(ordenarPor, ordenarModo);

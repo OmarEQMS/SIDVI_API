@@ -7,7 +7,7 @@ import { Log } from '../tools';
 
 export const listarMedicos: Handler = async (req, res, next) => {
     const fkUsuario: number = req.swagger.params['fkUsuario'].value;
-    const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
+    const fkUbicacion: number[] = req.swagger.params['fkUbicacion'].value;
     const nombreConsultorio: string = req.swagger.params['nombreConsultorio'].value;
     const nombreDoctor: string = req.swagger.params['nombreDoctor'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
