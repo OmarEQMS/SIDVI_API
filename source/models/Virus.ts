@@ -35,7 +35,7 @@ export class Virus extends BaseModel implements IVirus {
     static tableName = 'Virus';
     static idColumn = 'idVirus';
     // Objection Modifiers
-    static columnList = ['idVirus', 'clave', 'nombre', 'mimetypeIcono', 'fkTestNodo', 'estatus'];
+    static columnList = ['idVirus', 'clave', 'nombre', 'mimetypeIcono', 'archivoIcono', 'fkTestNodo', 'estatus'];
 
     // Columns
     idVirus?: number;
