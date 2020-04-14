@@ -1967,6 +1967,12 @@ paths:
                   in: query
                   type: integer
                   description: identificador del virus
+                - name: fkUbicacion
+                  in: query
+                  type: array
+                  items: 
+                      type: integer
+                  description: identificador de la ubicacion
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
             responses:

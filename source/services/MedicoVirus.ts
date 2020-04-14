@@ -12,14 +12,15 @@ import { Log } from '../tools';
 
 export class MedicoVirusServicio {
 
-    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
+    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, fkUbicacion: number[], ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
         try {
             let query = req.query<MedicoVirus>('MedicoVirus').modify('defaultSelect');
             query = fkMedico ? query.where({ fkMedico }) : query;
             query = fkVirus ? query.where({ fkVirus }) : query;
-            query = query.withGraphFetched('Medico(defaultSelect)');
-
+            query = query.withGraphFetched('Medico(defaultSelect, filtrarUbicacion)').modifiers({ filtrarUbicacion: query => fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query });
+            
             let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);
+            medicosVirus = medicosVirus.filter((item: any) => item.Medico != null);
             let medicosVirusFormat = medicosVirus.map((item: any) => new MedicoVirus(item).forJSON());
             return new Coleccion<MedicoVirus>(medicosVirusFormat, medicosVirusFormat.length);
         } catch (error) {

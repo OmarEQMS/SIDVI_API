@@ -5,13 +5,14 @@ import { MedicoVirus, _MedicoVirus } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarMedicoViruss: Handler = async (req, res, next) => {
+export const listarMedicosVirus: Handler = async (req, res, next) => {
     const fkMedico: number = req.swagger.params['fkMedico'].value;
     const fkVirus: number = req.swagger.params['fkVirus'].value;
+    const fkUbicacion: number[] = req.swagger.params['fkUbicacion'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || MedicoVirus.idColumn;    
     try{
-        let response = await MedicoVirusServicio.listarMedicosVirus(req, fkMedico, fkVirus, ordenarPor, ordenarModo);
+        let response = await MedicoVirusServicio.listarMedicosVirus(req, fkMedico, fkVirus, fkUbicacion, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);
