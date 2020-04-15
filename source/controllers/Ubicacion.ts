@@ -5,7 +5,7 @@ import { Ubicacion, _Ubicacion } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarUbicacions: Handler = async (req, res, next) => {
+export const listarUbicaciones: Handler = async (req, res, next) => {
     const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
     const clave: string = req.swagger.params['clave'].value;
     const nombre: string = req.swagger.params['nombre'].value;
