@@ -6,7 +6,7 @@ import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
 
 export namespace _Informacion {
-    export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG];
+    export let archivoContentType: ContentTypeEnum[] = [ContentTypeEnum.JPG, ContentTypeEnum.PNG, ContentTypeEnum.PDF, ContentTypeEnum.MP4];
     export let archivoFileSize: number = 8 * 1024 * 1024;
 }
 
