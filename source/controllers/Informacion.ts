@@ -41,8 +41,8 @@ export const obtenerInformacion: Handler = async (req, res, next) => {
 
 
 export const actualizarInformacion: Handler = async (req, res, next) => {
-    const idInformacion: number = req.swagger.params['idInformacion'].value;
-    const informacion: Informacion = req.swagger.params['Informacion'].value;
+    const idInformacion: number = req.swagger.params['idInformacion'].value;    
+    const informacion: Informacion = req.swagger.params['informacion'].value;
     try{
         let response = await InformacionServicio.actualizarInformacion(req, idInformacion, informacion);
         res.respond(response);
