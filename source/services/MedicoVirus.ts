@@ -12,12 +12,15 @@ import { Log } from '../tools';
 
 export class MedicoVirusServicio {
 
-    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, fkUbicacion: number[], ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
+    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, nombre: string, fkUbicacion: number[], ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
         try {
             let query = req.query<MedicoVirus>('MedicoVirus').modify('defaultSelect');
             query = fkMedico ? query.where({ fkMedico }) : query;
             query = fkVirus ? query.where({ fkVirus }) : query;
-            query = query.withGraphFetched('Medico(defaultSelect, filtrarUbicacion)').modifiers({ filtrarUbicacion: query => fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query });
+            query = query.withGraphFetched('Medico(defaultSelect, filtrarUbicacion, filtrarNombre)').modifiers({
+                filtrarUbicacion: query => { fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query },
+                filtrarNombre: query => { nombre ? query.where('nombreDoctor', 'like', `%${nombre}%`) : query }
+            });
             
             let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);
             medicosVirus = medicosVirus.filter((item: any) => item.Medico != null);

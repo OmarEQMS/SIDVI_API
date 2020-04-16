@@ -1966,7 +1966,11 @@ paths:
                 - name: fkVirus
                   in: query
                   type: integer
-                  description: identificador del virus
+                  description: identificador del virus 
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre del medico
                 - name: fkUbicacion
                   in: query
                   type: array
