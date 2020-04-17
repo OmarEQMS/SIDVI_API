@@ -58,6 +58,8 @@ export const up = (knex: any) => {
             table.integer('fkUbicacion').unsigned().references('Ubicacion.idUbicacion').onDelete('CASCADE');            
             table.string('clave', 20);
             table.string('nombre', 300);
+            table.decimal('latitud', 11, 7);
+            table.decimal('longitud', 11, 7);
         })
         .createTable('CategoriaEstadistica', (table: any) => {
             table.increments('idCategoriaEstadistica').primary();
@@ -79,9 +81,11 @@ export const up = (knex: any) => {
             table.string('nombreDoctor', 300); 
             table.string('direccionConsultorio', 300); 
             table.string('telefonoConsultorio', 300); 
+            table.string('cedulaProfesional', 30);
             table.string('descripcion', 1000);
             table.string('mimetypeFoto', 30);
             table.specificType('archivoFoto', 'mediumblob');
+            table.enum('estatus', ['ACEPTADO', 'RECHAZADO']);
         })
         .createTable('MedicoVirus', (table: any) => {
             table.increments('idMedicoVirus').primary();

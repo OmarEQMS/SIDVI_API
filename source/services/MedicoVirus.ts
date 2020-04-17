@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 import { ServerRequest } from '../types';
 import { OrderModeEnum, Defaults, ContentTypeEnum } from '../api';
-import { MedicoVirus, DBModels, _MedicoVirus, Coleccion, } from '../models';
+import { MedicoVirus, DBModels, _MedicoVirus, Coleccion, _Medico, } from '../models';
 import { APIResponse, _APIResponse, Response } from '../responses';
 import { Token } from '../models/Token';
 import { generateCode, deleteProperty } from '../tools/Utils';
@@ -12,14 +12,15 @@ import { Log } from '../tools';
 
 export class MedicoVirusServicio {
 
-    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, nombre: string, fkUbicacion: number[], ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
+    static async listarMedicosVirus(req: ServerRequest, fkMedico: number, fkVirus: number, nombre: string, fkUbicacion: number[], estatus: _Medico.Estatus, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<Coleccion<MedicoVirus>> {
         try {
             let query = req.query<MedicoVirus>('MedicoVirus').modify('defaultSelect');
             query = fkMedico ? query.where({ fkMedico }) : query;
             query = fkVirus ? query.where({ fkVirus }) : query;
-            query = query.withGraphFetched('Medico(defaultSelect, filtrarUbicacion, filtrarNombre)').modifiers({
+            query = query.withGraphFetched('Medico(defaultSelect, filtrarUbicacion, filtrarNombre, filtrarEstatus)').modifiers({
                 filtrarUbicacion: query => { fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query },
-                filtrarNombre: query => { nombre ? query.where('nombreDoctor', 'like', `%${nombre}%`) : query }
+                filtrarNombre: query => { nombre ? query.where('nombreDoctor', 'like', `%${nombre}%`) : query },
+                filtrarEstatus: query => { estatus ? query.where({ estatus }) : query }
             });
             
             let medicosVirus = await query.orderBy(ordenarPor, ordenarModo);

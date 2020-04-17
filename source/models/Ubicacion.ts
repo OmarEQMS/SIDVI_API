@@ -15,6 +15,8 @@ export interface IUbicacion {
     fkUbicacion?: number;
     clave?: string;
     nombre?: string;
+    latitud?: number;
+    longitud?: number;
 }
 
 export class Ubicacion extends BaseModel implements IUbicacion {
@@ -29,6 +31,8 @@ export class Ubicacion extends BaseModel implements IUbicacion {
     fkUbicacion?: number;
     clave?: string;
     nombre?: string;
+    latitud?: number;
+    longitud?: number;
 
     //Relations: BelongsToOne
     ubicacion?: Ubicacion;
@@ -44,6 +48,8 @@ export class Ubicacion extends BaseModel implements IUbicacion {
             this.fkUbicacion = ubicacion.fkUbicacion;
             this.clave = ubicacion. clave;
             this.nombre = ubicacion.nombre;
+            this.latitud = ubicacion.latitud;
+            this.longitud = ubicacion.longitud;
         }
     }
     

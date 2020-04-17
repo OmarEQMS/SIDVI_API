@@ -1779,6 +1779,13 @@ paths:
                   in: query
                   type: string
                   description: nombre del doctor
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                    - ACEPTADO
+                    - RECHAZADO
+                  description: estatus del doctor
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
                 - $ref: '#/parameters/tamanoPagina'
@@ -1985,6 +1992,13 @@ paths:
                   items: 
                       type: integer
                   description: identificador de la ubicacion
+                - name: estatus
+                  in: query
+                  type: string
+                  enum:
+                    - ACEPTADO
+                    - RECHAZADO
+                  description: estatus del doctor
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
             responses:
@@ -2637,6 +2651,16 @@ definitions:
                 type: string
                 description: nombre de la ubicacion
                 example: Mexico
+            latitud:
+                x-name: latitud
+                type: number
+                description: latitud de la ubicacion
+                example: -170.5
+            longitud:
+                x-name: longitud
+                type: number
+                description: longitud de la ubicacion
+                example: 88.9
     CategoriaEstadistica:
         type: object
         description: Informacion de las categorias de las estadisticas
@@ -2732,6 +2756,11 @@ definitions:
                 type: string
                 description: telefono donde podra consultar al consultorio
                 example: 7771326125
+            cedulaProfesional:
+                x-name: cedula profesional
+                type: string
+                description: cedula profesional del doctor
+                examle: ABC123
             descripcion:
                 x-name: descripcion
                 type: string
@@ -2747,6 +2776,14 @@ definitions:
                 type: string
                 format: binary
                 description: foto para mostrar del medico / consultorio
+            estatus:
+                x-name: estatus
+                type: string
+                enum:
+                  - ACEPTADO
+                  - RECHAZADO
+                description: estatus del doctor
+                example: RECHAZADO
     MedicoVirus:
         type: object
         description: Informacion de las especialidades de los medicos o consultorios

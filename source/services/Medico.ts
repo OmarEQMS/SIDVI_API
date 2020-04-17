@@ -12,13 +12,14 @@ import { Log } from '../tools';
 
 export class MedicoServicio {
 
-    static async listarMedicos(req: ServerRequest, fkUsuario: number, fkUbicacion: number[], nombreConsultorio: string, nombreDoctor: string, ordenarPor: string, ordenarModo: OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
+    static async listarMedicos(req: ServerRequest, fkUsuario: number, fkUbicacion: number[], nombreConsultorio: string, nombreDoctor: string, estatus: _Medico.Estatus, ordenarPor: string, ordenarModo: OrderModeEnum, tamanoPagina: number, indicePagina: number): Promise<any> {
         try {
             let query = req.query<Medico>('Medico').modify('defaultSelect');
             query = fkUsuario ? query.where({ fkUsuario }) : query;
             query = fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query;
             query = nombreConsultorio ? query.where('nombreConsultorio', 'like', `%${nombreConsultorio}%`) : query;
             query = nombreDoctor ? query.where('nombreDoctor', 'like', `%${nombreDoctor}%`) : query;
+            query = estatus ? query.where({ estatus }) : query;
 
             let medicos = await query.orderBy(ordenarPor, ordenarModo).page(indicePagina, tamanoPagina);
             let medicosFormat = medicos.results.map((item: any) => new Medico(item).forJSON());
