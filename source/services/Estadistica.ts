@@ -12,12 +12,14 @@ import { Log } from '../tools';
 
 export class EstadisticaServicio {
 
-    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number[], fkCategoriaEstadistica: number, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
+    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkCategoriaEstadistica: number, fechaInicio: string, fechaFin: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
             query = fkVirus ? query.where({ fkVirus }) : query;
-            query = fkUbicacion ? query.whereIn('fkUbicacion', fkUbicacion) : query;
+            query = fkUbicacion ? query.where({ fkUbicacion }) : query;
             query = fkCategoriaEstadistica ? query.where({ fkCategoriaEstadistica }) : query;
+            query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
+            query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);

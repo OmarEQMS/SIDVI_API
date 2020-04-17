@@ -1624,14 +1624,22 @@ paths:
                   description: identificador del virus
                 - name: fkUbicacion
                   in: query
-                  type: array
-                  items: 
-                      type: integer
+                  type: integer
                   description: identificador de la ubicacion
                 - name: fkCategoriaEstadistica
                   in: query
                   type: integer
                   description: identificador de la categoria estadistica
+                - name: fechaInicio
+                  in: query
+                  type: string
+                  format: date
+                  description: fecha de inicio de filtrado
+                - name: fechaFin
+                  in: query
+                  type: string
+                  format: date
+                  description: fecha fin de filtrado
                 - $ref: '#/parameters/ordenarPor'
                 - $ref: '#/parameters/ordenarModo'
             responses:
