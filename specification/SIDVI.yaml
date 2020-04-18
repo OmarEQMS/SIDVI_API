@@ -2760,7 +2760,7 @@ definitions:
                 x-name: cedula profesional
                 type: string
                 description: cedula profesional del doctor
-                examle: ABC123
+                example: ABC123
             descripcion:
                 x-name: descripcion
                 type: string
