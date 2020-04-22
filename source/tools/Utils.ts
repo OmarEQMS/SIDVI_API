@@ -19,7 +19,15 @@ export function createDate(date: Date) {
     return moment(date).tz(Defaults.timezone).format(Defaults.dateformat);
 }
 
+export function createDateStr(date: string) {
+    return moment(date).tz(Defaults.timezone).format(Defaults.dateformat);
+}
+
 export function createDateTime(date: Date) {
+    return moment(date).tz(Defaults.timezone).format(Defaults.timeformat);
+}
+
+export function createDateTimeStr(date: string) {
     return moment(date).tz(Defaults.timezone).format(Defaults.timeformat);
 }
 
