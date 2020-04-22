@@ -5,7 +5,7 @@ import { Valoracion, _Valoracion } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarValoracions: Handler = async (req, res, next) => {
+export const listarValoraciones: Handler = async (req, res, next) => {
     const fkMedicoVirus: number = req.swagger.params['fkMedicoVirus'].value;
     const fkUsuario: number = req.swagger.params['fkUsuario'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
