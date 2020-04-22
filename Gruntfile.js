@@ -93,7 +93,8 @@ module.exports = function(grunt) {
                                    'shell:releaseSetup',
                                    'shell:copyAll:public',
                                    'ts:build',
-                                   'shell:deleteDir:build\\test']);
+                                   // 'shell:deleteDir:build\\test'
+                                ]);
     grunt.registerTask('unixRelease', ['shell:unixDeleteDir:build',
                                        'shell:mkdir:build',
                                        'shell:mkdir:build/specification',
@@ -102,7 +103,8 @@ module.exports = function(grunt) {
                                        'shell:releaseSetup',
                                        'shell:unixCopyAll:public',
                                        'ts:build',
-                                       'shell:unixDeleteDir:build/test']);
+                                       // 'shell:unixDeleteDir:build/test'
+                                    ]);
     grunt.registerTask('migrate', ['shell:cleardb',
                                    'shell:migrate']);
     grunt.registerTask('cleardb', ['shell:cleardb']);
