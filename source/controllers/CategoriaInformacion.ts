@@ -5,12 +5,13 @@ import { CategoriaInformacion, _CategoriaInformacion } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarCategoriaInformacions: Handler = async (req, res, next) => {
+export const listarCategoriasInformacion: Handler = async (req, res, next) => {
     const clave: string = req.swagger.params['clave'].value;    
     const nombre: string = req.swagger.params['nombre'].value;    
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || CategoriaInformacion.idColumn;    
     try{
+        console.log("why?");
         let response = await CategoriaInformacionServicio.listarCategoriasInformaciones(req, clave, nombre, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
