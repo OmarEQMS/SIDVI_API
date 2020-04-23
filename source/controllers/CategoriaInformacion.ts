@@ -11,7 +11,6 @@ export const listarCategoriasInformacion: Handler = async (req, res, next) => {
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || CategoriaInformacion.idColumn;    
     try{
-        console.log("why?");
         let response = await CategoriaInformacionServicio.listarCategoriasInformaciones(req, clave, nombre, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
