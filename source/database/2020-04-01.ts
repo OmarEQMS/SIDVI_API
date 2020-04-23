@@ -85,7 +85,7 @@ export const up = (knex: any) => {
             table.string('descripcion', 1000);
             table.string('mimetypeFoto', 30);
             table.specificType('archivoFoto', 'mediumblob');
-            table.enum('estatus', ['ACEPTADO', 'RECHAZADO']);
+            table.enum('estatus', ['HABILITADO', 'DESHABILITADO', 'EN_ESPERA', 'RECHAZADO']);
         })
         .createTable('MedicoVirus', (table: any) => {
             table.increments('idMedicoVirus').primary();
