@@ -14,7 +14,8 @@ export const seed = async (knex: Knex) => {
 		{ idUbicacion:5, fkUbicacion: null, clave: 'eu', nombre: 'Estados Unidos', latitud: 0.5, longitud:0.5 } as IUbicacion,
 		{ idUbicacion:6, fkUbicacion: 5, clave: 'ny', nombre: 'New York', latitud: 0.5, longitud:0.5 } as IUbicacion,
 		{ idUbicacion:7, fkUbicacion: 5, clave: 'wash', nombre: 'Washinton', latitud: 0.5, longitud:0.5 } as IUbicacion,
-		{ idUbicacion:8, fkUbicacion: 7, clave: 'seat', nombre: 'Seattle', latitud: 0.5, longitud:0.5 } as IUbicacion
+		{ idUbicacion:8, fkUbicacion: 7, clave: 'seat', nombre: 'Seattle', latitud: 0.5, longitud:0.5 } as IUbicacion,
+		{ idUbicacion:9, fkUbicacion: 2, clave: 'cva', nombre: 'Cuernavaca', latitud: 0.5, longitud:0.5 } as IUbicacion
     ]);
 	return knex;
 };
