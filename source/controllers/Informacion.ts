@@ -20,7 +20,7 @@ export const listarInformaciones: Handler = async (req, res, next) => {
 }
 
 export const crearInformacion: Handler = async (req, res, next) => {
-    const informacion: Informacion = req.swagger.params['Informacion'].value;
+    const informacion: Informacion = req.swagger.params['informacion'].value;
     try{
         let response = await InformacionServicio.crearInformacion(req, informacion);
         res.respond(response);

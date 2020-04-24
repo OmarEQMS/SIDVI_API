@@ -88,23 +88,28 @@ module.exports = function(grunt) {
     grunt.registerTask('release', ['shell:deleteDir:build',
                                    'shell:mkdir:build',
                                    'shell:mkdir:build\\specification',
-                                   'shell:copy:.npmrc',
+                                   'shell:mkdir:build\\test\\files',
                                    'shell:copyRelease:package.json',
                                    'shell:copyRelease:.env',
                                    'shell:releaseSetup',
+                                   'shell:copyAll:test\\files',
                                    'shell:copyAll:public',
                                    'ts:build',
-                                   'shell:deleteDir:build\\test']);
+                                   // 'shell:deleteDir:build\\test'
+                                ]);
     grunt.registerTask('unixRelease', ['shell:unixDeleteDir:build',
                                        'shell:mkdir:build',
                                        'shell:mkdir:build/specification',
-                                       'shell:unixCopy:.npmrc',
+                                       'shell:mkdir:build/test',
+                                       'shell:mkdir:build/test/files',
                                        'shell:unixCopyRelease:package.json',
                                        'shell:unixCopyRelease:.env',
                                        'shell:releaseSetup',
+                                       'shell:unixCopyAll:test/files',
                                        'shell:unixCopyAll:public',
                                        'ts:build',
-                                       'shell:unixDeleteDir:build/test']);
+                                       // 'shell:unixDeleteDir:build/test'
+                                    ]);
     grunt.registerTask('migrate', ['shell:cleardb',
                                    'shell:migrate']);
     grunt.registerTask('cleardb', ['shell:cleardb']);

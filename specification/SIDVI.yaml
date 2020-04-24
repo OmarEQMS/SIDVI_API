@@ -1783,7 +1783,9 @@ paths:
                   in: query
                   type: string
                   enum:
-                    - ACEPTADO
+                    - HABILITADO
+                    - DESHABILITADO
+                    - EN_ESPERA
                     - RECHAZADO
                   description: estatus del doctor
                 - $ref: '#/parameters/ordenarPor'
@@ -1996,7 +1998,9 @@ paths:
                   in: query
                   type: string
                   enum:
-                    - ACEPTADO
+                    - HABILITADO
+                    - DESHABILITADO
+                    - EN_ESPERA
                     - RECHAZADO
                   description: estatus del doctor
                 - $ref: '#/parameters/ordenarPor'
@@ -2780,7 +2784,9 @@ definitions:
                 x-name: estatus
                 type: string
                 enum:
-                  - ACEPTADO
+                  - HABILITADO
+                  - DESHABILITADO
+                  - EN_ESPERA
                   - RECHAZADO
                 description: estatus del doctor
                 example: RECHAZADO
