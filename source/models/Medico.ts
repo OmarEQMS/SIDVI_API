@@ -43,7 +43,7 @@ export class Medico extends BaseModel implements IMedico {
     static tableName = 'Medico';
     static idColumn = 'idMedico';
     // Objection Modifiers
-    static columnList = ['idMedico', 'fkUsuario', 'fkUbicacion', 'nombreConsultorio', 'nombreDoctor', 'direccionConsultorio', 'telefonoConsultorio', 'descripcion', 'mimetypeFoto', 'archivoFoto'];
+    static columnList = ['idMedico', 'fkUsuario', 'fkUbicacion', 'nombreConsultorio', 'nombreDoctor', 'direccionConsultorio', 'telefonoConsultorio', 'cedulaProfesional' ,'descripcion', 'mimetypeFoto', 'archivoFoto', 'estatus'];
 
     // Columns
     idMedico?: number;

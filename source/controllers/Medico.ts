@@ -24,7 +24,7 @@ export const listarMedicos: Handler = async (req, res, next) => {
 }
 
 export const crearMedico: Handler = async (req, res, next) => {
-    const medico: Medico = req.swagger.params['Medico'].value;
+    const medico: Medico = req.swagger.params['medico'].value;
     try{
         let response = await MedicoServicio.crearMedico(req, medico);
         res.respond(response);
@@ -46,7 +46,7 @@ export const obtenerMedico: Handler = async (req, res, next) => {
 
 export const actualizarMedico: Handler = async (req, res, next) => {
     const idMedico: number = req.swagger.params['idMedico'].value;
-    const medico: Medico = req.swagger.params['Medico'].value;
+    const medico: Medico = req.swagger.params['medico'].value;
     try{
         let response = await MedicoServicio.actualizarMedico(req, idMedico, medico);
         res.respond(response);
