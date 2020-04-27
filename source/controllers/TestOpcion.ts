@@ -5,7 +5,7 @@ import { TestOpcion, _TestOpcion } from '../models';
 import { Defaults, OrderModeEnum } from '../api';
 import { Log } from '../tools';
 
-export const listarTestOpcions: Handler = async (req, res, next) => {
+export const listarTestOpciones: Handler = async (req, res, next) => {
     const fkTestNodo: number = req.swagger.params['fkTestNodo'].value;
     const fkTestNodoSig: number = req.swagger.params['fkTestNodoSig'].value;
     const clave: string = req.swagger.params['clave'].value;

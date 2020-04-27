@@ -9,6 +9,7 @@ import { Defaults, ContentTypeEnum } from '../../source/api';
 export const seed = async (knex: Knex) => {
 	await knex('TestOpcion').insert([
         { idTestOpcion:1, fkTestNodo: 1, fkTestNodoSig: 1, texto: 'Opcion 1', clave: '1', descripcion: 'Descripcion', mimetype: ContentTypeEnum.JPG, archivo: fs.readFileSync(path.resolve(__dirname, '..', 'files', 'imagen1.jpg')) } as ITestOpcion,
+        { idTestOpcion:2, fkTestNodo: 1, fkTestNodoSig: 2, texto: 'Opcion 2', clave: '2', descripcion: 'Descripcion', mimetype: ContentTypeEnum.JPG, archivo: fs.readFileSync(path.resolve(__dirname, '..', 'files', 'imagen1.jpg')) } as ITestOpcion,
     ]);
 	return knex;
 };

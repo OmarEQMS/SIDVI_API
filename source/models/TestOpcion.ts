@@ -30,7 +30,7 @@ export class TestOpcion extends BaseModel implements ITestOpcion {
     static tableName = 'TestOpcion';
     static idColumn = 'idTestOpcion';
     // Objection Modifiers
-    static columnList = ['idTestOpcion', 'fkTestNodo', 'fkTestNodoSig', 'clave', 'texto', 'descripcion', 'mimetype'];
+    static columnList = ['idTestOpcion', 'fkTestNodo', 'fkTestNodoSig', 'clave', 'texto', 'descripcion', 'mimetype', 'archivo'];
 
     // Columns
     idTestOpcion?: number;

@@ -28,7 +28,7 @@ export class TestNodo extends BaseModel implements ITestNodo {
     static tableName = 'TestNodo';
     static idColumn = 'idTestNodo';
     // Objection Modifiers
-    static columnList = ['idTestNodo', 'fkVirus', 'texto', 'descripcion', 'mimetype'];
+    static columnList = ['idTestNodo', 'fkVirus', 'texto', 'descripcion', 'mimetype', 'archivo'];
 
     // Columns
     idTestNodo?: number;
