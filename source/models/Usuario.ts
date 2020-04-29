@@ -37,7 +37,7 @@ export class Usuario extends BaseModel implements IUsuario {
     static idColumn = 'idUsuario';
     // Objection Modifiers
     static columnList = ['idUsuario', 'nombreCompleto', 'usuario', 'correo', 'celular', 'mimetypeFoto', 'rol'];
-    static columnListAuthorization = ['idUsuario', 'nombreCompleto', 'usuario', 'contrasena', 'token', 'rol'];
+    static columnListAuthorization = ['idUsuario', 'nombreCompleto', 'usuario', 'contrasena', 'token', 'correo', 'rol'];
 
     // Columns
     idUsuario?: number;

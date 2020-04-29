@@ -42,8 +42,12 @@ export class UsuarioServicio {
 
     static async recuperacion(req: ServerRequest, usuario: string): Promise<APIResponse> {
         try {
-            // Diasble Anti-Virus and Enable https://myaccount.google.com/lesssecureapps  
-            let usuarioCorreo = nodemailer.createTransport({
+            let _usuario =  await req.query<Usuario>('Usuario').modify('authorizationSelect').findOne({usuario});
+            if(_usuario==null) throw new APIResponse(_APIResponse.NOT_FOUND);
+            // Sin correo no hay recuperacion :(
+            if(_usuario.correo==null) throw new APIResponse(_APIResponse.UNAVAILABLE, 'No cuenta con un correo electronico asociado');
+
+            let usuarioCorreo = nodemailer.createTransport({ // Diasble Anti-Virus and Enable https://myaccount.google.com/lesssecureapps  
                 service: process.env.MAIL_SERVICE,
                 auth: {
                     user: process.env.MAIL_USER,
@@ -52,12 +56,19 @@ export class UsuarioServicio {
             });
             let confirmacionEnvio = await usuarioCorreo.sendMail({
                 from: 'SIDVI ' + process.env.MAIL_USER,
-                to: "omar.quintero.ms@gmail.com",
-                subject: "Hello ✔",
-                html: "<b>Hello world?</b>"
+                to: _usuario.correo,
+                subject: 'Reestablece tu contraseña ✔',
+                html: 
+                `<html><head>` +
+                `<style type='text/css'> .p0 { margin: 0px; }</style>` +
+                `</head><body>` +
+                `<h3 class='p0'><b>Hola,</b></h3>` +
+                `<h4 class='p0'>Para recuperar tu contraseña abre el siguiente enlace:</h4>` +
+                `<h4 class='p0'><a target='_blank' href='http://${process.env.HOST_FRONT}:${process.env.PORT_FRONT}/restablecer/${_usuario.usuario}/${_usuario.token}'>http://${process.env.HOST_FRONT}:${process.env.PORT_FRONT}/restablecer/${_usuario.usuario}/${_usuario.token}</a></h4>` +
+                `</body></html>`
             });
-
-            return new APIResponse(_APIResponse.NOT_IMPLEMENTED);
+            
+            return new APIResponse(_APIResponse.OK, 'Correo Enviado con exito a:' + _usuario.correo);
         } catch (error) {
             throw error;
         }
