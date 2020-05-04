@@ -17,6 +17,8 @@ export interface IUbicacion {
     nombre?: string;
     latitud?: number;
     longitud?: number;
+    archivoMapa?: string;
+    identificadorMapa?: string;
 }
 
 export class Ubicacion extends BaseModel implements IUbicacion {
@@ -24,7 +26,7 @@ export class Ubicacion extends BaseModel implements IUbicacion {
     static tableName = 'Ubicacion';
     static idColumn = 'idUbicacion';
     // Objection Modifiers
-    static columnList = ['idUbicacion', 'fkUbicacion', 'clave', 'nombre'];
+    static columnList = ['idUbicacion', 'fkUbicacion', 'clave', 'nombre', 'latitud', 'longitud', 'archivoMapa', 'identificadorMapa'];
 
     // Columns
     idUbicacion?: number;
@@ -33,6 +35,8 @@ export class Ubicacion extends BaseModel implements IUbicacion {
     nombre?: string;
     latitud?: number;
     longitud?: number;
+    archivoMapa?: string;
+    identificadorMapa?: string;
 
     //Relations: BelongsToOne
     ubicacion?: Ubicacion;
@@ -50,6 +54,8 @@ export class Ubicacion extends BaseModel implements IUbicacion {
             this.nombre = ubicacion.nombre;
             this.latitud = ubicacion.latitud;
             this.longitud = ubicacion.longitud;
+            this.archivoMapa = ubicacion.archivoMapa;
+            this.identificadorMapa = ubicacion.identificadorMapa;
         }
     }
     

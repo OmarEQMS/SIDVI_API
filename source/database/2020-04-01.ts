@@ -60,16 +60,24 @@ export const up = (knex: any) => {
             table.string('nombre', 300);
             table.decimal('latitud', 11, 7);
             table.decimal('longitud', 11, 7);
+            table.text('archivoMapa', 'longtext');
+            table.string('identificadorMapa');
         })
         .createTable('CategoriaEstadistica', (table: any) => {
             table.increments('idCategoriaEstadistica').primary();
             table.string('nombre', 300);
         })
+        .createTable('SubcategoriaEstadistica', (table: any) => {
+            table.increments('idSubcategoriaEstadistica').primary();
+            table.integer('fkCategoriaEstadistica').unsigned().references('CategoriaEstadistica.idCategoriaEstadistica').onDelete('CASCADE');   
+            table.string('nombre', 300);
+        })
         .createTable('Estadistica', (table: any) => {
             table.increments('idEstadistica').primary();
             table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');            
-            table.integer('fkUbicacion').unsigned().references('Ubicacion.idUbicacion').onDelete('CASCADE');            
-            table.integer('fkCategoriaEstadistica').unsigned().references('CategoriaEstadistica.idCategoriaEstadistica').onDelete('CASCADE');            
+            table.integer('fkUbicacion').unsigned().references('Ubicacion.idUbicacion').onDelete('CASCADE');  
+            table.integer('fkSubcategoriaEstadistica1').unsigned().references('SubcategoriaEstadistica.idSubcategoriaEstadistica').onDelete('CASCADE');   
+            table.integer('fkSubcategoriaEstadistica2').unsigned().references('SubcategoriaEstadistica.idSubcategoriaEstadistica').onDelete('CASCADE');   
             table.decimal('valor', 8, 2);
             table.date('fecha');
         })
