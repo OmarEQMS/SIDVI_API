@@ -88,6 +88,8 @@ tags:
       description: Informacion de Ubicaciones
     - name: CategoriaEstadistica
       description: Informacion de Categorias de Estadistica
+    - name: SubcategoriaEstadistica
+      description: Informacion de las Subcategorias de Estadistica
     - name: Estadistica
       description: Informacion de Estadisticas
     - name: Medico
@@ -1602,6 +1604,135 @@ paths:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
+# ------------------------------------------- SubcategoriaEstadistica
+    /subcategoriaEstadistica:
+        get:
+            tags: 
+                - SubcategoriaEstadistica
+            summary: Listar Subcategorias Estadistica
+            description: Se listan todas las Subcategorias Estadistica dependiendo de los filtros
+            x-swagger-router-controller: SubcategoriaEstadistica
+            operationId: listarSubcategoriasEstadistica
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - USUARIO
+                - ADMINISTRADOR
+            parameters:
+                - name: fkCategoriaEstadistica
+                  in: query
+                  type: integer
+                  description: identificador de la categoria estadistica
+                - name: nombre
+                  in: query
+                  type: string
+                  description: nombre de la categoria
+                - $ref: '#/parameters/ordenarPor'
+                - $ref: '#/parameters/ordenarModo'
+            responses:
+                200:
+                    $ref: '#/definitions/SubcategoriaEstadisticaColeccion'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        post:
+            tags: 
+                - SubcategoriaEstadistica
+            summary: Crear Subcategoria Estadistica
+            description: Se crea una Subcategoria Estadistica con el objeto enviado
+            x-swagger-router-controller: SubcategoriaEstadistica
+            operationId: crearSubcategoriaEstadistica
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: subcategoriaEstadistica
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/SubcategoriaEstadistica'  
+                  required: true
+                  description: objeto de categoria estadistica
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+    /subcategoriaEstadistica/{idSubcategoriaEstadistica}:
+        get:
+            tags: 
+                - SubcategoriaEstadistica
+            summary: Obtener una Subcategoria Estadistica
+            description: Se obtiene una Subcategoria Estadistica con el Id Subcategoria Estadistica correspondiente
+            x-swagger-router-controller: SubcategoriaEstadistica
+            operationId: obtenerSubcategoriaEstadistica
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ANY
+                - USUARIO
+                - ADMINISTRADOR
+            parameters:
+                - name: idSubcategoriaEstadistica
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador de la subcategoria estadistica
+            responses:
+                200:
+                    $ref: '#/definitions/SubcategoriaEstadistica'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        put:
+            tags: 
+                - SubcategoriaEstadistica
+            summary: Actualizar Subcategoria Estadistica
+            description: Se actualiza la Subcategoria Estadistica con el Id Subcategoria Estadistica y el objeto proporcionado 
+            x-swagger-router-controller: SubcategoriaEstadistica
+            operationId: actualizarSubcategoriaEstadistica
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idSubcategoriaEstadistica
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador de la subcategoria estadistica
+                - name: subcategoriaEstadistica
+                  in: body    
+                  schema:
+                    $ref: '#/definitions/SubcategoriaEstadistica'  
+                  required: true
+                  description: objeto de subcategoria estadistica
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
+        delete:
+            tags: 
+                - SubcategoriaEstadistica
+            summary: Eliminar Subcategoria Estadistica
+            description: Se elimina la Subcategoria Estadistica con el Id Subcategoria Estadistica proporcionado
+            x-swagger-router-controller: SubcategoriaEstadistica
+            operationId: eliminarSubcategoriaEstadistica
+            security:
+                - TokenUsuario: []
+            x-security:
+                - ADMINISTRADOR
+            parameters:
+                - name: idSubcategoriaEstadistica
+                  in: path
+                  type: integer
+                  required: true
+                  description: identificador de la subcategoria estadistica
+            responses:
+                200:
+                    $ref: '#/responses/RespuestaExitosa'
+                default:
+                    $ref: '#/responses/RespuestaFallida'
 # ------------------------------------------- Estadistica
     /estadistica:
         get:
@@ -2665,6 +2796,16 @@ definitions:
                 type: number
                 description: longitud de la ubicacion
                 example: 88.9
+            archivoMapa:
+                x-name: archivo mapa
+                type: string
+                description: archivo mapa para los hijos
+                example: SVG
+            identificadorMapa:
+                x-name: id mapa
+                type: string
+                description: identificador del mapa dentro del padre
+                example: p00001
     CategoriaEstadistica:
         type: object
         description: Informacion de las categorias de las estadisticas
@@ -2680,6 +2821,27 @@ definitions:
                 x-name: nombre
                 type: string
                 description: nombre de la categoria
+                example: Casos Confirmados 
+    SubcategoriaEstadistica:
+        type: object
+        description: Informacion de las Subcategorias de las estadisticas
+        required:
+            - nombre
+        properties:
+            idSubcategoriaEstadistica:
+                x-name: id subcategoria estadistica 
+                type: integer
+                description: identificador unico de la subcategoria estadistica
+                example: 1
+            fkCategoriaEstadistica:
+                x-name: id categoria estadistica 
+                type: integer
+                description: identificador de la categoria estadistica
+                example: 1
+            nombre:
+                x-name: nombre
+                type: string
+                description: nombre de la subcategoria
                 example: Casos Confirmados 
     Estadistica:
         type: object
@@ -2702,10 +2864,15 @@ definitions:
                 type: integer
                 description: Identificador de la ubicacion
                 example: 1
-            fkCategoriaEstadistica:
-                x-name: id categoria estadistica
+            fkSubcategoriaEstadistica1:
+                x-name: id subcategoria estadistica
                 type: integer
-                description: Identificador de la categoria estadistica
+                description: Identificador de la subcategoria estadistica
+                example: 1
+            fkSubcategoriaEstadistica2:
+                x-name: id subcategoria estadistica
+                type: integer
+                description: Identificador de la subcategoria estadistica
                 example: 1
             valor:
                 x-name: valor
@@ -2991,6 +3158,21 @@ definitions:
                 items: 
                     $ref: '#/definitions/CategoriaEstadistica'
                 description: Arreglo de Categorias de Estadistica
+            total: 
+                type: integer
+                description: Total delementos devueltos en el arreglo
+    SubcategoriaEstadisticaColeccion:
+        type: object
+        description: Coleccion de Subcategorias de Estadistica
+        required: 
+            - results
+            - total
+        properties:
+            results:
+                type: array
+                items: 
+                    $ref: '#/definitions/SubcategoriaEstadistica'
+                description: Arreglo de Subcategorias de Estadistica
             total: 
                 type: integer
                 description: Total delementos devueltos en el arreglo

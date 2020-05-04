@@ -7,7 +7,7 @@ import { Defaults, ContentTypeEnum } from '../../source/api';
 
 export const seed = async (knex: Knex) => {
 	await knex('CategoriaEstadistica').insert([
-        { idCategoriaEstadistica:1, nombre: 'Casos Activos' } as ICategoriaEstadistica
+        { idCategoriaEstadistica:1, nombre: 'Casos' } as ICategoriaEstadistica
     ]);
 	return knex;
 };

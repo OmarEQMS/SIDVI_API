@@ -4,6 +4,7 @@ import { BaseModel, Estadistica } from '../models';
 import { fileToBase64 } from '../tools/Utils';
 import { ContentTypeEnum, Defaults } from '../api';
 import { Log } from '../tools';
+import { SubcategoriaEstadistica } from './SubcategoriaEstadistica';
 
 export namespace _CategoriaEstadistica {
     
@@ -28,7 +29,7 @@ export class CategoriaEstadistica extends BaseModel implements ICategoriaEstadis
     //Relations: BelongsToOne
     
     // Relations: HasMany
-    estadisticas: Estadistica[];
+    subcategoriaEstadisticas: SubcategoriaEstadistica[];
 
     // Constructor
     constructor(categoriaEstadistica?: any){
@@ -56,10 +57,10 @@ export class CategoriaEstadistica extends BaseModel implements ICategoriaEstadis
     // Objection: Relations
     static relationMappings: RelationMappings = {
         //------------------------------------- HasManyRelation
-        Estadistica: {
+        SubcategoriaEstadistica: {
             relation: Model.HasManyRelation,
-            modelClass: 'Estadistica',
-            join: { from: 'CategoriaEstadistica.idCategoriaEstadistica', to: 'Estadistica.fkCategoriaEstadistica' }
+            modelClass: 'SubcategoriaEstadistica',
+            join: { from: 'CategoriaEstadistica.idCategoriaEstadistica', to: 'SubcategoriaEstadistica.fkCategoriaEstadistica' }
         }
 
         //------------------------------------- HasOneRelation

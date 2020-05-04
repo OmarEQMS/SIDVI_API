@@ -1,4 +1,4 @@
-export type ModelsEnum = 'Usuario' | 'Virus' | 'TestNodo' | 'TestOpcion' | 'CategoriaInformacion' | 'Informacion' | 'Ubicacion' | 'CategoriaEstadistica' | 'Estadistica' | 'Medico' | 'MedicoVirus' | 'Valoracion' | 'CelularEstado';
+export type ModelsEnum = 'Usuario' | 'Virus' | 'TestNodo' | 'TestOpcion' | 'CategoriaInformacion' | 'Informacion' | 'Ubicacion' | 'CategoriaEstadistica' | 'SubcategoriaEstadistica' | 'Estadistica' | 'Medico' | 'MedicoVirus' | 'Valoracion' | 'CelularEstado';
 export const ModelsEnum = {
     Usuario: 'Usuario' as ModelsEnum,
     Virus: 'Virus' as ModelsEnum,
@@ -8,6 +8,7 @@ export const ModelsEnum = {
     Informacion: 'Informacion' as ModelsEnum,
     Ubicacion: 'Ubicacion' as ModelsEnum,
     CategoriaEstadistica: 'CategoriaEstadistica' as ModelsEnum,
+    SubcategoriaEstadistica: 'SubcategoriaEstadistica' as ModelsEnum,
     Estadistica: 'Estadistica' as ModelsEnum,
     Medico: 'Medico' as ModelsEnum,
     MedicoVirus: 'MedicoVirus' as ModelsEnum,
@@ -27,6 +28,7 @@ export * from './CategoriaInformacion';
 export * from './Informacion';
 export * from './Ubicacion';
 export * from './CategoriaEstadistica';
+export * from './SubcategoriaEstadistica';
 export * from './Estadistica';
 export * from './Medico';
 export * from './MedicoVirus';
