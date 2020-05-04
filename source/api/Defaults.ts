@@ -19,7 +19,7 @@ export const Defaults = {
     timeformat: 'YYYY-MM-DD HH:mm:ss',
 
     codeAlphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-    codeLength: 100,
+    codeLength: 20,
     
     anyUser: 'ANY',
     pathUser: 'PATH'
