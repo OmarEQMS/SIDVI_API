@@ -159,7 +159,7 @@ export class UsuarioServicio {
                 throw new APIResponse(_APIResponse.NOT_FOUND);
 
             //Verificar que no exista
-            let usu=usuario.usuario != null && await req.query<Usuario>('Usuario').findOne({ usuario: usuario.usuario });
+            let usu = await req.query<Usuario>('Usuario').findOne({ usuario: usuario.usuario });
             if ( usu != null && usu.idUsuario != idUsuario)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "El usuario ya existe");
 
