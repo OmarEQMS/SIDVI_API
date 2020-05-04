@@ -1485,7 +1485,7 @@ paths:
             summary: Listar Categorias Estadistica
             description: Se listan todas las Categorias Estadistica dependiendo de los filtros
             x-swagger-router-controller: CategoriaEstadistica
-            operationId: listarCategoriasEstadistica
+            operationId: listarCategoriaEstadistica
             security:
                 - TokenUsuario: []
             x-security:

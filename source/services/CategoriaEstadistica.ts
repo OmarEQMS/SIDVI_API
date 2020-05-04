@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class CategoriaEstadisticaServicio {
 
-    static async listarCategoriaEstadisticas(req: ServerRequest, nombre: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
+    static async listarCategoriaEstadistica(req: ServerRequest, nombre: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<CategoriaEstadistica>('CategoriaEstadistica').modify('defaultSelect');
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
@@ -57,7 +57,8 @@ export class CategoriaEstadisticaServicio {
                 throw new APIResponse(_APIResponse.NOT_FOUND);
 
             //Verificar que no exista el nombre
-            if (await req.query<CategoriaEstadistica>('CategoriaEstadistica').findOne({ nombre: categoriaEstadistica.nombre }) != null)
+            let categoriaEsta=await req.query<CategoriaEstadistica>('CategoriaEstadistica').findOne({ nombre: categoriaEstadistica.nombre });
+            if ( categoriaEsta != null && categoriaEsta.idCategoriaEstadistica != idCategoriaEstadistica)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "La CategoriaEstadistica ya existe");
 
             await req.query<CategoriaEstadistica>('CategoriaEstadistica').patchAndFetchById(idCategoriaEstadistica, categoriaEstadistica);

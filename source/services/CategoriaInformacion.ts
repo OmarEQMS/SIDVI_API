@@ -58,7 +58,8 @@ export class CategoriaInformacionServicio {
                 throw new APIResponse(_APIResponse.NOT_FOUND);
 
             //Verificar que no exista la clave
-            if (await req.query<CategoriaInformacion>('CategoriaInformacion').findOne({ clave: categoriaInformacion.clave }) != null)
+            let categoriaInfo= await req.query<CategoriaInformacion>('CategoriaInformacion').findOne({ clave: categoriaInformacion.clave});
+            if (categoriaInfo != null && categoriaInfo.idCategoriaInformacion!=idCategoriaInformacion)
                 throw new APIResponse(_APIResponse.UNAVAILABLE, "La CategoriaInformacion ya existe");
 
             await req.query<CategoriaInformacion>('CategoriaInformacion').patchAndFetchById(idCategoriaInformacion, categoriaInformacion);
