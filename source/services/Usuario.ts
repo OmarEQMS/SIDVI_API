@@ -158,8 +158,8 @@ export class UsuarioServicio {
             if (await req.query<Usuario>('Usuario').findById(idUsuario) == null)
                 throw new APIResponse(_APIResponse.NOT_FOUND);
             //Verificar que no exista
-            if (usuario.usuario != null && await req.query<Usuario>('Usuario').findOne({ usuario: usuario.usuario }) != null)
-                throw new APIResponse(_APIResponse.UNAVAILABLE, "El usuario ya existe");
+            //if (usuario.usuario != null && await req.query<Usuario>('Usuario').findOne({ usuario: usuario.usuario }) != null)
+            //    throw new APIResponse(_APIResponse.UNAVAILABLE, "El usuario ya existe");
 
             deleteProperty(usuario, ['idUsuario', 'contrasena', 'token']);
             await req.query<Usuario>('Usuario').patchAndFetchById(idUsuario, usuario);
