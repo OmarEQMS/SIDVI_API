@@ -12,12 +12,14 @@ import { Log } from '../tools';
 
 export class EstadisticaServicio {
 
-    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkCategoriaEstadistica: number, fechaInicio: string, fechaFin: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
+    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkSubcategoriaEstadistica1: number, fkSubcategoriaEstadistica2: number, fkCategoriaEstadistica: number, fechaInicio: string, fechaFin: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
             query = fkVirus ? query.where({ fkVirus }) : query;
             query = fkUbicacion ? query.where({ fkUbicacion }) : query;
-            query = fkCategoriaEstadistica ? query.where({ fkCategoriaEstadistica }) : query;
+            query = fkSubcategoriaEstadistica1 ? query.where({ fkSubcategoriaEstadistica1 }) : query;
+            query = fkSubcategoriaEstadistica2 ? query.where({ fkSubcategoriaEstadistica2 }) : query;
+
             query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
             query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
@@ -35,6 +37,18 @@ export class EstadisticaServicio {
         try {
             deleteProperty(estadistica, ['idEstadistica']);
 
+            if (estadistica.fkSubcategoriaEstadistica1 == null && estadistica.fkSubcategoriaEstadistica2 == null) {
+                throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria');
+            } else if (estadistica.fkSubcategoriaEstadistica1 == estadistica.fkSubcategoriaEstadistica2) {
+                throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria diferente');
+            } else if (estadistica.fkSubcategoriaEstadistica1 == null) {
+                estadistica.fkSubcategoriaEstadistica1 = estadistica.fkSubcategoriaEstadistica2;
+                estadistica.fkSubcategoriaEstadistica2 = null;
+            }else if (estadistica.fkSubcategoriaEstadistica1 < estadistica.fkSubcategoriaEstadistica2) { // La mas grande va en la 1
+                const temp = estadistica.fkSubcategoriaEstadistica1;
+                estadistica.fkSubcategoriaEstadistica1 = estadistica.fkSubcategoriaEstadistica2;
+                estadistica.fkSubcategoriaEstadistica2 = temp;
+            }
             let newEstadistica = await req.query<Estadistica>('Estadistica').insert(estadistica);
             return new APIResponse(_APIResponse.CREATED, 'La Estadistica fue creada satisfactoriamente', { insertedId: newEstadistica.idEstadistica });
         } catch (error) {

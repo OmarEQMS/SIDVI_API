@@ -37,6 +37,8 @@ export class CategoriaEstadistica extends BaseModel implements ICategoriaEstadis
         if(categoriaEstadistica!==undefined){
             this.idCategoriaEstadistica = categoriaEstadistica.idCategoriaEstadistica;
             this.nombre = categoriaEstadistica.nombre;
+            if (categoriaEstadistica.SubcategoriaEstadistica != null)
+                this.subcategoriaEstadisticas = categoriaEstadistica.SubcategoriaEstadistica.map((item: any) => new SubcategoriaEstadistica(item));
         }
     }
     

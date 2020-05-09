@@ -2874,6 +2874,11 @@ definitions:
                 type: integer
                 description: Identificador de la subcategoria estadistica
                 example: 1
+            fkCategoriaEstadistica2:
+                x-name: id categoria estadistica
+                type: integer
+                description: Identificador de la categoria estadistica
+                example: 1
             valor:
                 x-name: valor
                 type: number

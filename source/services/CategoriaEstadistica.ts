@@ -16,7 +16,8 @@ export class CategoriaEstadisticaServicio {
         try {
             let query = req.query<CategoriaEstadistica>('CategoriaEstadistica').modify('defaultSelect');
             query = nombre ? query.where('nombre', 'like', `%${nombre}%`) : query;
-
+            query = query.withGraphFetched('SubcategoriaEstadistica(defaultSelect)');
+            
             let categoriasEstadistica = await query.orderBy(ordenarPor, ordenarModo);
             let categoriasEstadisticaFormat = categoriasEstadistica.map((item: any) => new CategoriaEstadistica(item).forJSON());
             return new Coleccion<CategoriaEstadistica>(categoriasEstadisticaFormat, categoriasEstadistica.length);
