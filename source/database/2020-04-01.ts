@@ -32,7 +32,7 @@ export const up = (knex: any) => {
         .createTable('TestOpcion', (table: any) => {
             table.increments('idTestOpcion').primary();
             table.integer('fkTestNodo').unsigned().references('TestNodo.idTestNodo').onDelete('CASCADE');
-            table.integer('fkTestNodoSig').unsigned().references('TestNodo.idTestNodo').onDelete('NULL');
+            table.integer('fkTestNodoSig').unsigned().references('TestNodo.idTestNodo').onDelete('SET NULL');
             table.string('clave', 20);
             table.string('texto', 300);
             table.string('descripcion', 300);
