@@ -1757,6 +1757,14 @@ paths:
                   in: query
                   type: integer
                   description: identificador de la ubicacion
+                - name: fkSubcategoriaEstadistica1
+                  in: query
+                  type: integer
+                  description: identificador de la subcategoria estadistica
+                - name: fkSubcategoriaEstadistica2
+                  in: query
+                  type: integer
+                  description: identificador de la subcategoria estadistica
                 - name: fkCategoriaEstadistica
                   in: query
                   type: integer
@@ -2874,7 +2882,7 @@ definitions:
                 type: integer
                 description: Identificador de la subcategoria estadistica
                 example: 1
-            fkCategoriaEstadistica2:
+            fkCategoriaEstadistica:
                 x-name: id categoria estadistica
                 type: integer
                 description: Identificador de la categoria estadistica
