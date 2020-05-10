@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 import { ServerRequest } from '../types';
 import { OrderModeEnum, Defaults, ContentTypeEnum } from '../api';
-import { Estadistica, DBModels, _Estadistica, Coleccion, } from '../models';
+import { Estadistica, DBModels, _Estadistica, Coleccion, SubcategoriaEstadistica, } from '../models';
 import { APIResponse, _APIResponse, Response } from '../responses';
 import { Token } from '../models/Token';
 import { generateCode, deleteProperty } from '../tools/Utils';
@@ -17,9 +17,19 @@ export class EstadisticaServicio {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
             query = fkVirus ? query.where({ fkVirus }) : query;
             query = fkUbicacion ? query.where({ fkUbicacion }) : query;
-            query = fkSubcategoriaEstadistica1 ? query.where({ fkSubcategoriaEstadistica1 }) : query;
-            query = fkSubcategoriaEstadistica2 ? query.where({ fkSubcategoriaEstadistica2 }) : query;
 
+            let subcategoriasIds = new Array();
+            if (fkSubcategoriaEstadistica1 != null || fkSubcategoriaEstadistica2 != null) {
+                subcategoriasIds.push(fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2);
+            }
+            if (fkCategoriaEstadistica != null) {
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica }).modify('defaultSelect');
+                let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
+                subcategoriasIds.push(...subIds);
+            }
+
+            query = subcategoriasIds.length > 0 ? query.whereIn('fkSubcategoriaEstadistica1', subcategoriasIds) : query;
+            query = subcategoriasIds.length > 0 ? query.whereIn('fkSubcategoriaEstadistica2', subcategoriasIds) : query;
             query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
             query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
             query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
@@ -41,13 +51,6 @@ export class EstadisticaServicio {
                 throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria');
             } else if (estadistica.fkSubcategoriaEstadistica1 == estadistica.fkSubcategoriaEstadistica2) {
                 throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria diferente');
-            } else if (estadistica.fkSubcategoriaEstadistica1 == null) {
-                estadistica.fkSubcategoriaEstadistica1 = estadistica.fkSubcategoriaEstadistica2;
-                estadistica.fkSubcategoriaEstadistica2 = null;
-            }else if (estadistica.fkSubcategoriaEstadistica1 < estadistica.fkSubcategoriaEstadistica2) { // La mas grande va en la 1
-                const temp = estadistica.fkSubcategoriaEstadistica1;
-                estadistica.fkSubcategoriaEstadistica1 = estadistica.fkSubcategoriaEstadistica2;
-                estadistica.fkSubcategoriaEstadistica2 = temp;
             }
             let newEstadistica = await req.query<Estadistica>('Estadistica').insert(estadistica);
             return new APIResponse(_APIResponse.CREATED, 'La Estadistica fue creada satisfactoriamente', { insertedId: newEstadistica.idEstadistica });
@@ -72,6 +75,11 @@ export class EstadisticaServicio {
             if (await req.query<Estadistica>('Estadistica').findById(idEstadistica) == null)
                 throw new APIResponse(_APIResponse.NOT_FOUND);
 
+            if (estadistica.fkSubcategoriaEstadistica1 == null && estadistica.fkSubcategoriaEstadistica2 == null) {
+                throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria');
+            } else if (estadistica.fkSubcategoriaEstadistica1 == estadistica.fkSubcategoriaEstadistica2) {
+                throw new APIResponse(_APIResponse.BAD_REQUEST, 'La estadistica debe pertenecer por lo menos a una categoria diferente');
+            }
             await req.query<Estadistica>('Estadistica').patchAndFetchById(idEstadistica, estadistica);
             return new APIResponse(_APIResponse.UPDATED, "La Estadistica fue actualizada");
         } catch (error) {
