@@ -10,13 +10,14 @@ export const listarEstadisticas: Handler = async (req, res, next) => {
     const fkUbicacion: number = req.swagger.params['fkUbicacion'].value;
     const fkSubcategoriaEstadistica1: number = req.swagger.params['fkSubcategoriaEstadistica1'].value;
     const fkSubcategoriaEstadistica2: number = req.swagger.params['fkSubcategoriaEstadistica2'].value;
-    const fkCategoriaEstadistica: number = req.swagger.params['fkCategoriaEstadistica'].value;
+    const fkCategoriaEstadistica1: number = req.swagger.params['fkCategoriaEstadistica1'].value;
+    const fkCategoriaEstadistica2: number = req.swagger.params['fkCategoriaEstadistica2'].value;
     const fechaInicio: string = req.swagger.params['fechaInicio'].value;
     const fechaFin: string = req.swagger.params['fechaFin'].value;
     const ordenarModo: OrderModeEnum = req.swagger.params['ordenarModo'].value || Defaults.ordenarModo;
     const ordenarPor: string = req.swagger.params['ordenarPor'].value || Estadistica.idColumn;    
     try{
-        let response = await EstadisticaServicio.listarEstadisticas(req, fkVirus, fkUbicacion, fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2, fkCategoriaEstadistica, fechaInicio, fechaFin, ordenarPor, ordenarModo);
+        let response = await EstadisticaServicio.listarEstadisticas(req, fkVirus, fkUbicacion, fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2, fkCategoriaEstadistica1, fkCategoriaEstadistica2, fechaInicio, fechaFin, ordenarPor, ordenarModo);
         res.respond(response);
     }catch(error){
         next(error);

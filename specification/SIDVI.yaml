@@ -1765,7 +1765,11 @@ paths:
                   in: query
                   type: integer
                   description: identificador de la subcategoria estadistica
-                - name: fkCategoriaEstadistica
+                - name: fkCategoriaEstadistica1
+                  in: query
+                  type: integer
+                  description: identificador de la categoria estadistica
+                - name: fkCategoriaEstadistica2
                   in: query
                   type: integer
                   description: identificador de la categoria estadistica

@@ -12,7 +12,7 @@ import { Log } from '../tools';
 
 export class EstadisticaServicio {
 
-    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkSubcategoriaEstadistica1: number, fkSubcategoriaEstadistica2: number, fkCategoriaEstadistica: number, fechaInicio: string, fechaFin: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
+    static async listarEstadisticas(req: ServerRequest, fkVirus: number, fkUbicacion: number, fkSubcategoriaEstadistica1: number, fkSubcategoriaEstadistica2: number, fkCategoriaEstadistica1: number, fkCategoriaEstadistica2: number, fechaInicio: string, fechaFin: string, ordenarPor: string, ordenarModo: OrderModeEnum): Promise<any> {
         try {
             let query = req.query<Estadistica>('Estadistica').modify('defaultSelect');
             query = fkVirus ? query.where({ fkVirus }) : query;
@@ -22,8 +22,13 @@ export class EstadisticaServicio {
             if (fkSubcategoriaEstadistica1 != null || fkSubcategoriaEstadistica2 != null) {
                 subcategoriasIds.push(fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2);
             }
-            if (fkCategoriaEstadistica != null) {
-                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica }).modify('defaultSelect');
+            if (fkCategoriaEstadistica1 != null) {
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica1 }).modify('defaultSelect');
+                let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
+                subcategoriasIds.push(...subIds);
+            }
+            if (fkCategoriaEstadistica2 != null) {
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica2 }).modify('defaultSelect');
                 let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
                 subcategoriasIds.push(...subIds);
             }
