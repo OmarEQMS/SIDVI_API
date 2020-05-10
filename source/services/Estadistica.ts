@@ -18,7 +18,7 @@ export class EstadisticaServicio {
             query = fkVirus ? query.where({ fkVirus }) : query;
             query = fkUbicacion ? query.where({ fkUbicacion }) : query;
 
-            let subcategoriasIds = new Array();
+            let subcategoriasIds = new Array(0);
             if (fkSubcategoriaEstadistica1 != null || fkSubcategoriaEstadistica2 != null) {
                 subcategoriasIds.push(fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2);
             }
@@ -32,7 +32,6 @@ export class EstadisticaServicio {
             query = subcategoriasIds.length > 0 ? query.whereIn('fkSubcategoriaEstadistica2', subcategoriasIds) : query;
             query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
             query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
-            query = query.withGraphFetched('CategoriaEstadistica(defaultSelect)');
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
             let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).forJSON());
