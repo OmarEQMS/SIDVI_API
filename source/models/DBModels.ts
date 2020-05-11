@@ -6,6 +6,7 @@ import { CategoriaInformacion } from './CategoriaInformacion';
 import { Informacion } from './Informacion';
 import { Ubicacion } from './Ubicacion';
 import { CategoriaEstadistica } from './CategoriaEstadistica';
+import { SubcategoriaEstadistica } from './SubcategoriaEstadistica';
 import { Estadistica } from './Estadistica';
 import { Medico } from './Medico';
 import { MedicoVirus } from './MedicoVirus';
@@ -21,6 +22,7 @@ export interface DBModels{
     Informacion: typeof Informacion,
     Ubicacion: typeof Ubicacion,
     CategoriaEstadistica: typeof CategoriaEstadistica,
+    SubcategoriaEstadistica: typeof SubcategoriaEstadistica,
     Estadistica: typeof Estadistica,
     Medico: typeof Medico,
     MedicoVirus: typeof MedicoVirus,
@@ -37,6 +39,7 @@ export const DBModels = {
     Informacion,
     Ubicacion,
     CategoriaEstadistica,
+    SubcategoriaEstadistica,
     Estadistica,
     Medico,
     MedicoVirus,

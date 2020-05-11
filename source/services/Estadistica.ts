@@ -19,16 +19,18 @@ export class EstadisticaServicio {
             query = fkUbicacion ? query.where({ fkUbicacion }) : query;
 
             let subcategoriasIds = new Array(0);
+            if (fkSubcategoriaEstadistica1 === undefined) fkSubcategoriaEstadistica1 = null;
+            if (fkSubcategoriaEstadistica2 === undefined) fkSubcategoriaEstadistica2 = null;
             if (fkSubcategoriaEstadistica1 != null || fkSubcategoriaEstadistica2 != null) {
                 subcategoriasIds.push(fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2);
             }
             if (fkCategoriaEstadistica1 != null) {
-                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica1 }).modify('defaultSelect');
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica: fkCategoriaEstadistica1 }).modify('defaultSelect');
                 let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
                 subcategoriasIds.push(...subIds);
             }
             if (fkCategoriaEstadistica2 != null) {
-                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica2 }).modify('defaultSelect');
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica: fkCategoriaEstadistica2 }).modify('defaultSelect');
                 let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
                 subcategoriasIds.push(...subIds);
             }
