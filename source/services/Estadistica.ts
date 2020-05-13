@@ -45,8 +45,8 @@ export class EstadisticaServicio {
                 builder = subcategoriasIds.includes(null) ? builder.orWhereNull('fkSubcategoriaEstadistica2') : builder;
             }) : query;
 
-            query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
-            query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
+            query = fechaInicio ? query.where('fecha', '>=', fechaInicio) : query;
+            query = fechaFin ? query.where('fecha', '<=', fechaFin) : query;
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
             let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).forJSON());
