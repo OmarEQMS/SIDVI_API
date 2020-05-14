@@ -98,8 +98,6 @@ tags:
       description: Informacion de Medicos de un Virus
     - name: Valoracion
       description: Informacion de Valoraciones
-    - name: CelularEstado
-      description: Informacion de Estados del Celular
 
 # ------------------------------------------------------------ PATHS
 paths:
@@ -2386,140 +2384,6 @@ paths:
                     $ref: '#/responses/RespuestaExitosa'
                 default:
                     $ref: '#/responses/RespuestaFallida'
-# ------------------------------------------- CelularEstado
-    /celularEstado:
-        get:
-            tags: 
-                - CelularEstado
-            summary: Listar CelularEstados
-            description: Se listan todos los CelularEstados dependiendo de los filtros
-            x-swagger-router-controller: CelularEstado
-            operationId: listarCelularEstados
-            security:
-                - TokenUsuario: []
-            x-security:
-                - ADMINISTRADOR
-            parameters:
-                - name: celular
-                  in: query
-                  type: string
-                  description: numero celular del usuario
-                - name: fkVirus
-                  in: query
-                  type: integer
-                  description: identificador del virus
-                - name: seccion
-                  in: query
-                  type: string
-                  enum:
-                    - MEDICO
-                    - INFORMACION
-                    - TEST
-                    - ESTADISTICA
-                  description: seccion en donde se encuentra
-                - $ref: '#/parameters/ordenarPor'
-                - $ref: '#/parameters/ordenarModo'
-            responses:
-                200:
-                    $ref: '#/definitions/CelularEstadoColeccion'
-                default:
-                    $ref: '#/responses/RespuestaFallida'
-        post:
-            tags: 
-                - CelularEstado
-            summary: Crear CelularEstado
-            description: Se crea un CelularEstado con el objeto enviado
-            x-swagger-router-controller: CelularEstado
-            operationId: crearCelularEstado
-            security:
-                - TokenUsuario: []
-            x-security:
-                - ADMINISTRADOR
-            parameters:
-                - name: celularEstado
-                  in: body    
-                  schema:
-                    $ref: '#/definitions/CelularEstado'  
-                  required: true
-                  description: objeto de celular estado
-            responses:
-                200:
-                    $ref: '#/responses/RespuestaExitosa'
-                default:
-                    $ref: '#/responses/RespuestaFallida'
-    /celularEstado/{idCelularEstado}:
-        get:
-            tags: 
-                - CelularEstado
-            summary: Obtener un CelularEstado
-            description: Se obtiene un CelularEstado con el Id Celular Estado correspondiente
-            x-swagger-router-controller: CelularEstado
-            operationId: obtenerCelularEstado
-            security:
-                - TokenUsuario: []
-            x-security:
-                - ADMINISTRADOR
-            parameters:
-                - name: idCelularEstado
-                  in: path
-                  type: integer
-                  required: true
-                  description: identificador celular estado
-            responses:
-                200:
-                    $ref: '#/definitions/CelularEstado'
-                default:
-                    $ref: '#/responses/RespuestaFallida'
-        put:
-            tags: 
-                - CelularEstado
-            summary: Actualizar CelularEstado
-            description: Se actualiza el CelularEstado con el Id Celular Estado y el objeto proporcionado 
-            x-swagger-router-controller: CelularEstado
-            operationId: actualizarCelularEstado
-            security:
-                - TokenUsuario: []
-            x-security:
-                - ADMINISTRADOR
-            parameters:
-                - name: idCelularEstado
-                  in: path
-                  type: integer
-                  required: true
-                  description: identificador celular estado
-                - name: celularEstado
-                  in: body    
-                  schema:
-                    $ref: '#/definitions/CelularEstado'  
-                  required: true
-                  description: objeto de celular estado
-            responses:
-                200:
-                    $ref: '#/responses/RespuestaExitosa'
-                default:
-                    $ref: '#/responses/RespuestaFallida'
-        delete:
-            tags: 
-                - CelularEstado
-            summary: Eliminar CelularEstado
-            description: Se elimina el CelularEstado con el Id Celular Estado proporcionado
-            x-swagger-router-controller: CelularEstado
-            operationId: eliminarCelularEstado
-            security:
-                - TokenUsuario: []
-            x-security:
-                - ADMINISTRADOR
-            parameters:
-                - name: idCelularEstado
-                  in: path
-                  type: integer
-                  required: true
-                  description: identificador celular estado
-            responses:
-                200:
-                    $ref: '#/responses/RespuestaExitosa'
-                default:
-                    $ref: '#/responses/RespuestaFallida'
 
 # ------------------------------------------------------------ DEFINITIONS
 definitions:
@@ -3021,42 +2885,6 @@ definitions:
                 type: integer
                 description: valoracion asignada por el usuario, escala de 5
                 example: 5
-    CelularEstado:
-        type: object
-        description: Informacion del Estado del Celular
-        required:
-            - celular
-        properties:
-            idCelularEstado:
-                x-name: id celular estado 
-                type: integer
-                description: identificador unico del estado del celular
-                example: 1
-            celular:
-                x-name: celular
-                type: string
-                description: numero de celular
-                example: 7771326125   
-            fkVirus:
-                x-name: id virus
-                type: integer
-                description: Identificador del Virus seleccionado
-                example: 1
-            seccion:
-                x-name: seccion
-                type: string
-                enum:
-                    - MEDICO
-                    - INFORMACION
-                    - TEST
-                    - ESTADISTICA
-                description: seccion en la que se encuentra el usuario telefonico
-                example: HABILITADO   
-            fk:
-                x-name: foreign key
-                type: integer
-                description: foreign key del nodo, de la informacion o de la ubicacion
-                example: 1
 # ------------------------------------------- Coleccion
     UsuarioColeccion:
         type: object
@@ -3250,21 +3078,6 @@ definitions:
                 items: 
                     $ref: '#/definitions/Valoracion'
                 description: Arreglo de Valoraciones
-            total: 
-                type: integer
-                description: Total delementos devueltos en el arreglo
-    CelularEstadoColeccion:
-        type: object
-        description: Coleccion de Estados de Celular
-        required: 
-            - results
-            - total
-        properties:
-            results:
-                type: array
-                items: 
-                    $ref: '#/definitions/CelularEstado'
-                description: Arreglo de Estados de Celular
             total: 
                 type: integer
                 description: Total delementos devueltos en el arreglo

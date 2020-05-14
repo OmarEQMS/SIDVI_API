@@ -11,4 +11,3 @@ export * from './Estadistica';
 export * from './Medico';
 export * from './MedicoVirus';
 export * from './Valoracion';
-export * from './CelularEstado';

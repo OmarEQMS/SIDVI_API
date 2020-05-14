@@ -11,7 +11,6 @@ import { Estadistica } from './Estadistica';
 import { Medico } from './Medico';
 import { MedicoVirus } from './MedicoVirus';
 import { Valoracion } from './Valoracion';
-import { CelularEstado } from './CelularEstado';
 
 export interface DBModels{
     Usuario: typeof Usuario,
@@ -26,8 +25,7 @@ export interface DBModels{
     Estadistica: typeof Estadistica,
     Medico: typeof Medico,
     MedicoVirus: typeof MedicoVirus,
-    Valoracion: typeof Valoracion,
-    CelularEstado: typeof CelularEstado
+    Valoracion: typeof Valoracion
 }
 
 export const DBModels = {
@@ -43,6 +41,5 @@ export const DBModels = {
     Estadistica,
     Medico,
     MedicoVirus,
-    Valoracion,
-    CelularEstado
+    Valoracion
 }
