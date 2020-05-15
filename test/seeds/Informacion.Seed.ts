@@ -9,7 +9,7 @@ export const seed = async (knex: Knex) => {
 	await knex('Informacion').insert([
 		{ idInformacion:1, fkVirus: 1, fkCategoriaInformacion: 1, texto: 'Medidas de prevencion contra el Covid19', descripcion: 'Lee cuidadosamente las medidas de prevencion', mimetype: ContentTypeEnum.JPG, archivo : fs.readFileSync(path.resolve(__dirname, '..', 'files', 'imagen1.jpg')) } as IInformacion,
 		{ idInformacion:2, fkVirus: 1, fkCategoriaInformacion: 1, texto: 'Medidas de higiene contra el Covid19', descripcion: 'Lee cuidadosamente las medidas de prevencion', mimetype: ContentTypeEnum.PDF, archivo : fs.readFileSync(path.resolve(__dirname, '..', 'files', 'archivoPdf1.pdf')) } as IInformacion,
-		{ idInformacion:3, fkVirus: 1, fkCategoriaInformacion: 1, texto: 'Medidas de cuidado contra el Covid19', descripcion: 'Lee cuidadosamente las medidas de prevencion', mimetype: ContentTypeEnum.MP4, archivo : fs.readFileSync(path.resolve(__dirname, '..', 'files', 'video1.mp4')) } as IInformacion,
+		{ idInformacion:3, fkVirus: 1, fkCategoriaInformacion: 1, texto: 'Medidas de cuidado contra el Covid19', descripcion: 'Lee cuidadosamente las medidas de prevencion', mimetype: ContentTypeEnum.JPG, archivo : fs.readFileSync(path.resolve(__dirname, '..', 'files', 'imagen1.jpg')) } as IInformacion,
     ]);
 	return knex;
 };
