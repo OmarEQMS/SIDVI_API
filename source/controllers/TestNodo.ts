@@ -19,7 +19,7 @@ export const listarTestNodos: Handler = async (req, res, next) => {
 }
 
 export const crearTestNodo: Handler = async (req, res, next) => {
-    const testNodo: TestNodo = req.swagger.params['TestNodo'].value;
+    const testNodo: TestNodo = req.swagger.params['testNodo'].value;
     try{
         let response = await TestNodoServicio.crearTestNodo(req, testNodo);
         res.respond(response);
@@ -41,7 +41,7 @@ export const obtenerTestNodo: Handler = async (req, res, next) => {
 
 export const actualizarTestNodo: Handler = async (req, res, next) => {
     const idTestNodo: number = req.swagger.params['idTestNodo'].value;
-    const testNodo: TestNodo = req.swagger.params['TestNodo'].value;
+    const testNodo: TestNodo = req.swagger.params['testNodo'].value;
     try{
         let response = await TestNodoServicio.actualizarTestNodo(req, idTestNodo, testNodo);
         res.respond(response);

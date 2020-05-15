@@ -43,9 +43,9 @@ export const obtenerTestOpcion: Handler = async (req, res, next) => {
 
 export const actualizarTestOpcion: Handler = async (req, res, next) => {
     const idTestOpcion: number = req.swagger.params['idTestOpcion'].value;
-    const TestOpcion: TestOpcion = req.swagger.params['TestOpcion'].value;
+    const testOpcion: TestOpcion = req.swagger.params['testOpcion'].value;
     try{
-        let response = await TestOpcionServicio.actualizarTestOpcion(req, idTestOpcion, TestOpcion);
+        let response = await TestOpcionServicio.actualizarTestOpcion(req, idTestOpcion, testOpcion);
         res.respond(response);
     }catch(error){
         next(error);
