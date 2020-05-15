@@ -21,7 +21,7 @@ export const listarTestOpciones: Handler = async (req, res, next) => {
 }
 
 export const crearTestOpcion: Handler = async (req, res, next) => {
-    const TestOpcion: TestOpcion = req.swagger.params['TestOpcion'].value;
+    const TestOpcion: TestOpcion = req.swagger.params['testOpcion'].value;
     try{
         let response = await TestOpcionServicio.crearTestOpcion(req, TestOpcion);
         res.respond(response);

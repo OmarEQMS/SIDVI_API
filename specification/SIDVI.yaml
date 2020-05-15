@@ -2532,7 +2532,7 @@ definitions:
         type: object
         description: Informacion de 
         required:
-            - clave
+            - texto
         properties:
             idTestOpcion:
                 x-name: id testo opcion 
