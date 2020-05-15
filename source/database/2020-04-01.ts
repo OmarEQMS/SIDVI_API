@@ -106,20 +106,11 @@ export const up = (knex: any) => {
             table.integer('fkUsuario').unsigned().references('Usuario.idUsuario').onDelete('CASCADE');
             table.integer('valoracion');
         })
-
-        .createTable('CelularEstado', (table: any) => {
-            table.increments('idCelularEstado').primary();
-            table.string('celular', 50);
-            table.integer('fkVirus').unsigned().references('Virus.idVirus').onDelete('CASCADE');    
-            table.enum('seccion', ['MEDICO', 'INFORMACION','TEST','ESTADISTICA']);
-            table.integer('fk').unsigned();
-        })
     ;
 }
 
 export const down = (knex: any) => {
     return knex.schema
-        .dropTableIfExists('CelularEstado')
         .dropTableIfExists('Valoracion')
         .dropTableIfExists('MedicoVirus')
         .dropTableIfExists('Medico')

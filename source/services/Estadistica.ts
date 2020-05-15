@@ -19,24 +19,34 @@ export class EstadisticaServicio {
             query = fkUbicacion ? query.where({ fkUbicacion }) : query;
 
             let subcategoriasIds = new Array(0);
+            if (fkSubcategoriaEstadistica1 === undefined) fkSubcategoriaEstadistica1 = null;
+            if (fkSubcategoriaEstadistica2 === undefined) fkSubcategoriaEstadistica2 = null;
             if (fkSubcategoriaEstadistica1 != null || fkSubcategoriaEstadistica2 != null) {
                 subcategoriasIds.push(fkSubcategoriaEstadistica1, fkSubcategoriaEstadistica2);
             }
+
             if (fkCategoriaEstadistica1 != null) {
-                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica1 }).modify('defaultSelect');
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica: fkCategoriaEstadistica1 }).modify('defaultSelect');
                 let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
                 subcategoriasIds.push(...subIds);
             }
             if (fkCategoriaEstadistica2 != null) {
-                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica2 }).modify('defaultSelect');
+                const subcategorias = await req.query<SubcategoriaEstadistica>('SubcategoriaEstadistica').where({ fkCategoriaEstadistica: fkCategoriaEstadistica2 }).modify('defaultSelect');
                 let subIds = subcategorias.map((item: SubcategoriaEstadistica) => item.idSubcategoriaEstadistica);
                 subcategoriasIds.push(...subIds);
             }
 
-            query = subcategoriasIds.length > 0 ? query.whereIn('fkSubcategoriaEstadistica1', subcategoriasIds) : query;
-            query = subcategoriasIds.length > 0 ? query.whereIn('fkSubcategoriaEstadistica2', subcategoriasIds) : query;
-            query = fechaInicio ? query.where('fecha', '>', fechaInicio) : query;
-            query = fechaFin ? query.where('fecha', '<', fechaFin) : query;
+            query = subcategoriasIds.length > 0 ? query.where((builder) => {
+                builder = builder.whereIn('fkSubcategoriaEstadistica1', subcategoriasIds);
+                builder = subcategoriasIds.includes(null) ? builder.orWhereNull('fkSubcategoriaEstadistica1') : builder;
+            }) : query;
+            query = subcategoriasIds.length > 0 ? query.where((builder) => {
+                builder = builder.whereIn('fkSubcategoriaEstadistica2', subcategoriasIds);
+                builder = subcategoriasIds.includes(null) ? builder.orWhereNull('fkSubcategoriaEstadistica2') : builder;
+            }) : query;
+
+            query = fechaInicio ? query.where('fecha', '>=', fechaInicio) : query;
+            query = fechaFin ? query.where('fecha', '<=', fechaFin) : query;
 
             let estadisticas = await query.orderBy(ordenarPor, ordenarModo);
             let estadisticasFormat = estadisticas.map((item: any) => new Estadistica(item).forJSON());
