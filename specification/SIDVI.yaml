@@ -700,6 +700,8 @@ paths:
             security:
                 - TokenUsuario: []
             x-security:
+                - ANY
+                - USUARIO
                 - ADMINISTRADOR
             parameters:
                 - name: idTestNodo
